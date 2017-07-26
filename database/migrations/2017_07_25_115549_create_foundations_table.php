@@ -27,6 +27,7 @@ class CreateFoundationsTable extends Migration
             $table->string('website_url')->nullable();
             $table->boolean('verified')->default(false);
             $table->timestamps();
+            $table->dropColumn('user_id');
         });
     }
 

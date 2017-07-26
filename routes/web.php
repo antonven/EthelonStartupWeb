@@ -24,4 +24,5 @@ Route::get('/kobe',function(){
 	
 });
 
-Route::post('/register','RegistrationController@register');
+
+// Route::post('/register','RegistrationController@register');

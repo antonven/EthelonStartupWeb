@@ -12,7 +12,8 @@ class Foundation extends Model
 
     protected $fillable=['foundation_id','user_id','description','location','long','lat','facebook_url','website_url','verified'];
 
+
     public function activities(){
-    	return $this->hasMany('App\Activity','activity_id','activity_id');
+    	return $this->hasMany('App\Activity','foundation_id','foundation_id');
     }
 }

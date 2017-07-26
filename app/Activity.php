@@ -14,7 +14,7 @@ class Activity extends Model
     ];
 
     public function foundation(){
-    	return $this->belongsTo('\App\Activity','activity_id','activity_id');
+    	return $this->belongsTo('App\Foundation','activity_id','activity_id');
 
     }
 
