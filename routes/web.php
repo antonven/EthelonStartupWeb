@@ -11,5 +11,17 @@
 |
 */
 Route::get('/', function(){
-    return 'PRANZ';
+    return view('tempo');
 });
+
+Route::get('/shut',function(){
+
+	return 'kobe';
+
+});
+
+Route::get('/kobe',function(){
+	
+});
+
+Route::post('/register','RegistrationController@register');
