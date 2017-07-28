@@ -9,7 +9,7 @@ class Activityskill extends Model
     //
     protected $fillable = ['name','activity_id'];
 
-    protected $primary= 'name';
+    protected $primaryKey= 'name';
     protected $incrementing = false;
 
     public function activity(){

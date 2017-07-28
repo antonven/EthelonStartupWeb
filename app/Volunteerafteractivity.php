@@ -8,4 +8,5 @@ class Volunteerafteractivity extends Model
 {
     //
     protected $fillable=['volunteer_id','foundation_id'];
+    public $timestamps = false;
 }
