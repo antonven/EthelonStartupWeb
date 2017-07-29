@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Volunteerbeforeactivity;
 use App\Volunteerafteractivity;
 use App\Activity;
+use app\Volunteeractivity;
 
 class ActivityController extends Controller
 {
@@ -32,7 +33,7 @@ class ActivityController extends Controller
 
     	$volunteersBefore = Volunteerbeforeactivity::where('activity_id',$activity_id)->get();
     	return response()->json($volunteersBefore);
-
+        
     }
 
     //get volunteers that joined and captured the qr code
@@ -47,8 +48,19 @@ class ActivityController extends Controller
     public function getActivitiesNotDone(){
 
     	$activities = Activity::where('status',false)->get();
-
+            
     	return response()->json($activities);
+        
+    }
+
+    public function portfolio(Request $request){
+
+        $activities =  \DB::table('activities')->select('*')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->get();
+
+
+        return response()->json($activities);
 
     }
+
+   
 }

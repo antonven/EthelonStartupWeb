@@ -7,6 +7,9 @@ use App\Volunteerskill;
 use App\Activity;
 use App\Volunteerbeforeactivity;
 use App\Volunteerafteractivity;
+use App\Http\Controllers\DB;
+use App\Volunteeractivity;
+
 
 
 class VolunteerController extends Controller
@@ -42,6 +45,14 @@ class VolunteerController extends Controller
     		 
     		]);
 
+
+        Volunteeractivity::create([
+             'volunteer_id'=>$request->input('volunteer_id'),
+             'activity_id'=>$request->input('activity_id'),
+             'status'=> false  
+            ]);
+
+
     }
 
     public function successAttendance(Request $request){
@@ -49,9 +60,14 @@ class VolunteerController extends Controller
     	Volunteerafteractivity::create([
 
     		'volunteer_id'=>$request->input('volunteer_id'),
-    		 'activity_id'=>$request->input('activity_id'),
+    		 'activity_id'=>$request->input('activity_id')
 
     		]);
+
+         \DB::table('volunteeractivities')
+            ->where('volunteer_id',$request->input('volunteer_id'))
+            ->where('activity_id',$request->input('activity_id'))
+            ->update(['status' => true]);
 
 
     }
@@ -74,9 +90,25 @@ class VolunteerController extends Controller
     	//return dd($volunteer_id);
     	$activitiesAfter = Volunteerafteractivity::where('volunteer_id',$volunteer_id)->get();
 
-    	//mas maayo diri nga i delete ang beforeactivity ngari
-
     	return response()->json($activitiesAfter);
     }
+
+   /* public function portfolio(Request $request){
+
+        $volunteer_id = $request->input('volunteer_id');
+
+
+        $portfolio = \DB::table('activities')
+                       ->select('*')
+                       ->join('volunteerbeforeactivities', 'volunteerbeforeactivities.activity_id','=','activities.activity_id')
+                       ->join('Volunteerafteractivities','Volunteerafteractivities.activity_id','=','volunteerbeforeactivities.activity_id')
+                       ->where('volunteerbeforeactivities.volunteer_id',$volunteer_id)
+                       ->orWhere('Volunteerafteractivities.volunteer_id',$volunteer_id)  
+                       ->get();
+
+                       return response()->json($portfolio);
+
+    }*/
+
 
 }

@@ -24,14 +24,18 @@ Route::group(['middleware'=>'volunteer'],function(){
 	Route::post('/joinactivity','VolunteerController@joinActivity');
 	
 
-	Route::post('/attendanceactivity','VolunteerController@successAttendance');
 	Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
 	Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
 	
-	
+
+	Route::get('/activitygetvolunteersafter','ActvityController@getVolunteersAfter');
+	Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
+	Route::get('/activitygetvolunteersbefore','ActvityController@getVolunteersBefore');
+
 });
 
-Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
+Route::post('/attendanceactivity','VolunteerController@successAttendance');
+Route::post('/portfolio','ActivityController@portfolio');
 Route::post('/loginwithfb','LoginController@loginwithFb');
 Route::post('/register','RegistrationController@register');
 Route::get('/login','LoginController@login');
@@ -39,11 +43,6 @@ Route::get('/login','LoginController@login');
 
 Route::group(['middleware'=>'foundation'],function(){
 
-	//get activity's volunteers nga mo join daw  
-	Route::get('/activitygetvolunteersbefore','ActvityController@getVolunteersBefore');
-	
-	//get activity's volunteers nga ni pass sa ila attendance
-	Route::get('/activitygetvolunteersafter','ActvityController@getVolunteersAfter');
 	
 });
 
