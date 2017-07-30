@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -24,15 +23,14 @@ class VolunteerController extends Controller
     	$volunteer_id = $request->input('volunteer_id');
     	$skills = $request->input('skills');
     	
+    	// return dd($skills);
     	
-    	return dd($skills);
-    	
-    	/*foreach($skills as $skill){
+    	foreach($skills as $skill){
     			Volunteerskill::create([
     					'name'=> $skill,
     					 'volunteer_id'=> $volunteer_id
     					]);
-    	}*/
+    	}
     }
 
     //join activity nga wala pa nahitabo
@@ -69,7 +67,6 @@ class VolunteerController extends Controller
             ->where('activity_id',$request->input('activity_id'))
             ->update(['status' => true]);
 
-
     }
 
     //kuhaon ang activities nga wala pah na attendan sa volunteer* 
@@ -92,23 +89,5 @@ class VolunteerController extends Controller
 
     	return response()->json($activitiesAfter);
     }
-
-   /* public function portfolio(Request $request){
-
-        $volunteer_id = $request->input('volunteer_id');
-
-
-        $portfolio = \DB::table('activities')
-                       ->select('*')
-                       ->join('volunteerbeforeactivities', 'volunteerbeforeactivities.activity_id','=','activities.activity_id')
-                       ->join('Volunteerafteractivities','Volunteerafteractivities.activity_id','=','volunteerbeforeactivities.activity_id')
-                       ->where('volunteerbeforeactivities.volunteer_id',$volunteer_id)
-                       ->orWhere('Volunteerafteractivities.volunteer_id',$volunteer_id)  
-                       ->get();
-
-                       return response()->json($portfolio);
-
-    }*/
-
 
 }

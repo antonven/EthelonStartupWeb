@@ -20,28 +20,38 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware'=>'volunteer'],function(){
 
-	Route::post('/volunteerskills','VolunteerController@inputSkills');
-	Route::post('/joinactivity','VolunteerController@joinActivity');
 	
-
-	Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
-	Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
 	
-
-	Route::get('/activitygetvolunteersafter','ActvityController@getVolunteersAfter');
-	Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
-	Route::get('/activitygetvolunteersbefore','ActvityController@getVolunteersBefore');
-
+	
 });
 
+
+Route::post('/joinactivity','VolunteerController@joinActivity');
+Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
+Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
+Route::get('/activitygetvolunteersafter','ActvityController@getVolunteersAfter');
+Route::get('/activitygetvolunteersbefore','ActvityController@getVolunteersBefore');
+
+Route::post('/volunteerskills','VolunteerController@inputSkills');
+Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
 Route::post('/attendanceactivity','VolunteerController@successAttendance');
 Route::post('/portfolio','ActivityController@portfolio');
 Route::post('/loginwithfb','LoginController@loginwithFb');
 Route::post('/register','RegistrationController@register');
-Route::get('/login','LoginController@login');
-
+Route::get('/login','LoginController@session');
+Route::post('/session','LoginController@sessionwatch');
 
 Route::group(['middleware'=>'foundation'],function(){
+
+
+//environmental -30
+//sports - 20
+//culinary -20
+//medicine -40
+//charity -50
+//livelihood -50
+//education -40
+//arts -20
 
 	
 });

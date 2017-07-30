@@ -16,8 +16,9 @@ class Volunteer
      */
     public function handle($request, Closure $next)
     {
+        // return dd(\Auth::user());
 
-        if(\Auth::user()->role == "volunteer"){
+        if(\Auth::user()->role() == "volunteer"){
             return $next($request);
         }else {
             $error = ['You are not a Volunteer fuck you'];

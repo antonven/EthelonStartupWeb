@@ -38,7 +38,6 @@ class RegistrationController extends Controller
                          'image_url'=>$request->input('image_url')
                        ]);
 
-
                 auth()->login($user);
                 return response()->json($volunteer);
                    
