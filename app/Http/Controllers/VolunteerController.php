@@ -18,19 +18,50 @@ class VolunteerController extends Controller
     public function inputSkills(Request $request){
     	
 
-    	//piste pani diri
-
+        $arrays = array();
     	$volunteer_id = $request->input('volunteer_id');
-    	$skills = $request->input('skills');
-    	
-    	// return dd($skills);
-    	
-    	foreach($skills as $skill){
-    			Volunteerskill::create([
-    					'name'=> $skill,
-    					 'volunteer_id'=> $volunteer_id
-    					]);
-    	}
+
+
+        $i = 1;
+
+       
+
+        if($stringcount = $request->input('count')){
+            $count = (int)$stringcount;
+
+            for($i = 0; $i < $count; $i++){
+
+                 array_push($arrays, $request->input('params'.$i));      
+                  //return response()->json($request->input('params'.$i));
+            }
+
+            
+            foreach($arrays as $value){
+
+                 Volunteerskill::create([
+                  'name' => $value,
+                  'volunteer_id' => $volunteer_id 
+                ]);      
+
+            }
+
+          }else{
+            return "wtf";
+          }
+
+          //loop $request->input("params".)  
+
+       
+    /*	$skills = $request->input('params');
+
+
+        $skillsjsons = json_encode($skills);
+        return count($skillsjsons);
+         return dd($skillsjsons);
+*/
+       
+
+        return "Success";
     }
 
     //join activity nga wala pa nahitabo

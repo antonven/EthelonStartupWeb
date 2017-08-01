@@ -36,18 +36,20 @@ class LoginController extends Controller
     public function loginwithFb(Request $request){
 
             $watcher = User::where('user_id',$request->input('facebook_id'))->get();
-            
-            if(!$watcher){
+                        
+            if(count($watcher)!=0){
 
                     auth()->login($request->input('facebook_id'));
 
-                    
                      $message = array("Message"=>"logged in");
                      return response()->json($message);
                      
 
             }else{
-                
+
+            if($request->input('facebook_id') && $request->input('email') && $request->input('role') && $request->input('name')){
+
+
                $user_id = $request->input('facebook_id'); 
                $email = $request->input('email');
                $role = $request->input('role');
@@ -65,32 +67,32 @@ class LoginController extends Controller
                         'api_token'=> $api_token
                     ]);
 
-
                 $volunteer = Volunteer::create([
                         'volunteer_id' => $volunteer_id,
                          'user_id'=>$user_id,
                          'location'=>$request->input('location'),
                          'image_url'=>$request->input('image_url')
                  ]);
-                    
+                                    
 
                  auth()->login($user);
-
-                 $message = array("Message"=>"First Time");
-
-                 return response()->json($message);
+                    
+                 $message = "First Time";
+                 return $message;
                  //return response()->json(\Auth::user()->role);
+             }
              }
 
     }
 
+    
     public function sessionwatch(Request $request){
 
             //auth()->login($request->input('facebook_id'));
             $volunteer = Volunteer::where('user_id',$request->input('facebook_id'))->first();
           //   $volunteer = Volunteer::first();   
                 //return dd($volunteer);
-            return response()->json($volunteer->volunteer_id);
+            return $volunteer->volunteer_id;
                 
     }
 

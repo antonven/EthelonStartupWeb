@@ -20,18 +20,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware'=>'volunteer'],function(){
 
-	
-	
-	
+		
 });
 
 
+Route::post('/loginwithfbnoemail','@LoginController@loginwithFbnoEmail');
 Route::post('/joinactivity','VolunteerController@joinActivity');
 Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
 Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
 Route::get('/activitygetvolunteersafter','ActvityController@getVolunteersAfter');
 Route::get('/activitygetvolunteersbefore','ActvityController@getVolunteersBefore');
-
 Route::post('/volunteerskills','VolunteerController@inputSkills');
 Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
 Route::post('/attendanceactivity','VolunteerController@successAttendance');
@@ -40,6 +38,9 @@ Route::post('/loginwithfb','LoginController@loginwithFb');
 Route::post('/register','RegistrationController@register');
 Route::get('/login','LoginController@session');
 Route::post('/session','LoginController@sessionwatch');
+Route::post('/kobe','ActivityController@prac');
+
+
 
 Route::group(['middleware'=>'foundation'],function(){
 
@@ -53,7 +54,6 @@ Route::group(['middleware'=>'foundation'],function(){
 //education -40
 //arts -20
 
-	
 });
 
 Route::post('/picture','RegistrationController@addPhoto');

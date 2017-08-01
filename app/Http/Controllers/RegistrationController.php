@@ -13,7 +13,6 @@ class RegistrationController extends Controller
 
     public function register(Request $request){	
 
-
                 $request->merge(['password' => Hash::make($request->password)]);
                 $user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
