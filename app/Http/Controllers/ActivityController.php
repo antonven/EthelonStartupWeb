@@ -14,18 +14,76 @@ use App\User;
 
 class ActivityController extends Controller
 {
+    
+    public function index()
+    {
+        $activities = \Auth::user()->foundation->activities;
+        return view('activity.activityIndex', compact('activities'));
+    }
+    public function create()
+    {
+        return view('activity.activityCreate');
+    }
+    public function store(Request $request)
+    {
+        $file = $this->uploadFile($request->file('file'));
+        $activityId = Activity::create([
+            "activity_id" => substr(sha1(mt_rand().microtime()), mt_rand(0,35),7),
+            "foundation_id" => \Auth::user()->foundation->foundation_id,
+            "name" => $request->input('activityName'),
+            "image_url" => $file,
+            "imageQr_url" => $request->input('activityName'),
+            "description" => $request->input('activityDescription'),
+            "location" => "",
+            "start_time" => "",
+            "end_time" => "",
+            "date" => "",
+            "group" => "",
+            "long" => 1,
+            "lat" => 2,
+            "points_equivalent" => 1,
+            "status" => 1
+        ])->activity_id;
+        
+        foreach($request->input('activitySkills') as $skill)
+        {
+            Activityskill::create([
+                "name" => $skill,
+                "activity_id" => $activityId
+            ]);
+        }
+        
+        return redirect(url('/activity'));
+    }
+    public function uploadFile($file)
+    {
+        $extension = $file->clientExtension();
+        if($extension != "bin")
+        {
+            $destinationPath = public_path('file_attachments');
+            $filename = $file->getClientOriginalName();
+            $file->move($destinationPath, $filename);
+            
+            return $filename;
+        }
+        else
+        {
+            $files = "";
+            return $file;
+        }
+        
+    }
+    public function inputSkills(Request $request){
 
-	 public function inputSkills(Request $request){
-    	
-    	$skills = $request->input('skills');
-    	$volunteer_id = $request->input('activity_id');
+        $skills = $request->input('skills');
+        $volunteer_id = $request->input('activity_id');
 
-    	foreach ($skills as $skill) {
-    		Activitiyskill::create([
-    			'name'=>$skill, 	
-    			'activity_id' => $volunteer_id
-    			]);
-    	}
+        foreach ($skills as $skill) {
+                Activitiyskill::create([
+                        'name'=>$skill, 	
+                        'activity_id' => $volunteer_id
+                        ]);
+        }
     }
 
     //
