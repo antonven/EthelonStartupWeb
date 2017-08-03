@@ -10,19 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function(){
-    return view('tempo');
+Auth::routes();
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', 'DashboardController@index');
+    Route::get('/activity', 'ActivityController@index');
+    Route::get('/activity/create', 'ActivityController@create');
+    Route::post('/activity/store', 'ActivityController@store');
 });
-
-Route::get('/shut',function(){
-
-	return 'kobe';
-
-});
-
-Route::get('/kobe',function(){
-	
-});
-
-
-// Route::post('/register','RegistrationController@register');
