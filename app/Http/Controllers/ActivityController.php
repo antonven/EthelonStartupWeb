@@ -41,21 +41,24 @@ class ActivityController extends Controller
 
     //get volunteers that joined and captured the qr code
     public function getVolunteersAfter(Request $request){
+        
     	$activity_id = $request->input('activity_id');
 
     	$volunteersAfter = Volunteerafteractivity::where('activity_id',$activity_id)->get();
     	return response()->json($volunteersAfter);
+
     }
 
     //get activities nga not done
     public function getActivitiesNotDone(Request $request){
+
         $matches = 0;
         $activityKeeper = array();
         $activityScores = array();
         $newActivities = array();
 
-    	$activities = Activity::where('status',false)->get();
-        $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
+    	$activities = Activity::where('status',false)->get()
+;        $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
             foreach($activities as $activity){
                 $count = 0;
@@ -106,7 +109,7 @@ class ActivityController extends Controller
                 
             } 
             
-            return response()->json(array_reverse($activityKeeper));
+            return response()->json($activityKeeper);
 
     	//return response()->json($activities);
         

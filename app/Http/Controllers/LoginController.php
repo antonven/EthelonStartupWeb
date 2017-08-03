@@ -32,19 +32,19 @@ class LoginController extends Controller
     		//return response()->json(\Auth::user()->api_token);	    	
     	}
     }
+    
 
     public function loginwithFb(Request $request){
 
             $watcher = User::where('user_id',$request->input('facebook_id'))->get();
                         
-            if(count($watcher)!=0){
+            if($watcher->count()){
 
-                    auth()->login($request->input('facebook_id'));
+                    //auth()->login($request->input('facebook_id'));
 
-                     $message = array("Message"=>"logged in");
-                     return response()->json($message);
+                     $message = "Watcher";
+                     return $message;
                      
-
             }else{
 
             if($request->input('facebook_id') && $request->input('email') && $request->input('role') && $request->input('name')){
@@ -75,23 +75,25 @@ class LoginController extends Controller
                  ]);
                                     
 
-                 auth()->login($user);
+                // auth()->login($user);
                     
                  $message = "First Time";
                  return $message;
                  //return response()->json(\Auth::user()->role);
              }
+             
              }
+
+             return $message = "Logged in";
 
     }
 
     
     public function sessionwatch(Request $request){
 
-            //auth()->login($request->input('facebook_id'));
+         
             $volunteer = Volunteer::where('user_id',$request->input('facebook_id'))->first();
-          //   $volunteer = Volunteer::first();   
-                //return dd($volunteer);
+          
             return $volunteer->volunteer_id;
                 
     }

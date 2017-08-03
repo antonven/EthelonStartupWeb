@@ -25,7 +25,6 @@ class VolunteerController extends Controller
         $i = 1;
 
        
-
         if($stringcount = $request->input('count')){
             $count = (int)$stringcount;
 
@@ -48,18 +47,6 @@ class VolunteerController extends Controller
           }else{
             return "wtf";
           }
-
-          //loop $request->input("params".)  
-
-       
-    /*	$skills = $request->input('params');
-
-
-        $skillsjsons = json_encode($skills);
-        return count($skillsjsons);
-         return dd($skillsjsons);
-*/
-       
 
         return "Success";
     }
