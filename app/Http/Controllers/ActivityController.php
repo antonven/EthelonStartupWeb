@@ -92,7 +92,10 @@ class ActivityController extends Controller
     public function getVolunteersBefore(Request $request){
     	$activity_id = $request->input('activity_id');
 
-    	$volunteersBefore = Volunteerbeforeactivity::where('activity_id',$activity_id)->get();
+    	//$volunteersBefore = Volunteerbeforeactivity::where('activity_id',$activity_id)->get();
+
+        $volunteersBefore = \DB::table('volunteers')->select('volunteers.*')->join('volunteerbeforeactivities','volunteerbeforeactivities.volunteer_id','=','volunteers.volunteer_id')->where('volunteerbeforeactivities.activity_id',$activity_id)->get();
+
     	return response()->json($volunteersBefore);
         
     }
@@ -102,7 +105,10 @@ class ActivityController extends Controller
         
     	$activity_id = $request->input('activity_id');
 
-    	$volunteersAfter = Volunteerafteractivity::where('activity_id',$activity_id)->get();
+    	//$volunteersAfter = Volunteerafteractivity::where('activity_id',$activity_id)->get();
+
+        $volunteersAfter = \DB::table('volunteers')->select('volunteers.*')->join('volunteerafteractivities','volunteerafteractivities.volunteer_id','=','volunteers.volunteer_id')->where('volunteerafteractivities.activity_id',$activity_id)->get();
+
     	return response()->json($volunteersAfter);
 
     }

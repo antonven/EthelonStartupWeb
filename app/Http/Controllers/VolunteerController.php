@@ -44,8 +44,12 @@ class VolunteerController extends Controller
 
             }
 
-          }else{
+          }
+
+          else{
+
             return "wtf";
+
           }
 
         return "Success";
@@ -85,8 +89,7 @@ class VolunteerController extends Controller
             ->where('activity_id',$request->input('activity_id'))
             ->update(['status' => true]);
 
-
-
+            
                $sumOfPoints = 0;
 
         if($count = $request->input('count')){
@@ -124,8 +127,10 @@ class VolunteerController extends Controller
 
         Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
 
-        return "Success";
+        \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
 
+        return "Sucess";
+         
     }
       public function points(){
 
@@ -162,6 +167,6 @@ class VolunteerController extends Controller
     	$activitiesAfter = Volunteerafteractivity::where('volunteer_id',$volunteer_id)->get();
 
     	return response()->json($activitiesAfter);
-    }
+    }   
 
 }

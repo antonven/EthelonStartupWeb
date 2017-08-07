@@ -71,11 +71,12 @@ class RegisterController extends Controller
         //Dapat inig register sa foundation naa iyang mga description, foundation name, website url, facebook url. 
         /*Foundation::create([
            'foundation_id'=> $foundation_id,
-                            
-        
+                                        
+                     
             ]);*/
 
         return User::create([
+
             'user_id' => $user_id,
             'name' => $data['name'],
             'email' => $data['email'],

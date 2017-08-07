@@ -20,7 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware'=>'auth:api'],function(){
 
-		Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
+	
+
+});
+
+	
+	Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
 		Route::post('/joinactivity','VolunteerController@joinActivity');
 		Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
 		Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
@@ -31,11 +36,6 @@ Route::group(['middleware'=>'auth:api'],function(){
 	    Route::post('/portfolio','ActivityController@portfolio');
 	    Route::get('/getallfoundations','FoundationController@getallfoundations');
 		Route::post('/activitypoints','VolunteerController@points');
-
-});
-
-	
-
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 
 Route::post('/loginwithfb','LoginController@loginwithFb');
