@@ -18,41 +18,38 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['middleware'=>'volunteer'],function(){
+Route::group(['middleware'=>'auth:api'],function(){
 
-		
+		Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
+		Route::post('/joinactivity','VolunteerController@joinActivity');
+		Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
+		Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
+		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
+		Route::get('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
+		Route::post('/volunteerskills','VolunteerController@inputSkills');
+		Route::post('/attendanceactivity','VolunteerController@successAttendance');
+	    Route::post('/portfolio','ActivityController@portfolio');
+	    Route::get('/getallfoundations','FoundationController@getallfoundations');
+		Route::post('/activitypoints','VolunteerController@points');
+
 });
 
+	
 
-Route::post('/loginwithfbnoemail','@LoginController@loginwithFbnoEmail');
-Route::post('/joinactivity','VolunteerController@joinActivity');
-Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
-Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
-Route::get('/activitygetvolunteersafter','ActvityController@getVolunteersAfter');
-Route::get('/activitygetvolunteersbefore','ActvityController@getVolunteersBefore');
-Route::post('/volunteerskills','VolunteerController@inputSkills');
-Route::get('/getallactivities','ActivityController@getActivitiesNotDone');
-Route::post('/attendanceactivity','VolunteerController@successAttendance');
-Route::post('/portfolio','ActivityController@portfolio');
+Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
+
 Route::post('/loginwithfb','LoginController@loginwithFb');
 Route::post('/register','RegistrationController@register');
 Route::get('/login','LoginController@session');
 Route::post('/session','LoginController@sessionwatch');
-Route::post('/kobe','ActivityController@prac');
+
 
 
 
 Route::group(['middleware'=>'foundation'],function(){
 
 
-//environmental -30
-//sports - 20
-//culinary -20
-//medicine -40
-//charity -50
-//livelihood -50
-//education -40
-//arts -20
+
 
 });
 

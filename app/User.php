@@ -28,10 +28,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token'
+        'password', 'remember_token', 'api_token' 
     ];
 
-    public function getRole(){
+    public function getRole()
+    {
         return $this->role;
     }
     
@@ -39,4 +40,5 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Foundation', 'user_id', 'user_id');
     }
+
 }

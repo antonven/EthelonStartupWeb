@@ -56,8 +56,8 @@ class LoginController extends Controller
                $name = $request->input('name');
                
                $volunteer_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-                    $time = microtime(true);
-                    $api_token = $user_id.$time;
+                $time = microtime(true);
+                $api_token = $user_id.$time;
 
                 $user = User::create([
                         'user_id'=>$user_id,
@@ -81,7 +81,7 @@ class LoginController extends Controller
                  return $message;
                  //return response()->json(\Auth::user()->role);
              }
-             
+
              }
 
              return $message = "Logged in";
@@ -94,6 +94,8 @@ class LoginController extends Controller
          
             $volunteer = Volunteer::where('user_id',$request->input('facebook_id'))->first();
           
+            
+           // return dd($volunteer);          
             return $volunteer->volunteer_id;
                 
     }

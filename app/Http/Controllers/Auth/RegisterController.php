@@ -62,13 +62,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        
+        $user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+        $time = microtime(true);
+        $api_token = $user_id.$time;
+        $foundation_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+        //Dapat inig register sa foundation naa iyang mga description, foundation name, website url, facebook url. 
+        /*Foundation::create([
+           'foundation_id'=> $foundation_id,
+                            
+        
+            ]);*/
+
         return User::create([
-            'user_id' => substr(sha1(mt_rand().microtime()), mt_rand(0,35),7),
+            'user_id' => $user_id,
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'role' => 'admin',
-            'api_token' => 'wasa'
+            'api_token' => $api_token
             
         ]);
     }

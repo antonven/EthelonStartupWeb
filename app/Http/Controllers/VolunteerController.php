@@ -85,7 +85,63 @@ class VolunteerController extends Controller
             ->where('activity_id',$request->input('activity_id'))
             ->update(['status' => true]);
 
+
+
+               $sumOfPoints = 0;
+
+        if($count = $request->input('count')){
+            for($i = 0; $i<$count; $i++){
+                $skill = $request->input('params'.$i);
+
+                switch($skill){
+
+                     case 'Environmental': $sumOfPoints = $sumOfPoints + 30;
+                                  break;          
+                     case 'Sports': $sumOfPoints = $sumOfPoints + 20;                       
+                                  break;
+                     case 'Culinary': $sumOfPoints = $sumOfPoints + 20;
+                                  break;
+                     case 'Medical': $sumOfPoints = $sumOfPoints + 40;
+                                  break;
+                     case 'Charity': $sumOfPoints = $sumOfPoints + 50;
+                                  break;
+                     case 'Livelihood': $sumOfPoints = $sumOfPoints + 50;
+                                  break;
+                     case 'Education': $sumOfPoints = $sumOfPoints + 40;
+                                  break;
+                     case 'Arts': $sumOfPoints = $sumOfPoints + 20;
+                                  break;
+
+                }
+            }
+        }
+        
+        $hours = $request->input('hours');
+        $sumOfPoints = $sumOfPoints * $hours;
+        $volunteer_points = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->select('points');
+
+        $new_points = $volunteer_points->points + $sumOfPoints;
+
+        Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
+
+        return "Success";
+
     }
+      public function points(){
+
+        //environmental -30
+        //sports - 20
+        //culinary -20
+        //medicine -40
+        //charity -50
+        //livelihood -50
+        //education -40
+        //arts -20
+
+        // points = (categories) * time difference;
+      
+    }
+
 
     //kuhaon ang activities nga wala pah na attendan sa volunteer* 
     public function getBeforeActivities(Request $request){

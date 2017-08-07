@@ -42,7 +42,7 @@ class ActivityController extends Controller
             "long" => 1,
             "lat" => 2,
             "points_equivalent" => 1,
-            "status" => 1
+            "status" => false
         ])->activity_id;
         
         foreach($request->input('activitySkills') as $skill)
@@ -115,9 +115,11 @@ class ActivityController extends Controller
         $activityScores = array();
         $newActivities = array();
 
-    	$activities = Activity::where('status',false)->get()
-;        $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
+    	$activities = Activity::where('status',false)->get();
+        $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
+
+            
             foreach($activities as $activity){
                 $count = 0;
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
@@ -167,7 +169,7 @@ class ActivityController extends Controller
                 
             } 
             
-            return response()->json($activityKeeper);
+            return response()->json(array_reverse($activityKeeper));
 
     	//return response()->json($activities);
         
@@ -197,7 +199,7 @@ class ActivityController extends Controller
                         'role'=> "Volunteer",
                         'api_token'=> "Pisteeeee"
                     ]);*/
-
+                        
                       $id = $request->input("facebook_id");  
                       $name = $request->input("name");
 
@@ -211,8 +213,65 @@ class ActivityController extends Controller
         
             return response()->json($name);
         
-
-        
     }
+
+    public function points(Request $request){
+
+
+    }
+
+
+   /* public function practice(){
+        $a = 0; 
+        $sum = 0;
+        
+        do{
+              if($a == 0){
+
+              } 
+              else if($a == 1){
+                  $sum = 1;  
+              }
+              else
+              {
+                $sum = $sum + $a;
+              } 
+          }while($a <= 100);
+
+        return $sum;
+    }
+
+    public function practice1(){
+        $a = 5;
+        do{
+               $a = $a + 0.5; 
+               echo($a.' ');
+        }while($a != 15);
+
+    }
+
+    public function practice2(){
+        $sum = 0;
+        $a = 1;
+      
+        do{
+             if($a % 2 == 0){
+
+            }else{
+                $sum = $sum + $a;
+                echo($sum. ' ');
+            }
+            $a++;
+        }while($a <= 30);
+    }
+    public function practice3(){
+        $a = 1;
+        $b = 2;
+        do{
+           $sum = $a / $b;
+           echo($sum.' ');
+           $b++;     
+        }while($b <= 10);
+    }*/
    
 }
