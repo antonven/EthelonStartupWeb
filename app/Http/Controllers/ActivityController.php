@@ -39,10 +39,10 @@ class ActivityController extends Controller
             "end_time" => "",
             "date" => "",
             "group" => "",
-            "long" => 1,
-            "lat" => 2,
+            "long" => $request->input('long'),
+            "lat" => $request->input('lat'),
             "points_equivalent" => 1,
-            "status" => false
+            "status" => 1
         ])->activity_id;
         
         foreach($request->input('activitySkills') as $skill)
@@ -73,6 +73,7 @@ class ActivityController extends Controller
         }
         
     }
+    
     public function inputSkills(Request $request){
 
         $skills = $request->input('skills');

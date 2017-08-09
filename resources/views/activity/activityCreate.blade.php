@@ -1,6 +1,15 @@
 @extends('layouts.master')
 
-@section('additional_styles_top')
+@section('additional_styles')
+  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/webfont.css').'?'.rand() }}">
+  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/climacons-font.css').'?'.rand() }}">
+  <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/bootstrap/dist/css/bootstrap.css').'?'.rand() }}">
+  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/font-awesome.css').'?'.rand() }}">
+  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/card.css').'?'.rand() }}">
+  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/sli.css').'?'.rand() }}">
+  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/animate.css').'?'.rand() }}">
+  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/app.css').'?'.rand() }}">
+  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/app.skins.css').'?'.rand() }}">
     <!-- page stylesheets -->
     <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.min.css') }}">
     <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/summernote/dist/summernote.css') }}">
@@ -27,27 +36,20 @@
     <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/chosen_v1.4.0/chosen.min.css') }}">
     <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/checkbo/src/0.1.4/css/checkBo.min.css') }}">
     <!-- end page stylesheets -->
+    <style>
+              #map {
+        height: 100%;
+      }
+    </style>
 @endsection
-
-@section('sidebar')
-    @include('reactor_includes.sidebar')
-@endsection
-
-@section('topheader')
-    @include('reactor_includes.topheader')
-@endsection
-
 @section('content')
-<div class="page-title">
-    <div class="title">Create Activity</div>
-</div>
+<div class="container"> 
+            <header class="clearfix">
+                <h1>Activity <span>with Expanding Preview</span></h1> 
+            </header>
 <form class="form-horizontal" role="form" action="{{ url('/activity/store') }}" method="post" enctype="multipart/form-data">
     {{ csrf_field() }}
-<div class="card bg-white">
-    <div class="card-header">
-        Activity Details
-    </div>
-    <div class="card-block">
+
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Activity Name</label>
                                 <div class="col-sm-10">
@@ -105,97 +107,72 @@
                     <div class="form-group">
                     <label class="col-sm-2 control-label">Number of volunteers</label>
                     </div>
-        </div>
-        </div>
-
-<div class="card bg-white">
-    <div class="card-header">
-        Activity Date & Time
-    </div>
-    <div class="card-block">
+       
         <div class="form-group">
-            <label class="col-sm-2 control-label">Start Date</label>
-            <div class="col-sm-10">
-            <div class="row">
-                <div class="col-xs-9">
-                    <div class="input-group">
-                        <input type="text" class="form-control" data-provide="datepicker" placeholder="Datepicker" name="startDate" required="required">
-                        <span class="input-group-addon add-on">
-                        <i class="fa fa-clock-o"></i>
-                        </span>
+            <label class="col-sm-2 control-label">Start Date/Time</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-xs-9">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
         
         <div class="form-group">
-            <label class="col-sm-2 control-label">Start Time</label>
-            <div class="col-sm-10">
-            <div class="row">
-                <div class="col-xs-9">
-                    <div class="input-group">
-                        <input type="text" class="form-control time-picker" value="none" name="startTime" required="required">
-                        <span class="input-group-addon add-on">
-                        <i class="fa fa-clock-o"></i>
-                        </span>
+            <label class="col-sm-2 control-label">End Date/Time</label>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-xs-9">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-        
-        <div class="form-group">
-            <label class="col-sm-2 control-label">End Date</label>
-            <div class="col-sm-10">
-            <div class="row">
-                <div class="col-xs-9">
-                    <div class="input-group">
-                        <input type="text" class="form-control" data-provide="datepicker" placeholder="Datepicker" name="endDate" required="required">
-                        <span class="input-group-addon add-on">
-                        <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="col-sm-2 control-label">End Time</label>
-            <div class="col-sm-10">
-            <div class="row">
-                <div class="col-xs-9">
-                    <div class="input-group">
-                        <input type="text" class="form-control time-picker" value="none" name="endTime" required="required">
-                        <span class="input-group-addon add-on">
-                        <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div>
-    </div>
-</div>
     
-    <div class="card bg-white">
-    <div class="card-header">
-        Location
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Location</label>
+            <div class="col-sm-10">
+                <div class="row">
+                    <div class="col-xs-9">
+                    <!-- diri ang map -->
+                    <div id="map" style="height:500px">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-block">
         
-    </div>
-</div>
+    <!-- hidden input diri para long lat sa maps -->
+    <input type="text" id="long" name="long" hidden="hidden">
+    <input type="text" id="lat" name="lat" hidden="hidden">
+    
     <button type="submit" class="btn btn-danger btn-lg btn-icon mr5"><i class="icon-plus"></i><span>Create Event</span></button>
 </form>
-@endsection
-
-@section('footer')
+    </div>
 
 @endsection
 
 @section('additional_scripts')
+   <script src="{{ asset('reactorAssets/scripts/helpers/modernizr.js') }}"></script>
+    <script src="{{ asset('reactorAssets/vendor/jquery/dist/jquery.js') }}"></script>
+    <script src="{{ asset('reactorAssets/vendor/bootstrap/dist/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('reactorAssets/vendor/fastclick/lib/fastclick.js') }}"></script>
+    <script src="{{ asset('reactorAssets/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js') }}"></script>
+    <script src="{{ asset('reactorAssets/scripts/helpers/smartresize.js') }}"></script>
+    <script src="{{ asset('reactorAssets/scripts/constants.js') }}"></script>
+    <script src="{{ asset('reactorAssets/scripts/main.js') }}"></script>
     <!-- page scripts -->
     <script src="{{ asset('reactorAssets/vendor/chosen_v1.4.0/chosen.jquery.min.js') }}"></script>
     <script src="{{ asset('reactorAssets/vendor/jquery.tagsinput/src/jquery.tagsinput.js') }}"></script>
@@ -233,15 +210,6 @@
     <script src="{{ asset('reactorAssets/vendor/jquery.ui/ui/widget.js') }}"></script>
     <script src="{{ asset('reactorAssets/vendor/jquery.ui/ui/mouse.js') }}"></script>
     <script src="{{ asset('reactorAssets/vendor/jquery.ui/ui/draggable.js') }}"></script>
-    <!-- The Templates plugin is included to render the upload/download listings -->
-    <script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
-    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-    <script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
-    <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-    <script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-    <!-- blueimp Gallery script -->
-    <script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
-    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
     <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.iframe-transport.js') }}"></script>
     <!-- The basic File Upload plugin -->
     <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.fileupload.js') }}"></script>
@@ -269,6 +237,74 @@
     <script src="{{ asset('reactorAssets/scripts/forms/wysiwyg.js') }}"></script>
     <!-- end initialize page scripts -->
     <script>
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
+      var map, infoWindow;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 18
+        });
+        infoWindow = new google.maps.InfoWindow;
 
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+        
+        var marker;
+
+        function placeMarker(location) {
+          if ( marker ) {
+            marker.setPosition(location);
+          } else {
+            marker = new google.maps.Marker({
+              position: location,
+              map: map
+            });
+          }
+        }
+
+        google.maps.event.addListener(map, 'click', function(event) {
+          placeMarker(event.latLng);
+          //input x ang long y ang lat
+          console.log(event);
+          console.log(event.da.x);
+          console.log(event.da.y);
+          $('#long').val(event.da.x);
+          $('#lat').val(event.da.y);
+          console.log($('#long').val());
+          console.log($('#lat').val());
+        });
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+     
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnOLaiuE2JgkqIlsyzsSvw_WKbSoEqdoM&callback=initMap">
     </script>
 @endsection
