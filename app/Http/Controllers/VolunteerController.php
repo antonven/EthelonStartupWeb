@@ -58,21 +58,37 @@ class VolunteerController extends Controller
     //join activity nga wala pa nahitabo
     public function joinActivity(Request $request){
 
-    	Volunteerbeforeactivity::create([
+       $watch = Volunteerbeforeactivity::where('volunteer_id',$request->input('volunteer_id'))
+                                       ->where('activity_id',$request->input('activity_id'))->get();
 
-    		 'volunteer_id'=>$request->input('volunteer_id'),
-    		 'activity_id'=>$request->input('activity_id'),
-    		 
-    		]);
+         if($watch->count()){
+
+            $data = array("message"=>"Already Joined");
+
+            return response()->json($data);
+         }                                   
+         else{
+
+        	Volunteerbeforeactivity::create([
+
+        		 'volunteer_id'=>$request->input('volunteer_id'),
+        		 'activity_id'=>$request->input('activity_id'),
+        		 
+        		]);
 
 
-        Volunteeractivity::create([
-             'volunteer_id'=>$request->input('volunteer_id'),
-             'activity_id'=>$request->input('activity_id'),
-             'status'=> false  
-            ]);
+            Volunteeractivity::create([
+                 'volunteer_id'=>$request->input('volunteer_id'),
+                 'activity_id'=>$request->input('activity_id'),
+                 'status'=> false  
+                ]);
 
 
+            $data = array("message"=>"Success");
+
+            return response()->json($data);
+            
+            }
     }
 
     public function successAttendance(Request $request){
@@ -129,7 +145,7 @@ class VolunteerController extends Controller
 
         \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
 
-        return "Sucess";
+        return "Success";
          
     }
       public function points(){
