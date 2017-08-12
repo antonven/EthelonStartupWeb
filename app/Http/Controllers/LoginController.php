@@ -21,9 +21,18 @@ class LoginController extends Controller
     	}else{
             
             if(\Auth::user()->role == 'volunteer'){
-                
-                $volunteer = Volunteer::where('user_id',\Auth::user()->user_id)->get();
-                return response()->json($volunteer->volunteer_id); 
+
+                   
+                    $user = User::where('email',$request->input('email'))->first();
+                    $volunteer = Volunteer::where('user_id',$user->user_id)->first();
+                    $message = "Success";
+
+                                       // return response()->json($user->user_id);
+
+
+                return response()->json(array("volunteer_id"=>$volunteer->volunteer_id, 
+                                            "api_token"  => $user->api_token,
+                                            "message" => $message)); 
                 
             }else{
                 // wa lang sa tay mobile ang foundation
@@ -47,7 +56,7 @@ class LoginController extends Controller
 
                   $data = array("message"=>"Not First Time","volunteer_id"=>$watch->volunteer_id,"api_token"=>$watcher->api_token);      
                      
-                     return response()->json($data);
+                  return response()->json($data);
                      
             }else{
 
@@ -79,7 +88,7 @@ class LoginController extends Controller
                 // auth()->login($user);
                 
                  $data = array("message"=>"First Time","volunteer_id"=>$volunteer_id,"api_token"=>$api_token);    
-                 $message = "First Time";
+                 
                  //return $data;
                  return response()->json($data);
              }

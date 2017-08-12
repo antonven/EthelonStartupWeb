@@ -183,6 +183,10 @@ class VolunteerController extends Controller
     	$activitiesAfter = Volunteerafteractivity::where('volunteer_id',$volunteer_id)->get();
 
     	return response()->json($activitiesAfter);
+    }
+
+    public function leaderboard(){
+        
     }   
 
 }

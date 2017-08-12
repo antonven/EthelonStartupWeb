@@ -42,7 +42,7 @@ class ActivityController extends Controller
             "long" => $request->input('long'),
             "lat" => $request->input('lat'),
             "points_equivalent" => 1,
-            "status" => 1
+            "status" => 0
         ])->activity_id;
         
         foreach($request->input('activitySkills') as $skill)
@@ -55,6 +55,7 @@ class ActivityController extends Controller
         
         return redirect(url('/activity'));
     }
+
     public function uploadFile($file)
     {
         $extension = $file->clientExtension();
@@ -125,12 +126,13 @@ class ActivityController extends Controller
     	$activities = Activity::where('status',false)->get();
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
-
-            
             foreach($activities as $activity){
                 $count = 0;
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
-
+                    /*$act = \DB::table('activities')->select('activities.*','volunteeractivities.volunteer_id as vol_count')
+                                                   ->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('activities.activity_id',$activity->activity_id)->get();*/
+                                                                //problem here    
+                                                  // return response()->json($act);                                     
 
                     foreach($activityskills as $activityskill){
 
@@ -189,7 +191,7 @@ class ActivityController extends Controller
 
         return response()->json($activities);
 
-            
+           
     }
 
     public function prac(Request $request){
