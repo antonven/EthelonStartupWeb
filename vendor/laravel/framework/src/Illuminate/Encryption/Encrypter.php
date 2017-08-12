@@ -35,11 +35,7 @@ class Encrypter implements EncrypterContract
     public function __construct($key, $cipher = 'AES-128-CBC')
     {
         $key = (string) $key;
-        $cipher = 'AES-128-CBC';
-
-
-        
-
+    
         if (static::supported($key, $cipher)) {
             $this->key = $key;
             $this->cipher = $cipher;
