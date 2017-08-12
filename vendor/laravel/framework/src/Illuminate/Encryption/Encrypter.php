@@ -32,7 +32,7 @@ class Encrypter implements EncrypterContract
      *
      * @throws \RuntimeException
      */
-    public function __construct($key, $cipher = 'AES-128-CBC')
+    public function __construct($key, $cipher = 'AES-256-CBC')
     {
         $key = (string) $key;
     
