@@ -14,6 +14,8 @@ use App\User;
 
 class ActivityController extends Controller
 {
+
+  
     
     public function index()
     {

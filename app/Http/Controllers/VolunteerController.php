@@ -13,6 +13,8 @@ use App\Volunteeractivity;
 
 class VolunteerController extends Controller
 {
+
+
     //
 
     public function inputSkills(Request $request){
