@@ -27,6 +27,7 @@ class ActivityController extends Controller
         $activities = \Auth::user()->foundation->activities;
         return view('activity.activityIndex', compact('activities'));
     }
+    
     public function create()
     {
         return view('activity.activityCreate');

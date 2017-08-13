@@ -69,11 +69,15 @@ class RegisterController extends Controller
         $foundation_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
         //Dapat inig register sa foundation naa iyang mga description, foundation name, website url, facebook url. 
-        /*Foundation::create([
+        Foundation::create([
            'foundation_id'=> $foundation_id,
-                                        
-                     
-            ]);*/
+            'name' => $time.'wala pa',
+            'user_id'=>$user_id,
+            'image_url'=>'',
+            'description'=>'',
+            'location'=>'',
+            'email'=> $data['email']                                                
+            ]);
 
         return User::create([
 

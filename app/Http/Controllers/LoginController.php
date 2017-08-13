@@ -15,9 +15,10 @@ class LoginController extends Controller
 
     	if(!\Auth::attempt(request(['email','password']))){
             
-            $message = array("Message"=>"Invalid credentials");
+            $message = array("message"=>"Invalid credentials");
     		return response()->json($message);
-            
+
+
     	}else{
             
             if(\Auth::user()->role == 'volunteer'){
@@ -32,7 +33,9 @@ class LoginController extends Controller
 
                 return response()->json(array("volunteer_id"=>$volunteer->volunteer_id, 
                                             "api_token"  => $user->api_token,
-                                            "message" => $message)); 
+                                            "message" => $message,
+                                            "name"=> $user->name,
+                                            "image_url",$volunteer->image_url); 
                 
             }else{
                 // wa lang sa tay mobile ang foundation
