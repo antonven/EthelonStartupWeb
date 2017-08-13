@@ -38,7 +38,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 	    Route::get('/getallfoundations','FoundationController@getallfoundations');
 		Route::post('/activitypoints','VolunteerController@points');
 
-		Route::post('/test','ActivityController@test');
+		Route::get('/test','ActivityController@test');
 
 
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
