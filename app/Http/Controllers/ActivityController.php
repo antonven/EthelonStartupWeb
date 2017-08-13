@@ -16,6 +16,11 @@ class ActivityController extends Controller
 {
 
   
+  public function test(){
+    $activities = Activity::all();
+
+    return response()->json($activities);
+  }
     
     public function index()
     {
