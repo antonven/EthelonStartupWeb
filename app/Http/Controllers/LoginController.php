@@ -35,7 +35,7 @@ class LoginController extends Controller
                                             "api_token"  => $user->api_token,
                                             "message" => $message,
                                             "name"=> $user->name,
-                                            "image_url",$volunteer->image_url)); 
+                                            "image_url" => $volunteer->image_url)); 
                 
             }else{
                 // wa lang sa tay mobile ang foundation
