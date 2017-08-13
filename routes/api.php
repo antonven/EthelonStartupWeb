@@ -45,6 +45,8 @@ Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
 
 Route::post('/register','RegistrationController@register');
+
+
 Route::post('/login','LoginController@login');
 
 Route::post('/session','LoginController@sessionwatch');
