@@ -13,16 +13,16 @@ class LoginController extends Controller
 
     public function login(Request $request){
 
+    
+
     	if(!\Auth::attempt(request(['email','password']))){
             
             $message = array("message"=>"Invalid credentials");
-    		return response()->json($message);
-
+    		
 
     	}else{
             
-            if(\Auth::user()->role == 'volunteer'){
-
+          
                    
                     $user = User::where('email',$request->input('email'))->first();
                     $volunteer = Volunteer::where('user_id',$user->user_id)->first();
@@ -35,13 +35,8 @@ class LoginController extends Controller
                                             "api_token"  => $user->api_token,
                                             "message" => $message,
                                             "name"=> $user->name,
-                                            "image_url" => $volunteer->image_url)); 
-                
-            }else{
-                // wa lang sa tay mobile ang foundation
-            }
-            
-    		//return response()->json(\Auth::user()->api_token);	    	
+                                            "image_url" => $volunteer->image_url));            
+    	   	
     	}
     }
 
