@@ -17,7 +17,7 @@ class ActivityController extends Controller
 
   
   public function test(){
-    $activities = Activity::all();
+    $activities = User::all();
 
     return response()->json($activities);
   }
