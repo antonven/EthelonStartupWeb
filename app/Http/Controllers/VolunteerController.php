@@ -175,6 +175,7 @@ class VolunteerController extends Controller
     	$activitiesBefore = Volunteerbeforeactivity::where('volunteer_id',$volunteer_id)->get();
 
     	return response()->json($activitiesBefore);
+
     }
 
     //kuhaon ang activities nga na attendan nah sa volunteer

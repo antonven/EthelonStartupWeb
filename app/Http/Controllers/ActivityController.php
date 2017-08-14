@@ -131,24 +131,33 @@ class ActivityController extends Controller
         $activityScores = array();
         $newActivities = array();
 
+
+
     	$activities = Activity::where('status',false)->get();
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
+
 
             foreach($activities as $activity){
                 $count = 0;
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
+                    
+
+
                     /*$act = \DB::table('activities')->select('activities.*','volunteeractivities.volunteer_id as vol_count')
                                                    ->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('activities.activity_id',$activity->activity_id)->get();*/
                                                                 //problem here    
-                                                  // return response()->json($act);                                     
+                                                  // return response()->json($act); 
 
+
+                                                                                   
                     foreach($activityskills as $activityskill){
 
                             foreach($skills as $skill){
 
                                 if($skill->name == $activityskill->name){
                                     $matches = $matches + 1;
-                                    break; 
+                                    break;
+
                                 }
                             }//innermost foreach
 
@@ -185,10 +194,13 @@ class ActivityController extends Controller
                 }
                 
             } 
-            
+
+           
+
             return response()->json(array_reverse($activityKeeper));
 
-    	//return response()->json($activities);
+
+    	   //return response()->json($activities);
         
     }
 
@@ -259,14 +271,15 @@ class ActivityController extends Controller
     }
 
     public function practice1(){
+        
         $a = 5;
         do{
                $a = $a + 0.5; 
                echo($a.' ');
         }while($a != 15);
-
+        
     }
-
+    
     public function practice2(){
         $sum = 0;
         $a = 1;

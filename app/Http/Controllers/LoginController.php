@@ -23,20 +23,18 @@ class LoginController extends Controller
     	}else{
             
           
-                   
                     $user = User::where('email',$request->input('email'))->first();
                     $volunteer = Volunteer::where('user_id',$user->user_id)->first();
                     $message = "Success";
 
                                        // return response()->json($user->user_id);
 
-
                 return response()->json(array("volunteer_id"=>$volunteer->volunteer_id, 
                                             "api_token"  => $user->api_token,
                                             "message" => $message,
                                             "name"=> $user->name,
                                             "image_url" => $volunteer->image_url));            
-    	   	
+    	   	       
     	}
     }
 
@@ -47,7 +45,6 @@ class LoginController extends Controller
 
             $watcher = User::where('user_id',$request->input('facebook_id'))->get();
 
-                                   
             if($watcher->count()){
 
                     //auth()->login($request->input('facebook_id'));
@@ -100,11 +97,10 @@ class LoginController extends Controller
     
     public function sessionwatch(Request $request){
 
-         
+        
             $volunteer = Volunteer::where('user_id',$request->input('facebook_id'))->first();
-          
-            
-           // return dd($volunteer);          
+                          
+            // return dd($volunteer);          
             return $volunteer->volunteer_id;
                 
     }
