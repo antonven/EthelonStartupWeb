@@ -206,6 +206,7 @@ class ActivityController extends Controller
 
     public function portfolio(Request $request){
 
+
         $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.created_at','DESC')->get();
 
 

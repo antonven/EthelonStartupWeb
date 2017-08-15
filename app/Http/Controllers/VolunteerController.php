@@ -66,8 +66,8 @@ class VolunteerController extends Controller
          if($watch->count()){
 
             $data = array("message"=>"Already Joined");
-
             return response()->json($data);
+            
          }                                   
          else{
 
@@ -84,7 +84,7 @@ class VolunteerController extends Controller
                  'activity_id'=>$request->input('activity_id'),
                  'status'=> false  
                 ]);
-
+            
 
             $data = array("message"=>"Success");
 

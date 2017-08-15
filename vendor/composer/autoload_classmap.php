@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'AddColumnContactpersonFromActivitiesTable' => $baseDir . '/database/migrations/2017_07_30_112805_add_column_contactperson_from_activities_table.php',
     'AddColumnPasswordFromUsersTable' => $baseDir . '/database/migrations/2017_07_27_191129_add_column_password_from_users_table.php',
+    'AddColumnStartdateInActivities' => $baseDir . '/database/migrations/2017_08_15_215940_add_column_startdate_in_activities.php',
     'AddColumnTimestampInActivityskills' => $baseDir . '/database/migrations/2017_08_03_215620_add_column_timestamp_in_activityskills.php',
     'AddUserIdColumnInFoundationsTable' => $baseDir . '/database/migrations/2017_08_03_213649_add_user_id_column_in_foundations_table.php',
     'App\\Activity' => $baseDir . '/app/Activity.php',
@@ -92,6 +93,7 @@ return array(
     'DeepCopy\\TypeFilter\\Spl\\SplDoublyLinkedList' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/Spl/SplDoublyLinkedList.php',
     'DeepCopy\\TypeFilter\\TypeFilter' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/TypeFilter.php',
     'DeepCopy\\TypeMatcher\\TypeMatcher' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/TypeMatcher/TypeMatcher.php',
+    'DeleteColumnDateInActivitiesTable' => $baseDir . '/database/migrations/2017_08_15_215702_delete_column_date_in_activities_table.php',
     'Doctrine\\Common\\Inflector\\Inflector' => $vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
     'Doctrine\\Instantiator\\Exception\\ExceptionInterface' => $vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator/Exception/ExceptionInterface.php',
     'Doctrine\\Instantiator\\Exception\\InvalidArgumentException' => $vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator/Exception/InvalidArgumentException.php',

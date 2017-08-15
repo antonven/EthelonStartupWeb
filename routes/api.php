@@ -23,7 +23,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 	Route::post('/volunteerskills','VolunteerController@inputSkills');	
 	Route::post('/getallactivities','ActivityController@getActivitiesNotDone');			
 
-		Route::post('/joinactivity','VolunteerController@joinActivity');
+		
 		Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
 		Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
 		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
@@ -36,7 +36,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 	
 });
 	
-		
+		Route::post('/joinactivity','VolunteerController@joinActivity');
 
 		Route::get('/test','ActivityController@test');
 

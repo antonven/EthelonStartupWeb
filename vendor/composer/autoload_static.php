@@ -279,6 +279,7 @@ class ComposerStaticInit56711270566107abf49bcc4db815b00d
     public static $classMap = array (
         'AddColumnContactpersonFromActivitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_30_112805_add_column_contactperson_from_activities_table.php',
         'AddColumnPasswordFromUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_27_191129_add_column_password_from_users_table.php',
+        'AddColumnStartdateInActivities' => __DIR__ . '/../..' . '/database/migrations/2017_08_15_215940_add_column_startdate_in_activities.php',
         'AddColumnTimestampInActivityskills' => __DIR__ . '/../..' . '/database/migrations/2017_08_03_215620_add_column_timestamp_in_activityskills.php',
         'AddUserIdColumnInFoundationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_03_213649_add_user_id_column_in_foundations_table.php',
         'App\\Activity' => __DIR__ . '/../..' . '/app/Activity.php',
@@ -363,6 +364,7 @@ class ComposerStaticInit56711270566107abf49bcc4db815b00d
         'DeepCopy\\TypeFilter\\Spl\\SplDoublyLinkedList' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/Spl/SplDoublyLinkedList.php',
         'DeepCopy\\TypeFilter\\TypeFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/TypeFilter.php',
         'DeepCopy\\TypeMatcher\\TypeMatcher' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeMatcher/TypeMatcher.php',
+        'DeleteColumnDateInActivitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_15_215702_delete_column_date_in_activities_table.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'Doctrine\\Instantiator\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator/Exception/ExceptionInterface.php',
         'Doctrine\\Instantiator\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator/Exception/InvalidArgumentException.php',
