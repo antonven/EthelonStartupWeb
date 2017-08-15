@@ -57,37 +57,48 @@ class LoginController extends Controller
                      
             }else{
 
-               $user_id = $request->input('facebook_id'); 
-               $email = $request->input('email');
-               $role = $request->input('role');
-               $name = $request->input('name');
-               
-               $volunteer_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-                $time = microtime(true);
-                $api_token = $user_id.$time;
+                $emailWatcher = User::where('email',$request->input('email'))->get();
 
-                $user = User::create([
-                        'user_id'=>$user_id,
-                        'name'=>$name,
-                        'email'=>$email,
-                        'role'=> $role,
-                        'api_token'=> $api_token
-                    ]);
+                if($emailWatcher->count()){
+                    
+                    $data = array("message"=>"Email already exists");
 
-                $volunteer = Volunteer::create([
-                        'volunteer_id' => $volunteer_id,
-                         'user_id'=>$user_id,
-                         'location'=>$request->input('location'),
-                         'image_url'=>$request->input('image_url')
-                 ]);
-                                    
+                    return response()->json($data);
 
-                // auth()->login($user);
-                
-                 $data = array("message"=>"First Time","volunteer_id"=>$volunteer_id,"api_token"=>$api_token);    
-                 
-                 //return $data;
-                 return response()->json($data);
+                }else{
+
+                   $user_id = $request->input('facebook_id'); 
+                   $email = $request->input('email');
+                   $role = $request->input('role');
+                   $name = $request->input('name');
+                   
+                   $volunteer_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                    $time = microtime(true);
+                    $api_token = $user_id.$time;
+
+                    $user = User::create([
+                            'user_id'=>$user_id,
+                            'name'=>$name,
+                            'email'=>$email,
+                            'role'=> $role,
+                            'api_token'=> $api_token
+                        ]);
+
+                    $volunteer = Volunteer::create([
+                            'volunteer_id' => $volunteer_id,
+                             'user_id'=>$user_id,
+                             'location'=>$request->input('location'),
+                             'image_url'=>$request->input('image_url')
+                     ]);
+                                        
+
+                    // auth()->login($user);
+                    
+                     $data = array("message"=>"First Time","volunteer_id"=>$volunteer_id,"api_token"=>$api_token);    
+                     
+                     //return $data;
+                     return response()->json($data);
+                 }
              }
 
              //return $message = "Logged in";
