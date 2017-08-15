@@ -43,26 +43,36 @@ class LoginController extends Controller
 
     public function loginwithFb(Request $request){
 
+
+
             $watcher = User::where('user_id',$request->input('facebook_id'))->get();
 
             if($watcher->count()){
 
+                $emailWatcher = User::where('email',$request->input('email'))->get();
+
+                if($emailWatcher->count()){
+
+                    $data = array("message"=>"Email already exists");
+                    return response()->json($data);
+
+                }else{
                     //auth()->login($request->input('facebook_id'));
-                $watch = Volunteer::where('user_id',$request->input('facebook_id'))->first();
-                $watcher = User::where('user_id',$request->input('facebook_id'))->first();
+                  $watch = Volunteer::where('user_id',$request->input('facebook_id'))->first();
+                  $watcher = User::where('user_id',$request->input('facebook_id'))->first();
 
                   $data = array("message"=>"Not First Time","volunteer_id"=>$watch->volunteer_id,"api_token"=>$watcher->api_token);      
                      
                   return response()->json($data);
+                }
                      
             }else{
 
                 $emailWatcher = User::where('email',$request->input('email'))->get();
 
                 if($emailWatcher->count()){
-                    
-                    $data = array("message"=>"Email already exists");
 
+                    $data = array("message"=>"Email already exists");
                     return response()->json($data);
 
                 }else{
