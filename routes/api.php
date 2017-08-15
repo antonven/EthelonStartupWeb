@@ -21,10 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware'=>'auth:api'],function(){
 
 	Route::post('/volunteerskills','VolunteerController@inputSkills');	
-	
-	
-});
-	
 	Route::post('/getallactivities','ActivityController@getActivitiesNotDone');			
 
 		Route::post('/joinactivity','VolunteerController@joinActivity');
@@ -37,6 +33,10 @@ Route::group(['middleware'=>'auth:api'],function(){
 	    Route::post('/portfolio','ActivityController@portfolio');
 	    Route::get('/getallfoundations','FoundationController@getallfoundations');
 		Route::post('/activitypoints','VolunteerController@points');
+	
+});
+	
+		
 
 		Route::get('/test','ActivityController@test');
 
