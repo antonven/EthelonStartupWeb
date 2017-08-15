@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-     Commands\CustomCommand::class
+     Commands\CustomCommand::class,
+     Commands\RunScheduler::class
     ];
 
     /**
@@ -36,6 +37,7 @@ class Kernel extends ConsoleKernel
      *
      * @return void
      */
+
     protected function commands()
     {
         require base_path('routes/console.php');
