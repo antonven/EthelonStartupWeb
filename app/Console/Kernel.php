@@ -30,6 +30,8 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
          
         $schedule->command('custom:command')->daily();
+        $schedule->command('schedule:cron {--queue}')->daily();
+
     }
 
     /**

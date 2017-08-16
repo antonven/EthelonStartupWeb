@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Activity;
 
+
 class CustomCommand extends Command
 {
     /**
@@ -40,7 +41,8 @@ class CustomCommand extends Command
     public function handle()
     {
         //
-        Activity::where('date','>=',Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> true]);
+
+       // Activity::where('startDate','>=',\Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> false]);
         
         
     }
