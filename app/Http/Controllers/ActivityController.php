@@ -16,9 +16,9 @@ class ActivityController extends Controller
 {
 
   
-  public function test(){
+  public function test(Request $request){
     //$activities = User::all();
-    Volunteeractivity::where('activity_id','1eb8ec2')->where('volunteer_id','cb32a99')->update(['status' => true]);
+    Volunteeractivity::where('activity_id',$request->inpur('activity_id'))->where('volunteer_id',$request->input('volunteer_id'))->update(['status' => true]);
 
     return "success";
     //return response()->json($activities);
