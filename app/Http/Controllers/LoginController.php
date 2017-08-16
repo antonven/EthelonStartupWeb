@@ -53,7 +53,7 @@ class LoginController extends Controller
 
               }
 
-              
+
                     //auth()->login($request->input('facebook_id'));
                   $watch = Volunteer::where('user_id',$request->input('facebook_id'))->first();
                   $watcher = User::where('user_id',$request->input('facebook_id'))->first();
@@ -63,7 +63,7 @@ class LoginController extends Controller
                   return response()->json($data);
                 
                      
-            }else{
+            else{
 
                 $emailWatcher = User::where('email',$request->input('email'))->get();
 
