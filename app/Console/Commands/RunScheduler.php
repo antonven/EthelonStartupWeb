@@ -103,6 +103,7 @@ class RunScheduler extends Command
      *
      * @return int
      */
+
     protected function nextMinute()
     {
         $current = Carbon::now();
