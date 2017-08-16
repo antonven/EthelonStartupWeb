@@ -41,7 +41,7 @@ class CustomCommand extends Command
     {
         //
         Activity::where('date','>=',Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> true]);
-        Usere::delete('')
+        
         
     }
 }

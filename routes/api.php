@@ -33,12 +33,15 @@ Route::group(['middleware'=>'auth:api'],function(){
 	    Route::post('/portfolio','ActivityController@portfolio');
 	    Route::get('/getallfoundations','FoundationController@getallfoundations');
 		Route::post('/activitypoints','VolunteerController@points');
+			
+Route::post('/joinactivity','VolunteerController@joinActivity');
 	
 });
 	
-		Route::post('/joinactivity','VolunteerController@joinActivity');
 
-		Route::get('/test','ActivityController@test');
+
+
+Route::get('/test','ActivityController@test');
 
 
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
@@ -50,6 +53,7 @@ Route::post('/register','RegistrationController@register');
 Route::post('/login','LoginController@login');
 
 Route::post('/session','LoginController@sessionwatch');
+
 Route::group(['middleware'=>'foundation'],function(){
 
 });
