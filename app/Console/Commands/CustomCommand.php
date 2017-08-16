@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Acitivities;
+use App\Activity;
 
 class CustomCommand extends Command
 {
@@ -36,9 +36,12 @@ class CustomCommand extends Command
      *
      * @return mixed
      */
+
     public function handle()
     {
         //
-        Acitivities::where('date','>=',Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> true]);
+        Activity::where('date','>=',Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> true]);
+        Usere::delete('')
+        
     }
 }

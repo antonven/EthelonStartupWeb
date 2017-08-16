@@ -51,12 +51,9 @@ class LoginController extends Controller
 
                 $emailWatcher = User::where('email',$request->input('email'))->get();
 
-                if($emailWatcher->count()){
+              }
 
-                    $data = array("message"=>"Email already exists");
-                    return response()->json($data);
-
-                }else{
+              
                     //auth()->login($request->input('facebook_id'));
                   $watch = Volunteer::where('user_id',$request->input('facebook_id'))->first();
                   $watcher = User::where('user_id',$request->input('facebook_id'))->first();
@@ -64,7 +61,7 @@ class LoginController extends Controller
                   $data = array("message"=>"Not First Time","volunteer_id"=>$watch->volunteer_id,"api_token"=>$watcher->api_token);      
                      
                   return response()->json($data);
-                }
+                
                      
             }else{
 
