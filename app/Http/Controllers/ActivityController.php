@@ -20,7 +20,8 @@ class ActivityController extends Controller
     //$activities = User::all();
     Volunteeractivity::where('activity_id','eb1b8e9')->where('volunteer_id','ec0331c')->update(['status' => true]);
 
-    return response()->json($activities);
+    return "success";
+    //return response()->json($activities);
   }
     
     public function index()
