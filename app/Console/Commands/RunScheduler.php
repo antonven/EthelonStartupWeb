@@ -72,7 +72,7 @@ class RunScheduler extends Command
      */
     public function handle()
     {
-        Activity::whereDate('startDate','>=',\Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> true]);
+        Activity::whereDate('startDate','<=',\Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> true]);
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
         $this->runScheduler();
