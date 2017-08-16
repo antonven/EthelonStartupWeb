@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Volunteerbeforeactivity;
 use App\Volunteerafteractivity;
 use App\Activity;
-use app\Volunteeractivity;
+use App\Volunteeractivity;
 use App\Volunteerskill;
 use App\Activityskill;
 use App\User;
