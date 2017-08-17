@@ -140,7 +140,8 @@ class ActivityController extends Controller
 
 
             foreach($activities as $activity){
-                $count = 0;
+                $count = 0; 
+               
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
                     
 
@@ -252,59 +253,4 @@ class ActivityController extends Controller
 
     }
 
-
-   /* public function practice(){
-        $a = 0; 
-        $sum = 0;
-        
-        do{
-              if($a == 0){
-
-              } 
-              else if($a == 1){
-                  $sum = 1;  
-              }
-              else
-              {
-                $sum = $sum + $a;
-              } 
-          }while($a <= 100);
-
-        return $sum;
-    }
-
-    public function practice1(){
-        
-        $a = 5;
-        do{
-               $a = $a + 0.5; 
-               echo($a.' ');
-        }while($a != 15);
-        
-    }
-    
-    public function practice2(){
-        $sum = 0;
-        $a = 1;
-      
-        do{
-             if($a % 2 == 0){
-
-            }else{
-                $sum = $sum + $a;
-                echo($sum. ' ');
-            }
-            $a++;
-        }while($a <= 30);
-    }
-    public function practice3(){
-        $a = 1;
-        $b = 2;
-        do{
-           $sum = $a / $b;
-           echo($sum.' ');
-           $b++;     
-        }while($b <= 10);
-    }*/
-   
 }

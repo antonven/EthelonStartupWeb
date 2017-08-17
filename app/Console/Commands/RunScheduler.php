@@ -54,7 +54,7 @@ class RunScheduler extends Command
      * @var string
      */
     protected $description = 'Run the scheduler without cron (For use with Heroku etc)';
-
+    
     /**
      * Create a new command instance.
      *

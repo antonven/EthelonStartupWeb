@@ -75,7 +75,7 @@ class LoginController extends Controller
                    $role = $request->input('role');
                    $name = $request->input('name');
                    
-                   $volunteer_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                    $volunteer_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
                     $time = microtime(true);
                     $api_token = $user_id.$time;
 
