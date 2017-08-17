@@ -26,7 +26,14 @@ class ActivityController extends Controller
     
     public function index()
     {
-        $activities = \Auth::user()->foundation->activities;
+        if(\Auth::user()->foundation)
+        {
+            $activities = \Auth::user()->foundation->activities;
+        }
+        else{
+            $activities = null;
+        }
+
         return view('activity.activityIndex', compact('activities'));
     }
     
@@ -41,18 +48,18 @@ class ActivityController extends Controller
             "activity_id" => substr(sha1(mt_rand().microtime()), mt_rand(0,35),7),
             "foundation_id" => \Auth::user()->foundation->foundation_id,
             "name" => $request->input('activityName'),
-            "image_url" => $file,
+            "image_url" => url('/file_attachments').'/'.$file,
             "imageQr_url" => $request->input('activityName'),
             "description" => $request->input('activityDescription'),
             "location" => "",
             "start_time" => "",
             "end_time" => "",
             "date" => "",
-            "group" => "",
+            "group" => "1",
             "long" => $request->input('long'),
             "lat" => $request->input('lat'),
             "points_equivalent" => 1,
-            "status" => 0
+            "status" => 1
         ])->activity_id;
         
         foreach($request->input('activitySkills') as $skill)
@@ -72,9 +79,8 @@ class ActivityController extends Controller
         if($extension != "bin")
         {
             $destinationPath = public_path('file_attachments');
-            $filename = $file->getClientOriginalName();
+            $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
             $file->move($destinationPath, $filename);
-            
             return $filename;
         }
         else
