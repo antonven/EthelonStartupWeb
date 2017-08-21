@@ -11,9 +11,9 @@ use App\Volunteerskill;
 use App\Activityskill;
 use App\User;
 
-use Vendor\Autoload;
 
-require __DIR__.'/../vendor/autoload.php';
+
+
 
 
 class ActivityController extends Controller
