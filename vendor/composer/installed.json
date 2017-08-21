@@ -3525,5 +3525,195 @@
             "testing",
             "xunit"
         ]
+    },
+    {
+        "name": "pusher/pusher-php-server",
+        "version": "3.0.0",
+        "version_normalized": "3.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/pusher/pusher-http-php.git",
+            "reference": "a013bd4190e12422365e559b309f54ec50cbd0dd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/pusher/pusher-http-php/zipball/a013bd4190e12422365e559b309f54ec50cbd0dd",
+            "reference": "a013bd4190e12422365e559b309f54ec50cbd0dd",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": "^5.4 || ^7.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7"
+        },
+        "time": "2017-07-10T09:21:10+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Pusher\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Library for interacting with the Pusher REST API",
+        "keywords": [
+            "events",
+            "messaging",
+            "php-pusher-server",
+            "publish",
+            "push",
+            "pusher",
+            "real time",
+            "real-time",
+            "realtime",
+            "rest",
+            "trigger"
+        ]
+    },
+    {
+        "name": "graham-campbell/manager",
+        "version": "v3.0.0",
+        "version_normalized": "3.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/GrahamCampbell/Laravel-Manager.git",
+            "reference": "bf9da58aa32676209961558eaac5d6625f6f1399"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/GrahamCampbell/Laravel-Manager/zipball/bf9da58aa32676209961558eaac5d6625f6f1399",
+            "reference": "bf9da58aa32676209961558eaac5d6625f6f1399",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/contracts": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
+            "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
+            "php": "^7.0"
+        },
+        "require-dev": {
+            "graham-campbell/analyzer": "^1.1",
+            "graham-campbell/testbench-core": "^2.0",
+            "mockery/mockery": "dev-master#c90a17247147543081e4d00f46911e422b49e583",
+            "phpunit/phpunit": "^6.0"
+        },
+        "time": "2017-08-06T17:54:13+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "GrahamCampbell\\Manager\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Graham Campbell",
+                "email": "graham@alt-three.com"
+            }
+        ],
+        "description": "Manager Provides Some Manager Functionality For Laravel 5",
+        "keywords": [
+            "Graham Campbell",
+            "GrahamCampbell",
+            "Laravel Manager",
+            "Laravel-Manager",
+            "connector",
+            "framework",
+            "interface",
+            "laravel",
+            "manager"
+        ]
+    },
+    {
+        "name": "vinkla/pusher",
+        "version": "3.0.0",
+        "version_normalized": "3.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/vinkla/laravel-pusher.git",
+            "reference": "5f7f448e5aef5b5cf1843e240da4920708514f02"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/vinkla/laravel-pusher/zipball/5f7f448e5aef5b5cf1843e240da4920708514f02",
+            "reference": "5f7f448e5aef5b5cf1843e240da4920708514f02",
+            "shasum": ""
+        },
+        "require": {
+            "graham-campbell/manager": "^3.0",
+            "illuminate/contracts": "5.3.* || 5.4.* || 5.5.*",
+            "illuminate/support": "5.3.* || 5.4.* || 5.5.*",
+            "php": "^7.0",
+            "pusher/pusher-php-server": "^3.0"
+        },
+        "require-dev": {
+            "graham-campbell/analyzer": "^1.1",
+            "graham-campbell/testbench": "^4.0",
+            "mockery/mockery": "dev-master#c90a17247147543081e4d00f46911e422b49e583",
+            "phpunit/phpunit": "^6.3"
+        },
+        "time": "2017-08-07T13:01:24+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.0-dev"
+            },
+            "laravel": {
+                "providers": [
+                    "Vinkla\\Pusher\\PusherServiceProvider"
+                ],
+                "aliases": {
+                    "Pusher": "Vinkla\\Pusher\\Facades\\Pusher"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Vinkla\\Pusher\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Vincent Klaiber",
+                "email": "hello@vinkla.com",
+                "homepage": "https://vinkla.com"
+            }
+        ],
+        "description": "A Pusher bridge for Laravel",
+        "keywords": [
+            "api",
+            "events",
+            "http",
+            "laravel",
+            "php-pusher-server",
+            "publish",
+            "pusher",
+            "realtime",
+            "rest",
+            "trigger"
+        ]
     }
 ]

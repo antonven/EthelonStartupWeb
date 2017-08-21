@@ -11,6 +11,10 @@ use App\Volunteerskill;
 use App\Activityskill;
 use App\User;
 
+use Vendor\Autoload;
+
+require __DIR__.'/../vendor/autoload.php';
+
 
 class ActivityController extends Controller
 {
@@ -18,9 +22,19 @@ class ActivityController extends Controller
   
   public function test(Request $request){
     //$activities = User::all();
-    Volunteeractivity::where('activity_id',$request->input('activity_id'))->where('volunteer_id',$request->input('volunteer_id'))->update(['status' => true]);
+     $options = array(
+    'cluster' => 'ap1',
+    'encrypted' => true
+  );
+  $pusher = new Pusher\Pusher(
+    '208f7d226e5c9a4e7626',
+    '0521a17074c0d25d8023',
+    '384681',
+    $options
+  );
 
-    return "success";
+  $data['message'] = 'hello world';
+  $pusher->trigger('kitten', 'my-event', $data);
     //return response()->json($activities);
   }
     
@@ -138,9 +152,9 @@ class ActivityController extends Controller
         $activityKeeper = array();
         $activityScores = array();
         $newActivities = array();
+        
 
-
-
+        
     	$activities = Activity::where('status',false)->get();
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
@@ -150,15 +164,11 @@ class ActivityController extends Controller
                
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
                     
-
-
                     /*$act = \DB::table('activities')->select('activities.*','volunteeractivities.volunteer_id as vol_count')
                                                    ->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('activities.activity_id',$activity->activity_id)->get();*/
                                                                 //problem here    
                                                   // return response()->json($act); 
-
-
-                                                                                   
+                                 
                     foreach($activityskills as $activityskill){
 
                             foreach($skills as $skill){
@@ -166,7 +176,7 @@ class ActivityController extends Controller
                                 if($skill->name == $activityskill->name){
                                     $matches = $matches + 1;
                                     break;
-
+                                        
                                 }
                             }//innermost foreach
 

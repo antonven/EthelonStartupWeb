@@ -43,8 +43,6 @@ class LoginController extends Controller
 
     public function loginwithFb(Request $request){
 
-
-
             $watcher = User::where('user_id',$request->input('facebook_id'))->get();
 
             if($watcher->count()){
@@ -94,8 +92,6 @@ class LoginController extends Controller
                              'image_url'=>$request->input('image_url')
                      ]);
                                         
-
-                    // auth()->login($user);
                     
                      $data = array("message"=>"First Time","volunteer_id"=>$volunteer_id,"api_token"=>$api_token);    
                      

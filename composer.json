@@ -9,7 +9,9 @@
         "fideloper/proxy": "^3.3",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "nesbot/carbon": "^1.22"
+        "nesbot/carbon": "^1.22",
+        "pusher/pusher-php-server": "^3.0",
+        "vinkla/pusher": "^3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
