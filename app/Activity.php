@@ -14,12 +14,17 @@ class Activity extends Model
     ];
 
     public function foundation(){
-    	return $this->belongsTo('App\Foundation','activity_id','activity_id');
 
+    	return $this->belongsTo('App\Foundation','activity_id','activity_id');
+            
     }
 
     public function skills(){
     	return $this->hasMany('App\Activityskill','activity_id','activity_id');
+    }
+
+    public function groups(){
+        return $this->hasMany('App\Activitygroup','activity_id','activity_id');
     }
 
 }

@@ -72,7 +72,13 @@ class RunScheduler extends Command
      */
     public function handle()
     {
+
+
         Activity::whereDate('startDate','<=',\Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> true]);
+
+          createGroups();  
+
+
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
         $this->runScheduler();
@@ -108,5 +114,9 @@ class RunScheduler extends Command
     {
         $current = Carbon::now();
         return 60 -$current->second;
+    }
+
+    public function createGroups(){
+            
     }
 }

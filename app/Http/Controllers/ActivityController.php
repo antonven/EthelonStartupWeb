@@ -10,12 +10,11 @@ use App\Volunteeractivity;
 use App\Volunteerskill;
 use App\Activityskill;
 use App\User;
-use App\Http\Controllers\Pusher\Pusher;
+use App\Events\HelloPusherEvent;
+use App\Volunteer;
+use App\Activitycriteria;
 
-
-
-
-
+use Illuminate\Support\Facades\App;
 
 class ActivityController extends Controller
 {
@@ -23,11 +22,12 @@ class ActivityController extends Controller
   
   public function test(Request $request){
     //$activities = User::all();
-     $options = array(
+    /* $options = array(
     'cluster' => 'ap1',
     'encrypted' => true
   );
-  $pusher = new Pusher\Pusher(
+
+  $pusher = new \Pusher(
     '208f7d226e5c9a4e7626',
     '0521a17074c0d25d8023',
     '384681',
@@ -35,8 +35,23 @@ class ActivityController extends Controller
   );
 
   $data['message'] = 'hello world';
-  $pusher->trigger('kitten', 'my-event', $data);
+  $pusher->trigger('kitten', 'my-event', $data);*/
     //return response()->json($activities);
+
+    //Pusher::trigger('kitten','my-event',['message' => 'Hello world']);
+
+  /*  $pusher = App::make('pusher');
+     $pusher->trigger( 'kitten',
+                      'my-event', 
+                      array('text' => 'Preparing the Pusher Laracon.eu workshop!'));
+
+    return 'string';*/
+    $points = Volunteer::where('volunteer_id','db5c55b')->select('points')->first();
+
+    return $points->points;
+
+
+
   }
     
     public function index()
@@ -56,6 +71,7 @@ class ActivityController extends Controller
     {
         return view('activity.activityCreate');
     }
+
     public function store(Request $request)
     {
         $file = $this->uploadFile($request->file('file'));
@@ -157,6 +173,10 @@ class ActivityController extends Controller
 
         
     	$activities = Activity::where('status',false)->get();
+        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundtion_name') 
+                                              ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
+                                               ->where('activities.status',false)->get();    
+
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
 
@@ -215,8 +235,6 @@ class ActivityController extends Controller
                 
             } 
 
-           
-
             return response()->json($activityKeeper);
 
 
@@ -265,9 +283,14 @@ class ActivityController extends Controller
         
     }
 
-    public function points(Request $request){
+   public function criteria(Request $request){ 
 
+     $activity_id = $request->input('activity_id');
+     $criterias  = Activitycriteria::where('activity_id',$activity_id)->get();
 
-    }
+     return response()->json($criterias);
+
+   }
+
 
 }

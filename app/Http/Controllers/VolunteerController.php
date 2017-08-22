@@ -78,7 +78,6 @@ class VolunteerController extends Controller
         		 
         		]);
 
-
             Volunteeractivity::create([
                  'volunteer_id'=>$request->input('volunteer_id'),
                  'activity_id'=>$request->input('activity_id'),
@@ -94,74 +93,82 @@ class VolunteerController extends Controller
     }
 
     public function successAttendance(Request $request){
+      //see if naka attendance nabah siya
+    $vol_activity = Volunteerafteractivity::where('volunteer_id',$request->input('volunteer_id'))
+                                          ->where('activity_id',$request->input('activity_id'))->get();
 
-    	Volunteerafteractivity::create([
+     if($vol_activity->count()){
 
-    		'volunteer_id'=>$request->input('volunteer_id'),
-    		 'activity_id'=>$request->input('activity_id')
+            $data = array("message"=>"Attended already");
+            return response()->json($data);
 
-    		]);
+     }else{
 
-         \DB::table('volunteeractivities')
-            ->where('volunteer_id',$request->input('volunteer_id'))
-            ->where('activity_id',$request->input('activity_id'))
-            ->update(['status' => true]);
+        	Volunteerafteractivity::create([
 
-            
-               $sumOfPoints = 0;
+        		'volunteer_id'=>$request->input('volunteer_id'),
+        		 'activity_id'=>$request->input('activity_id')
 
-        if($count = $request->input('count')){
-            for($i = 0; $i<$count; $i++){
-                $skill = $request->input('params'.$i);
+        		]);
 
-                switch($skill){
+             \DB::table('volunteeractivities')
+                ->where('volunteer_id',$request->input('volunteer_id'))
+                ->where('activity_id',$request->input('activity_id'))
+                ->update(['status' => true]);
 
-                     case 'Environmental': $sumOfPoints = $sumOfPoints + 30;
-                                  break;          
-                     case 'Sports': $sumOfPoints = $sumOfPoints + 20;                       
-                                  break;
-                     case 'Culinary': $sumOfPoints = $sumOfPoints + 20;
-                                  break;
-                     case 'Medical': $sumOfPoints = $sumOfPoints + 40;
-                                  break;
-                     case 'Charity': $sumOfPoints = $sumOfPoints + 50;
-                                  break;
-                     case 'Livelihood': $sumOfPoints = $sumOfPoints + 50;
-                                  break;
-                     case 'Education': $sumOfPoints = $sumOfPoints + 40;
-                                  break;
-                     case 'Arts': $sumOfPoints = $sumOfPoints + 20;
-                                  break;
+                
+                   $sumOfPoints = 0;
+
+            if($count = $request->input('count')){
+                for($i = 0; $i<$count; $i++){
+
+                    $skill = $request->input('params'.$i);
+                    $sumOfPoints = points($skill,$sumOfPoints);
 
                 }
             }
+            
+            $hours = $request->input('hours');
+            $sumOfPoints = $sumOfPoints * $hours;
+            $volunteer_points = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->select('points')->first();
+
+            $new_points = $volunteer_points->points + $sumOfPoints;
+
+            Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
+            \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
+
+            $data = array("message"=>"Success");
+
+            return response()->json($data);
         }
-        
-        $hours = $request->input('hours');
-        $sumOfPoints = $sumOfPoints * $hours;
-        $volunteer_points = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->select('points');
-
-        $new_points = $volunteer_points->points + $sumOfPoints;
-
-        Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
-
-        \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
-
-        return "Success";
          
     }
-      public function points(){
 
-        //environmental -30
-        //sports - 20
-        //culinary -20
-        //medicine -40
-        //charity -50
-        //livelihood -50
-        //education -40
-        //arts -20
+    public function points($skill, $sumOfPoints){
 
-        // points = (categories) * time difference;
+
+                    switch($skill){
+
+                         case 'Environmental': $sumOfPoints = $sumOfPoints + 30;
+                                      break;          
+                         case 'Sports': $sumOfPoints = $sumOfPoints + 20;                       
+                                      break;
+                         case 'Culinary': $sumOfPoints = $sumOfPoints + 20;
+                                      break;
+                         case 'Medical': $sumOfPoints = $sumOfPoints + 40;
+                                      break;
+                         case 'Charity': $sumOfPoints = $sumOfPoints + 50;
+                                      break;
+                         case 'Livelihood': $sumOfPoints = $sumOfPoints + 50;
+                                      break;
+                         case 'Education': $sumOfPoints = $sumOfPoints + 40;
+                                      break;
+                         case 'Arts': $sumOfPoints = $sumOfPoints + 20;
+                                      break;
+
+                    }        
+
+                    return $sumOfPoints;
       
     }
 
@@ -171,7 +178,6 @@ class VolunteerController extends Controller
 
     	$volunteer_id = $request->input('volunteer_id');
 
-    	//return dd($volunteer_id);
     	$activitiesBefore = Volunteerbeforeactivity::where('volunteer_id',$volunteer_id)->get();
 
     	return response()->json($activitiesBefore);
@@ -189,7 +195,16 @@ class VolunteerController extends Controller
     }
 
     public function leaderboard(){
+
+        $volunteerLeaderboard = Volunteer::orderBy('points','desc')->get();
+
+        return response()->json($volunteerLeaderboard);
+
+    }  
+
+    public function volunteeractivitycriteria(){
         
-    }   
+    }
+
 
 }
