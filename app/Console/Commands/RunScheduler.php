@@ -75,10 +75,10 @@ class RunScheduler extends Command
 
 
         Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+
+          //createGroups();  
+
             
-          createGroups();  
-
-
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
         $this->runScheduler();
