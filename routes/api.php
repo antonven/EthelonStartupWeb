@@ -30,7 +30,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::get('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 					
 		Route::post('/attendanceactivity','VolunteerController@successAttendance');
-	    Route::post('/portfolio','ActivityController@portfolio');
+	    
 	    Route::get('/getallfoundations','FoundationController@getallfoundations');
 		Route::post('/activitypoints','VolunteerController@points');
 			
@@ -38,7 +38,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::get('/leaderboard','VolunteerController@leaderboard');
 		Route::post('/activitycriteria','ActivityController@criteria');
 		Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
-
+			Route::post('/portfolio','ActivityController@portfolio');
 });
 	
 
