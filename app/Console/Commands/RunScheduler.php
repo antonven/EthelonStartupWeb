@@ -74,8 +74,8 @@ class RunScheduler extends Command
     {
 
 
-        Activity::whereDate('startDate','<=',\Carbon\Carbon::today()->format('Y-m-d'))->update(['status'=> true]);
-
+        Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+            
           createGroups();  
 
 
@@ -117,6 +117,6 @@ class RunScheduler extends Command
     }
 
     public function createGroups(){
-            
+
     }
 }
