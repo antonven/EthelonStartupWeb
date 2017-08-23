@@ -8,6 +8,8 @@ class Activitygroup extends Model
 {
     //
     protected $fillable=['id','activity_id','numOfVolunteers'];
+    public $incrementing = false; 
+    public $timestamps = false;
 
     public function volunteergroups(){
     	return $this->hasMany('App\Volunteergroup','activity_groups_id','id');			

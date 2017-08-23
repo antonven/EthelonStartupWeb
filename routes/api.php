@@ -27,22 +27,24 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
 		Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
 		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
-		Route::get('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
+		
 					
 		Route::post('/attendanceactivity','VolunteerController@successAttendance');
 	    
 	    Route::get('/getallfoundations','FoundationController@getallfoundations');
 		Route::post('/activitypoints','VolunteerController@points');
-			
+				
 		Route::post('/joinactivity','VolunteerController@joinActivity');
 		Route::get('/leaderboard','VolunteerController@leaderboard');
 		Route::post('/activitycriteria','ActivityController@criteria');
 		Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
-			Route::post('/portfolio','ActivityController@portfolio');
+		Route::post('/portfolio','ActivityController@portfolio');
+		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 });
 	
 
-Route::get('/test','ActivityController@test');
+
+Route::post('/test','ActivityController@test');
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
 

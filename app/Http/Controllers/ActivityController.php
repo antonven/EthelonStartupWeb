@@ -14,6 +14,9 @@ use App\Events\HelloPusherEvent;
 use App\Volunteer;
 use App\Activitycriteria;
 
+use App\Activitygroup;
+use App\Volunteergroup;
+
 use Illuminate\Support\Facades\App;
 
 class ActivityController extends Controller
@@ -21,35 +24,91 @@ class ActivityController extends Controller
 
   
   public function test(Request $request){
-    //$activities = User::all();
-    /* $options = array(
-    'cluster' => 'ap1',
-    'encrypted' => true
-  );
+   
+   $activities = Activity::where('activity_id','df89c1e')->get();
 
-  $pusher = new \Pusher(
-    '208f7d226e5c9a4e7626',
-    '0521a17074c0d25d8023',
-    '384681',
-    $options
-  );
+  
 
-  $data['message'] = 'hello world';
-  $pusher->trigger('kitten', 'my-event', $data);*/
-    //return response()->json($activities);
+      foreach($activities as $activity){
 
-    //Pusher::trigger('kitten','my-event',['message' => 'Hello world']);
+                $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->get();
+                
 
-  /*  $pusher = App::make('pusher');
-     $pusher->trigger( 'kitten',
-                      'my-event', 
-                      array('text' => 'Preparing the Pusher Laracon.eu workshop!'));
+                $vol_per_group = $activity->group; 
+                $count = 0;
+                $countforId = 1;
+                $id = '';
+                $volunteerCount = 0;   
 
-    return 'string';*/
-    $points = Volunteer::where('volunteer_id','db5c55b')->select('points')->first();
 
-    return $points->points;
+                    foreach($volunteers as $volunteer){
 
+                      if($count < $vol_per_group){
+                            if($count == 0){
+
+                                $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                                Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id  
+                                    ]);   
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    
+
+                                $count++;
+                                $countforId++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+
+                            }else{
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]); 
+
+                                $count++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+                            }
+                      }
+                      else{
+
+                        $count = 0;
+
+                           $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                                    
+                                Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id  
+                                    ]);   
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    
+
+                                $count++;
+                                $countforId++;
+                                
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+
+                      }     
+                      $volunteerCount++;
+                    }                    
+                    
+            }
+
+    
+    $groups = Volunteergroup::all();
+    return response()->json($groups);
 
 
   }
@@ -141,9 +200,12 @@ class ActivityController extends Controller
     public function getVolunteersBefore(Request $request){
     	$activity_id = $request->input('activity_id');
 
-    	//$volunteersBefore = Volunteerbeforeactivity::where('activity_id',$activity_id)->get();
 
-        $volunteersBefore = \DB::table('volunteers')->select('volunteers.*')->join('volunteerbeforeactivities','volunteerbeforeactivities.volunteer_id','=','volunteers.volunteer_id')->where('volunteerbeforeactivities.activity_id',$activity_id)->get();
+    $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.image_url as image_url')
+                                           ->join('volunteers','volunteers.user_id','=','users.user_id')
+                                           ->join('volunteerbeforeactivities','volunteerbeforeactivities.volunteer_id','=','volunteers.volunteer_id') 
+                                           ->get();
+                                            
 
     	return response()->json($volunteersBefore);
         

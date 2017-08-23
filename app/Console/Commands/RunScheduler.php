@@ -30,6 +30,9 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use App\Activity;
+use App\Volunteerbeforeactivity;
+use App\Activitygroup;
+use App\Volunteergroup;
 
 /**
  *
@@ -74,11 +77,11 @@ class RunScheduler extends Command
     {
 
 
-        Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+        $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true])->get();
 
-          //createGroups();  
+          
 
-            
+
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
         $this->runScheduler();
