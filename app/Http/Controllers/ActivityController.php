@@ -204,6 +204,7 @@ class ActivityController extends Controller
     $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.image_url as image_url')
                                            ->join('volunteers','volunteers.user_id','=','users.user_id')
                                            ->join('volunteerbeforeactivities','volunteerbeforeactivities.volunteer_id','=','volunteers.volunteer_id') 
+                                           ->where('volunteerbeforeactivities.activity_id',$activity_id)
                                            ->get();
                                             
 
