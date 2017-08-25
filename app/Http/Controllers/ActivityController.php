@@ -13,7 +13,7 @@ use App\User;
 use App\Events\HelloPusherEvent;
 use App\Volunteer;
 use App\Activitycriteria;
-
+use Carbon\Carbon;
 use App\Activitygroup;
 use App\Volunteergroup;
 
@@ -133,6 +133,8 @@ class ActivityController extends Controller
 
     public function store(Request $request)
     {
+        $dt = new \DateTime($request->input('startDate'));
+        $sd = Carbon::instance($dt);
         $file = $this->uploadFile($request->file('file'));
         $activityId = Activity::create([
             "activity_id" => substr(sha1(mt_rand().microtime()), mt_rand(0,35),7),
@@ -141,16 +143,22 @@ class ActivityController extends Controller
             "image_url" => url('/file_attachments').'/'.$file,
             "imageQr_url" => $request->input('activityName'),
             "description" => $request->input('activityDescription'),
-            "location" => "",
-            "start_time" => "",
-            "end_time" => "",
-            "date" => "",
+            "location" => "ambot asa",
             "group" => "1",
             "long" => $request->input('long'),
             "lat" => $request->input('lat'),
             "points_equivalent" => 1,
-            "status" => 1
+            "status" => 1,
+            "startDate" => $sd->toDateTimeString()
         ])->activity_id;
+        
+        foreach($request->input('criteria') as $criterion)
+        {
+            Activitycriteria::create([
+               "activity_id" => $activityId,
+                "criteria" => $criterion
+            ]);
+        }
         
         foreach($request->input('activitySkills') as $skill)
         {

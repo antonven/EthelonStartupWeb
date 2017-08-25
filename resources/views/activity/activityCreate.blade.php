@@ -1,241 +1,241 @@
-@extends('layouts.master')
+@extends('layouts.neonMaster')
+
+@section('page_title')
+@endsection
 
 @section('additional_styles')
-  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/webfont.css').'?'.rand() }}">
-  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/climacons-font.css').'?'.rand() }}">
-  <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/bootstrap/dist/css/bootstrap.css').'?'.rand() }}">
-  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/font-awesome.css').'?'.rand() }}">
-  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/card.css').'?'.rand() }}">
-  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/sli.css').'?'.rand() }}">
-  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/animate.css').'?'.rand() }}">
-  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/app.css').'?'.rand() }}">
-  <link rel="stylesheet" href="{{ asset('reactorAssets/styles/app.skins.css').'?'.rand() }}">
-    <!-- page stylesheets -->
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/summernote/dist/summernote.css') }}">
-    <!-- end page stylesheets -->
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/blueimp-file-upload/css/jquery.fileupload.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/blueimp-file-upload/css/jquery.fileupload-ui.css') }}">
-    <!-- page stylesheets -->
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/chosen_v1.4.0/chosen.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/jquery.tagsinput/src/jquery.tagsinput.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/checkbo/src/0.1.4/css/checkBo.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/intl-tel-input/build/css/intlTelInput.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/bootstrap-daterangepicker/daterangepicker.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/clockpicker/dist/bootstrap-clockpicker.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/jquery-labelauty/source/jquery-labelauty.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/multiselect/css/multi-select.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/ui-select/dist/select.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/select2/dist/css/select2.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/selectize/dist/css/selectize.css') }}">
-    <!-- end page stylesheets -->
-    <!-- page stylesheets -->
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/chosen_v1.4.0/chosen.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('reactorAssets/vendor/checkbo/src/0.1.4/css/checkBo.min.css') }}">
-    <!-- end page stylesheets -->
-    <style>
-              #map {
-        height: 100%;
-      }
-    </style>
 @endsection
+
+@section('sidebar')
+    @include('neon_includes.sidebar')
+@endsection
+
+@section('header')
+    @include('neon_includes.header')
+@endsection
+
 @section('content')
-<div class="container"> 
-            <header class="clearfix">
-                <h1>Activity <span>with Expanding Preview</span></h1> 
-            </header>
-<form class="form-horizontal" role="form" action="{{ url('/activity/store') }}" method="post" enctype="multipart/form-data">
-    {{ csrf_field() }}
+    <div class="row">
+        <form id="rootwizard" method="post" action="{{ url('/activity/store') }}" class="form-horizontal form-wizard validate" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="steps-progress">
+                        <div class="progress-indicator"></div>
+                </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Activity Name</label>
-                                <div class="col-sm-10">
-                                    <div class="row">
-                                        <div class="col-xs-9">
-                                            <input type="text" class="form-control" name="activityName" required="required">
+                <ul>
+                        <li class="active">
+                                <a href="#tab1" data-toggle="tab"><span>1</span>ACTIVITY INFO</a>
+                        </li>
+                        <li>
+                                <a href="#tab2" data-toggle="tab"><span>2</span>TIME & LOCATION</a>
+                        </li>
+                        <li>
+                                <a href="#tab3" data-toggle="tab"><span>3</span>CRITERIA AND GROUPS</a>
+                        </li>
+                        <li>
+                                <a href="#tab4" data-toggle="tab"><span>4</span>FINISH</a>
+                        </li>
+                </ul>
+                <hr>
+                <div class="tab-content">
+
+                        <div class="tab-pane active" id="tab1">
+
+                                <div class="row">
+                                        <div class="col-md-6 col-md-offset-3">
+                                                <div class="form-group">
+                                                        <label class="control-label" for="full_name">Activity Name</label>
+                                                        <input class="form-control" name="activityName" id="full_name" data-validate="required" placeholder="" />
+                                                </div>
                                         </div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="col-md-6 col-md-offset-3">
+                                                <div class="form-group">
+                                                        <label class="control-label">Activity Skills</label>
+
+                                                                <select name="activitySkills[]" class="select2" multiple data-validate="required">
+                                                                        <option value="Environmental" >Environmental</option>
+                                                                        <option value="Youth Work" >Youth Work</option>
+                                                                        <option value="Education" >Education</option>
+                                                                        <option value="Livelihood" >Livelihood</option>
+                                                                </select>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="col-md-6 col-md-offset-3">
+                                                <div class="form-group">
+                                                        <label for="field-1" class="control-label">Picture</label>
+                                                        <input type="file" name="file" class="form-control" id="field-file" data-validate="required" placeholder="Placeholder">
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="col-md-6 col-md-offset-3">
+                                                <div class="form-group">
+                                                        <label for="field-1" class="control-label">Description</label>
+                                                        <textarea class="form-control wysihtml5" data-stylesheet-url="assets/css/wysihtml5-color.css" name="activityDescription" data-validate="required" id="sample_wysiwyg"></textarea>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <div class="row">
+                                        <div class="col-md-6 col-md-offset-3">
+                                                <div class="form-group">
+                                                        <label for="field-1" class="control-label">Number of volunteers</label>
+                                                        <div class="input-spinner ">
+                                                                <button type="button" class="btn btn-default">-</button>
+                                                                <input type="text" class="form-control size-5" value="0" data-min="0" data-max="9999" name="numberOfVolunteers" data-validate="required" />
+                                                                <button type="button" class="btn btn-default">+</button>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+
+                        </div>
+                        <div class="tab-pane" id="tab2">
+                            <div class="row">
+                                    <div class="col-md-6 col-md-offset-3">
+                                            <div class="form-group">
+                                                    <label for="field-1" class="control-label">Start Date & Time</label>
+                                                    <div class="date-and-time">
+                                                        <input type="text" class="form-control datepicker" data-format="yyyy-mm-dd" name="startDate" data-validate="required">
+                                                        <input type="text" class="form-control timepicker" data-template="dropdown" data-show-meridian="true" data-minute-step="1" name="startTime" data-validate="required"/>
+                                                    </div>
+                                            </div>
+                                    </div>
+                            </div>
+
+                            <div class="row">
+                                    <div class="col-md-6 col-md-offset-3">
+                                            <div class="form-group">
+                                                    <label for="field-1" class="control-label">End Date & Time</label>
+                                                    <div class="date-and-time">
+                                                        <input type="text" class="form-control datepicker" data-format="D, dd MM yyyy" name="endDate" data-validate="required">
+                                                        <input type="text" class="form-control timepicker" data-template="dropdown" data-show-meridian="true" data-minute-step="1" name="endTime" data-validate="required" />
+                                                    </div>
+                                            </div>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-md-6 col-md-offset-3">
+                                            <div class="form-group">
+                                                    <label for="field-1" class="control-label">Location</label>
+                                                    <div class="date-and-time">
+                                                            <div id="map" style="height:500px"></div>
+                                                    </div>
+                                            </div>
+                                    </div>
+                            </div>
+                        </div>
+                    <div class="tab-pane" id="tab3">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="form-group">
+                                    <label for="field-1" class="control-label">Criteria</label>
+                    <script type="text/javascript">
+                            // Code used to add Todo Tasks
+                            jQuery(document).ready(function($)
+                            {
+                                    var $todo_tasks = $("#todo_tasks");
+
+                                    $todo_tasks.find('input[type="text"]').on('keydown', function(ev)
+                                    {
+                                            if(ev.keyCode == 13)
+                                            {
+                                                    ev.preventDefault();
+
+                                                    if($.trim($(this).val()).length)
+                                                    {
+                                                            var $todo_entry = $('<li><div class="checkbox checkbox-replace color-white"><label>'+$(this).val()+'</label></div></li>');
+                                                            var $hidden = $('<input type="text" name="criteria[]" value="'+$(this).val()+'" hidden>');
+                                                            $(this).val('');
+                                                            $hidden.appendTo($(".tile-content"));
+                                                            $todo_entry.appendTo($todo_tasks.find('.todo-list'));
+                                                            $todo_entry.hide().slideDown('fast');
+                                                            replaceCheckboxes();
+                                                    }
+                                            }
+                                    });
+                            });
+                    </script>
+
+                                    <div class="tile-block" id="todo_tasks">
+
+                                            <div class="tile-header">
+                                                    <i class="entypo-list"></i>
+
+                                                    <a href="#">
+                                                            Criteria
+                                                            <span>Add criteria for the event</span>
+                                                    </a>
+                                            </div>
+
+                                            <div class="tile-content">
+
+                                                    <input type="text" class="form-control" placeholder="Add Task" />
+
+
+                                                    <ul class="todo-list">
+                                                    </ul>
+
+                                            </div>
                                     </div>
                                 </div>
                             </div>
-                        
-                        
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Activity Skills</label>
-                                <div class="col-sm-10">
-                                    <div class="row">
-                                        <div class="col-xs-9">
-                                            <select data-placeholder=" " multiple class="chosen" style="width: 100%;" name="activitySkills[]" required="required">
-                                                <option>Environmental</option>
-                                                <option>Culinary</option>
-                                                <option>Sports</option>
-                                                <option>Education</option>
-                                                <option>Charity</option>
-                                                <option>Livelyhood</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                        
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Activity Banner</label>
-                                <div class="col-sm-10">
-                                    <span class="btn btn-danger fileinput-button">
-                                        <i class="icon-plus"></i>
-                                        <span>Add files...</span>
-                                        <input type="file" name="file" multiple>
-                                    </span>
-                                </div>
-                            </div>
-                        
-                        
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Activity Description</label>
-                                <div class="col-sm-10">
-                                    <div class="row">
-                                        <div class="col-xs-9">
-                                            <textarea class="bootstrap-wysiwyg" placeholder="" name="activityDescription" required="required"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                    <div class="form-group">
-                    <label class="col-sm-2 control-label">Number of volunteers</label>
-                    </div>
-       
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Start Date/Time</label>
-                <div class="col-sm-10">
-                    <div class="row">
-                        <div class="col-xs-9">
-                        <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label class="col-sm-2 control-label">End Date/Time</label>
-                <div class="col-sm-10">
-                    <div class="row">
-                        <div class="col-xs-9">
-                        <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+                        <div class="tab-pane" id="tab4">
+                                <button type="submit" class="btn btn-default">Create Activity</button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-    <div class="form-group">
-        <label class="col-sm-2 control-label">Location</label>
-            <div class="col-sm-10">
-                <div class="row">
-                    <div class="col-xs-9">
-                    <!-- diri ang map -->
-                    <div id="map" style="height:500px">
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-        
-    <!-- hidden input diri para long lat sa maps -->
-    <input type="text" id="long" name="long" hidden="hidden">
-    <input type="text" id="lat" name="lat" hidden="hidden">
-    
-    <button type="submit" class="btn btn-danger btn-lg btn-icon mr5"><i class="icon-plus"></i><span>Create Event</span></button>
-</form>
-    </div>
 
+
+
+                        <ul class="pager wizard">
+                                <li class="previous first">
+                                        <a href="#">First</a>
+                                </li>
+                                <li class="previous">
+                                        <a href="#"><i class="entypo-left-open"></i> Previous</a>
+                                </li>
+
+                                <li class="next last">
+                                        <a href="#">Last</a>
+                                </li>
+                                <li class="next">
+                                        <a href="#">Next <i class="entypo-right-open"></i></a>
+                                </li>
+                        </ul>
+
+                </div>
+            <!-- hidden input diri para long lat sa maps -->
+            <input type="text" id="long" name="long" hidden="hidden">
+            <input type="text" id="lat" name="lat" hidden="hidden">
+        </form>
+    </div>
 @endsection
 
 @section('additional_scripts')
-   <script src="{{ asset('reactorAssets/scripts/helpers/modernizr.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/jquery/dist/jquery.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/bootstrap/dist/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/fastclick/lib/fastclick.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js') }}"></script>
-    <script src="{{ asset('reactorAssets/scripts/helpers/smartresize.js') }}"></script>
-    <script src="{{ asset('reactorAssets/scripts/constants.js') }}"></script>
-    <script src="{{ asset('reactorAssets/scripts/main.js') }}"></script>
-    <!-- page scripts -->
-    <script src="{{ asset('reactorAssets/vendor/chosen_v1.4.0/chosen.jquery.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/jquery.tagsinput/src/jquery.tagsinput.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/checkbo/src/0.1.4/js/checkBo.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/intl-tel-input//build/js/intlTelInput.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/moment/min/moment.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/select2/dist/js/select2.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/selectize/dist/js/standalone/selectize.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/jquery-labelauty/source/jquery-labelauty.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/bootstrap-maxlength/src/bootstrap-maxlength.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/typeahead.js/dist/typeahead.bundle.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/multiselect/js/jquery.multi-select.js') }}"></script>
-    <!-- end page scripts -->
-    <!-- initialize page scripts -->
-    <script src="{{ asset('reactorAssets/scripts/forms/plugins.js') }}"></script>
-    <!-- end initialize page scripts -->
-    <!-- page scripts -->
-    <script src="{{ asset('reactorAssets/vendor/chosen_v1.4.0/chosen.jquery.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/card/lib/js/jquery.card.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/jquery-validation/dist/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/checkbo/src/0.1.4/js/checkBo.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}"></script>
-    <!-- end page scripts -->
-    <!-- initialize page scripts -->
-    <script src="{{ asset('reactorAssets/scripts/forms/wizard.js') }}"></script>
-    <!-- end initialize page scripts -->
-    <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-    <script src="{{ asset('reactorAssets/vendor/jquery.ui/ui/core.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/jquery.ui/ui/widget.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/jquery.ui/ui/mouse.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/jquery.ui/ui/draggable.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.iframe-transport.js') }}"></script>
-    <!-- The basic File Upload plugin -->
-    <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.fileupload.js') }}"></script>
-    <!-- The File Upload processing plugin -->
-    <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.fileupload-process.js') }}"></script>
-    <!-- The File Upload image preview & resize plugin -->
-    <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.fileupload-image.js') }}"></script>
-    <!-- The File Upload audio preview plugin -->
-    <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.fileupload-audio.js') }}"></script>
-    <!-- The File Upload video preview plugin -->
-    <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.fileupload-video.js') }}"></script>
-    <!-- The File Upload validation plugin -->
-    <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.fileupload-validate.js') }}"></script>
-    <!-- The File Upload user interface plugin -->
-    <script src="{{ asset('reactorAssets/vendor/blueimp-file-upload/js/jquery.fileupload-ui.js') }}"></script>
-    <!-- end page scripts -->
-    <!-- initialize page scripts -->
-    <script src="{{ asset('reactorAssets/scripts/forms/upload.js') }}"></script>
-    <!-- end initialize page scripts -->
-    <!-- page scripts -->
-    <script src="{{ asset('reactorAssets/vendor/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.min.js') }}"></script>
-    <script src="{{ asset('reactorAssets/vendor/summernote/dist/summernote.min.js') }}"></script>
-    <!-- end page scripts -->
-    <!-- initialize page scripts -->
-    <script src="{{ asset('reactorAssets/scripts/forms/wysiwyg.js') }}"></script>
-    <!-- end initialize page scripts -->
+	<script src="{{ asset('neonAssets/js/gsap/main-gsap.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/bootstrap.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/joinable.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/resizeable.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/neon-api.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/jquery.bootstrap.wizard.min.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/jquery.validate.min.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/jquery.inputmask.bundle.min.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/bootstrap-datepicker.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/bootstrap-switch.min.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/jquery.multi-select.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/neon-chat.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/neon-custom.js') }}"></script>
+	<script src="{{ asset('neonAssets/js/neon-demo.js') }}"></script>
     <script>
       // Note: This example requires that you consent to location sharing when
       // prompted by your browser. If you see the error "The Geolocation service
@@ -245,7 +245,7 @@
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: -34.397, lng: 150.644},
-          zoom: 18
+          zoom: 20
         });
         infoWindow = new google.maps.InfoWindow;
 
@@ -286,10 +286,10 @@
           placeMarker(event.latLng);
           //input x ang long y ang lat
           console.log(event);
-          console.log(event.da.x);
-          console.log(event.da.y);
-          $('#long').val(event.da.x);
-          $('#lat').val(event.da.y);
+          console.log(event.ea.x);
+          console.log(event.ea.y);
+          $('#long').val(event.ea.x);
+          $('#lat').val(event.ea.y);
           console.log($('#long').val());
           console.log($('#lat').val());
         });

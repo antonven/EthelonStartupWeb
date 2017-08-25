@@ -1,13 +1,21 @@
-@extends('layouts.master')
+@extends('layouts.neonMaster')
 
-@section('additional_styles')
-
+@section('page_title')
 @endsection
 
-@section('content')
+@section('additional_styles')
+@endsection
 
+@section('sidebar')
+    @include('neon_includes.sidebar')
+@endsection
+
+@section('header')
+    @include('neon_includes.header')
+@endsection
+
+@section('contents')
 @endsection
 
 @section('additional_scripts')
-   
 @endsection
