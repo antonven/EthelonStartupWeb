@@ -148,7 +148,7 @@ class ActivityController extends Controller
             "long" => $request->input('long'),
             "lat" => $request->input('lat'),
             "points_equivalent" => 1,
-            "status" => 1,
+            "status" => 0,
             "startDate" => $sd->toDateTimeString()
         ])->activity_id;
         
