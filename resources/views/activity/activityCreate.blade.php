@@ -69,7 +69,7 @@
                                         <div class="col-md-6 col-md-offset-3">
                                                 <div class="form-group">
                                                         <label for="field-1" class="control-label">Picture</label>
-                                                        <input type="file" name="file" class="form-control" id="field-file" data-validate="required" placeholder="Placeholder">
+                                                        <input type="file" name="file" class="form-control" id="field-file" placeholder="Placeholder">
                                                 </div>
                                         </div>
                                 </div>
