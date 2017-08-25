@@ -43,7 +43,6 @@ Route::group(['middleware'=>'auth:api'],function(){
 });
 	
 
-
 Route::post('/test','ActivityController@test');
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
