@@ -22,6 +22,20 @@ use Illuminate\Support\Facades\App;
 class ActivityController extends Controller
 {
 
+
+ public function deleteall(){
+    \DB::table('users')->delete();
+    \DB::table('foundations')->delete();
+    \DB::table('volunteers')->delete();
+    \DB::table('activityskills')->delete();
+    \DB::table('volunteergroups')->delete();
+    \DB::table('volunteerbeforeactivities')->delete();
+    \DB::table('volunteerafteractivities')->delete();
+    \DB::table('activitycriterias')->delete();
+    \DB::table('volunteerskills')->delete();
+    \DB::table('volunteeractivities')->delete();
+
+ }
   
   public function test(Request $request){
    
@@ -207,7 +221,7 @@ class ActivityController extends Controller
     public function getVolunteersBefore(Request $request){
 
     	$activity_id = $request->input('activity_id');
-        
+
 
         $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.image_url as image_url')
                                            ->join('volunteers','volunteers.user_id','=','users.user_id')
