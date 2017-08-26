@@ -31,7 +31,7 @@ class ActivityController extends Controller
 
       foreach($activities as $activity){
 
-                $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->get();
+                $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
 
                 $vol_per_group = $activity->group; 
@@ -39,7 +39,6 @@ class ActivityController extends Controller
                 $countforId = 1;
                 $id = '';
                 $volunteerCount = 0;   
-
 
                     foreach($volunteers as $volunteer){
 
@@ -107,7 +106,7 @@ class ActivityController extends Controller
             }
 
     
-    $groups = Volunteergroup::all();
+    $groups = Activitygroup::all();
     return response()->json($groups);
 
 
@@ -206,10 +205,11 @@ class ActivityController extends Controller
 
 	//get volunteers that said they will join
     public function getVolunteersBefore(Request $request){
+
     	$activity_id = $request->input('activity_id');
+        
 
-
-    $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.image_url as image_url')
+        $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.image_url as image_url')
                                            ->join('volunteers','volunteers.user_id','=','users.user_id')
                                            ->join('volunteerbeforeactivities','volunteerbeforeactivities.volunteer_id','=','volunteers.volunteer_id') 
                                            ->where('volunteerbeforeactivities.activity_id',$activity_id)
@@ -242,7 +242,7 @@ class ActivityController extends Controller
         $newActivities = array();
         
 
-        
+                
     	$activities = Activity::where('status',false)->get();
         $activities = \DB::table('activities')->select('activities.*','foundations.name as foundtion_name') 
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
@@ -253,9 +253,41 @@ class ActivityController extends Controller
 
             foreach($activities as $activity){
                 $count = 0; 
+
                
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
-                    
+
+                    $watch = Volunteerbeforeactivity::where('volunteer_id',$request->input('volunteer_id'))
+                                       ->where('activity_id',$activity->activity_id)->get();
+                    if($watch->count()){
+                        $data = "yes";
+                    }else{
+                        $data = "no";
+                    }
+
+
+                    $activityTempo = array("activity_id"=>$activity->activity_id,
+                                            "foundation_id"=>$activity->foundation_id,
+                                            "name"=>$activity->name,
+                                            "image_url"=>$activity->image_url,
+                                            "imageQr_url"=>$activity->imageQr_url,
+                                            "description"=>$activity->description,
+                                            "location"=>$activity->location,
+                                            "start_time"=>$activity->start_time,
+                                            "end_time"=>$activity->end_time,
+                                            "group"=>$activity->group,
+                                            "long"=>$activity->long,
+                                            "lat"=>$activity->lat,
+                                            "points_equivalent"=>$activity->points_equivalent,
+                                            "status"=>$activity->status,
+                                            "created_at"=>$activity->created_at,
+                                            "updated_at"=>$activity->updated_at,
+                                            "contactperson"=>$activity->contactperson,
+                                            "contact"=>$activity->contact,
+                                            "startDate"=>$activity->startDate,
+                                            "foundtion_name"=>$activity->foundtion_name,
+                                            "volunteerstatus"=>$data);                     
+
                     /*$act = \DB::table('activities')->select('activities.*','volunteeractivities.volunteer_id as vol_count')
                                                    ->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('activities.activity_id',$activity->activity_id)->get();*/
                                                                 //problem here    
@@ -266,6 +298,7 @@ class ActivityController extends Controller
                             foreach($skills as $skill){
 
                                 if($skill->name == $activityskill->name){
+
                                     $matches = $matches + 1;
                                     break;
                                         
@@ -276,7 +309,7 @@ class ActivityController extends Controller
                     }//2nd foreach
                 
                     
-                    array_push($activityKeeper,$activity);
+                    array_push($activityKeeper,$activityTempo);
                     array_push($activityScores,$matches);
                     $count++;    
                     $matches = 0;
@@ -307,7 +340,6 @@ class ActivityController extends Controller
             } 
 
             return response()->json($activityKeeper);
-
 
     	   //return response()->json($activities);
         
@@ -363,6 +395,44 @@ class ActivityController extends Controller
      return response()->json($criterias);
 
    }
+
+   public function volunteersToRate(Request $request){
+
+       /* $volunteersToRate = \DB::table('activitygroups')->select('users.name','activitygroups.id','volunteegroups.volunteer_id','activitygroups.numOfVolunteers')->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')->join('volunteers','volunteers.volunteer_id','=','volunteergroups.volunteer_id')->join('users','users.user_id','=','volunteers.user_id')->where('activitygroups.activity_id',$request->input('activity_id'))get();*/
+
+       $volunteersKeeper = array();
+
+       $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
+                                                        ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
+                                                        ->where('volunteergroups.volunteer_id',$request->input('volunteer_id'))
+                                                        ->where('activitygroups.activity_id',$request->input('activity_id'))
+                                                            ->first();
+
+        $volunteersToRate = \DB::table('users')->select('users.name','volunteers.volunteer_id','volunteers.image_url')
+                                                ->join('volunteers','volunteers.user_id','=','users.user_id')
+                                                ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')
+                                                ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
+                                                ->where('volunteergroups.volunteer_id','!=',$request->input('volunteer_id'))
+                                                ->get();   
+
+                     foreach($volunteersToRate as $volunteerToRate){
+
+                             $data = array("name"=>$volunteerToRate->name,
+                                            "volunteer_id"=>$volunteerToRate->volunteer_id,
+                                            "image_url"=>$volunteerToRate->image_url,
+                                            "activity_group_id"=>$activity_group_id->id,
+                                            "num_of_vol"=>$activity_group_id->numOfVolunteers);
+
+                             array_push($volunteersKeeper,$data);
+                     }                           
+
+                                                
+
+
+        return response()->json($volunteersKeeper);                       
+
+   }
+
 
 
 }
