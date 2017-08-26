@@ -18,9 +18,15 @@
                                     <ul class="list-inline links-list pull-right">
 
                                             <li>
-                                                    <a href="extra-login.html">
+                                                    <a href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
                                                             Log Out <i class="entypo-logout right"></i>
                                                     </a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
                                             </li>
                                     </ul>
 
