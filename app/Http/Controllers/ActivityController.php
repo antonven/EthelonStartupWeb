@@ -16,6 +16,7 @@ use App\Activitycriteria;
 use Carbon\Carbon;
 use App\Activitygroup;
 use App\Volunteergroup;
+use App\Volunteercriteria;
 
 use Illuminate\Support\Facades\App;
 
@@ -413,7 +414,7 @@ class ActivityController extends Controller
    public function volunteersToRate(Request $request){
 
        /* $volunteersToRate = \DB::table('activitygroups')->select('users.name','activitygroups.id','volunteegroups.volunteer_id','activitygroups.numOfVolunteers')->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')->join('volunteers','volunteers.volunteer_id','=','volunteergroups.volunteer_id')->join('users','users.user_id','=','volunteers.user_id')->where('activitygroups.activity_id',$request->input('activity_id'))get();*/
-
+       
        $volunteersKeeper = array();
 
        $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
@@ -441,9 +442,22 @@ class ActivityController extends Controller
                      }                           
 
                                                 
-
-
         return response()->json($volunteersKeeper);                       
+
+   }
+
+   public function rategroupmate(Request $request){
+    
+        $activity_group_id = $request->input('activitygroups_id');
+        $volunteer_id = $request->input('volunteer_id');
+        $activity_id = $request->input('activity_id');
+        $criteria_name = $request->input('criteria_name');
+        $rating = $request->input('rating');
+
+        $mate = Volunteercriteria::create([
+                                    
+            ]);
+
 
    }
 

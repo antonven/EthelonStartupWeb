@@ -9,7 +9,7 @@ class Volunteergroup extends Model
     //
     protected $fillable = ['activity_groups_id','volunteer_id'];
     public $timestamps = false;
-
+    
    	public function activtygroup(){
    		return $this->belongsTo('App/Activitygroup','activity_groups_id','id');
    	}

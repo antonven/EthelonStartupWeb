@@ -32,10 +32,10 @@ class Encrypter implements EncrypterContract
      *
      * @throws \RuntimeException
      */
-    public function __construct($key, $cipher = 'AES-256-CBC')
+    public function __construct($key, $cipher = 'AES-128-CBC')
     {
         $key = (string) $key;
-    
+
         if (static::supported($key, $cipher)) {
             $this->key = $key;
             $this->cipher = $cipher;
