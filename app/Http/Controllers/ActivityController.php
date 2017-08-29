@@ -223,10 +223,12 @@ class ActivityController extends Controller
 
 
             $url = \Cloudder::getResult();
+            //return dd($url);
 
             if($url){
 
-                return $url;
+                return $url['url'];
+                
             }
             
         }
