@@ -228,7 +228,7 @@ class ActivityController extends Controller
             if($url){
 
                 return $url['url'];
-                
+
             }
             
         }
@@ -494,28 +494,53 @@ class ActivityController extends Controller
         $mate = Volunteercriteria::create([
                     'volunteer_id' => $volunteer_id,
                     'name'=> $criteria_name,
-                    'activity_id'=>$activity_id,
+                    'actvity_id'=>$activity_id,
                     'activitygroups_id'=>$activity_group_id,
-                    'sum_of_rating' => $rating                
+                    'sum_of_rating' => $rating,          
+                    'criteria_name' => $criteria_name     
             ]);
 
+            if($mate){
 
-        $volunteercriteriapoints = Volunteercriteriapoints::where('activity_id',$activity_id)
-                                             ->where('volunteer_id',$volunteer_id)
-                                             ->where('name',$criteria_name)->first();
+                    $volunteercriteriapoints = Volunteercriteriapoint::where('activity_id',$activity_id)
+                                                         ->where('volunteer_id',$volunteer_id)
+                                                         ->where('criteria_name',$criteria_name)->first();
+                       if($volunteercriteriapoints){
 
-                    $total_points = $volunteercriteriapoints->total_points + $rating;   
-                    $num_of_raters = $volunteercriteriapoints->num_of_raters + 1;
-                    $average_points = $total_points / $num_of_raters;   
+                                $total_points = $volunteercriteriapoints->total_points + $rating;   
+                                $num_of_raters = $volunteercriteriapoints->no_of_raters + 1;
+                                $average_points = $total_points / $num_of_raters;   
 
+                                    $volunteercriteriapoints = \DB::table('volunteercriteriapoints')->where('activity_id',$activity_id)->where('volunteer_id',$volunteer_id)
+                                                         ->where('criteria_name',$criteria_name)
+                                                         ->update(['total_points'=>$total_points,
+                                                                   'no_of_raters'=>$num_of_raters,
+                                                                   'average_points'=>$average_points]);
+                                    if($volunteercriteriapoints){
 
-        \DB::table('volunteercriteriapoints')->where('activity_id',$activity_id)
-                                             ->where('volunteer_id',$volunteer_id)
-                                             ->where('name',$criteria_name)
-                                             ->update(['total_points'=>$total_points,
-                                                       'no_of_raters'=>$num_of_raters,
-                                                       'average_points'=>$average_points]);
+                                        $data = array("message"=>"Success");
 
+                                        return response()->json($data);
+
+                                    }else{
+                                         $data = array("message"=>"Something's wrong");
+
+                                         return response()->json($data);
+                                    }                     
+
+                            }else{
+
+                                $data = array("message"=>"Something's wrong");
+
+                                return response()->json($data);
+                            }                             
+
+             }else{
+
+                $data = array("message"=>"Something's wrong");
+
+                return reponse()->json($data);
+             }
 
    }
 
