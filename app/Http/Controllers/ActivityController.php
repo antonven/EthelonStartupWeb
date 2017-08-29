@@ -170,12 +170,15 @@ class ActivityController extends Controller
         $dt = new \DateTime($request->input('startDate'));
         $sd = Carbon::instance($dt);
         $url = $this->uploadFile($request->file('file'));
+        $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+        $qrUrl = $this->uploadQr($activity_id_store);
+
         $activityId = Activity::create([
-            "activity_id" => substr(sha1(mt_rand().microtime()), mt_rand(0,35),7),
+            "activity_id" => $activity_id_store, 
             "foundation_id" => \Auth::user()->foundation->foundation_id,
             "name" => $request->input('activityName'),
             "image_url" => $url,
-            "imageQr_url" => $request->input('activityName'),
+            "imageQr_url" => $qrUrl,
             "description" => $request->input('activityDescription'),
             "location" => "ambot asa",
             "group" => "1",
@@ -203,6 +206,39 @@ class ActivityController extends Controller
         }
         
         return redirect(url('/activity'));
+    }
+
+    public function uploadQr($activity_id){
+
+        
+        $renderer = new \BaconQrCode\Renderer\Image\Png();
+        $renderer->setHeight(256);
+        $renderer->setWidth(256);
+        $writer = new \BaconQrCode\Writer($renderer);
+
+        $qr_name =  substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+        $writer->writeFile($activity_id, $qr_name);
+
+      if($extension != "bin"){
+
+             $renderer->move($destinationPath, $filename);   
+             $destinationPath = public_path('file_attachments');
+             Cloudder::upload(url('/file_attachments').'/'.$qr_name);
+
+             $url = \Cloudder::getResult();
+            
+            if($url){
+
+                return $url['url'];
+
+            }
+
+      }else{
+            $files = "";
+            return $file;
+        }  
+
+       
     }
 
     public function uploadFile($file)
