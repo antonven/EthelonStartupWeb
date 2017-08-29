@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use App\Activitygroup;
 use App\Volunteergroup;
 use App\Volunteercriteria;
+use App\Volunteercriteriapoint;
 
 use Illuminate\Support\Facades\App;
 
@@ -37,18 +38,35 @@ class ActivityController extends Controller
     \DB::table('volunteeractivities')->delete();
 
  }
+
+  public function create_volunteer_criteria_points($activity, $volunteer_id){
+
+     $criterias = Activitycriteria::where('activity_id',$activity->activity_id)->get();
+
+      foreach($criterias as $criteria){
+
+            Volunteercriteriapoint::create([
+
+                'activity_id'=>$activity->activity_id,
+                'volunteer_id'=>$volunteer_id,
+                'criteria_name'=>$criteria->criteria,
+                'total_points'=>0,
+                'no_of_raters'=>0,
+                'average_points'=>0
+
+                ]);
+      }
+  }
+
   
   public function test(Request $request){
    
    $activities = Activity::where('activity_id','df89c1e')->get();
 
-  
-
       foreach($activities as $activity){
 
                 $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
-
                 $vol_per_group = $activity->group; 
                 $count = 0;
                 $countforId = 1;
@@ -56,6 +74,8 @@ class ActivityController extends Controller
                 $volunteerCount = 0;   
 
                     foreach($volunteers as $volunteer){
+
+                        $this->create_volunteer_criteria_points($activity, $volunteer->volunteer_id);
 
                       if($count < $vol_per_group){
                             if($count == 0){
@@ -149,12 +169,12 @@ class ActivityController extends Controller
     {
         $dt = new \DateTime($request->input('startDate'));
         $sd = Carbon::instance($dt);
-        $file = $this->uploadFile($request->file('file'));
+        $url = $this->uploadFile($request->file('file'));
         $activityId = Activity::create([
             "activity_id" => substr(sha1(mt_rand().microtime()), mt_rand(0,35),7),
             "foundation_id" => \Auth::user()->foundation->foundation_id,
             "name" => $request->input('activityName'),
-            "image_url" => url('/file_attachments').'/'.$file,
+            "image_url" => $url,
             "imageQr_url" => $request->input('activityName'),
             "description" => $request->input('activityDescription'),
             "location" => "ambot asa",
@@ -190,10 +210,19 @@ class ActivityController extends Controller
         $extension = $file->clientExtension();
         if($extension != "bin")
         {
+
             $destinationPath = public_path('file_attachments');
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
             $file->move($destinationPath, $filename);
-            return $filename;
+
+            \Clouder::upload($destinationPath,$filename);
+            $url = \Clouder::getResult();
+
+            if($url){
+
+                return $url;
+            }
+            
         }
         else
         {
@@ -455,8 +484,29 @@ class ActivityController extends Controller
         $rating = $request->input('rating');
 
         $mate = Volunteercriteria::create([
-                                    
+                    'volunteer_id' => $volunteer_id,
+                    'name'=> $criteria_name,
+                    'activity_id'=>$activity_id,
+                    'activitygroups_id'=>$activity_group_id,
+                    'sum_of_rating' => $rating                
             ]);
+
+
+        $volunteercriteriapoints = Volunteercriteriapoints::where('activity_id',$activity_id)
+                                             ->where('volunteer_id',$volunteer_id)
+                                             ->where('name',$criteria_name)->first();
+
+                    $total_points = $volunteercriteriapoints->total_points + $rating;   
+                    $num_of_raters = $volunteercriteriapoints->num_of_raters + 1;
+                    $average_points = $total_points / $num_of_raters;   
+
+
+        \DB::table('volunteercriteriapoints')->where('activity_id',$activity_id)
+                                             ->where('volunteer_id',$volunteer_id)
+                                             ->where('name',$criteria_name)
+                                             ->update(['total_points'=>$total_points,
+                                                       'no_of_raters'=>$num_of_raters,
+                                                       'average_points'=>$average_points]);
 
 
    }

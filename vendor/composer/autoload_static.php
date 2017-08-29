@@ -15,6 +15,7 @@ class ComposerStaticInit56711270566107abf49bcc4db815b00d
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        'c15243c55ab4c20eff78d1e24be20dac' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -292,6 +293,10 @@ class ComposerStaticInit56711270566107abf49bcc4db815b00d
             array (
                 0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
             ),
+            'JD\\Cloudder' => 
+            array (
+                0 => __DIR__ . '/..' . '/jrm2k6/cloudder/src',
+            ),
         ),
     );
 
@@ -342,11 +347,29 @@ class ComposerStaticInit56711270566107abf49bcc4db815b00d
         'App\\Volunteerafteractivity' => __DIR__ . '/../..' . '/app/Volunteerafteractivity.php',
         'App\\Volunteerbeforeactivity' => __DIR__ . '/../..' . '/app/Volunteerbeforeactivity.php',
         'App\\Volunteercriteria' => __DIR__ . '/../..' . '/app/Volunteercriteria.php',
+        'App\\Volunteercriteriapoint' => __DIR__ . '/../..' . '/app/Volunteercriteriapoint.php',
         'App\\Volunteergroup' => __DIR__ . '/../..' . '/app/Volunteergroup.php',
         'App\\Volunteerskill' => __DIR__ . '/../..' . '/app/Volunteerskill.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
+        'Cloudinary' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Cloudinary.php',
+        'CloudinaryField' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/CloudinaryField.php',
+        'Cloudinary\\Api' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\AlreadyExists' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\AuthorizationRequired' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\BadRequest' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\Error' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\GeneralError' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\NotAllowed' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\NotFound' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\RateLimited' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\Api\\Response' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Api.php',
+        'Cloudinary\\AuthToken' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/AuthToken.php',
+        'Cloudinary\\Error' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Uploader.php',
+        'Cloudinary\\PreloadedFile' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/PreloadedFile.php',
+        'Cloudinary\\Search' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Search.php',
+        'Cloudinary\\Uploader' => __DIR__ . '/..' . '/cloudinary/cloudinary_php/src/Uploader.php',
         'Create' => __DIR__ . '/../..' . '/database/migrations/2017_08_15_225606_create.php',
         'CreateActivitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_25_120241_create_activities_table.php',
         'CreateActivitycreteriasTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_15_225828_create_activitycreterias_table.php',
@@ -359,6 +382,7 @@ class ComposerStaticInit56711270566107abf49bcc4db815b00d
         'CreateVolunteeractivitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_29_101955_create_volunteeractivities_table.php',
         'CreateVolunteerafteractivitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_25_125743_create_volunteerafteractivities_table.php',
         'CreateVolunteerbeforeactivitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_25_125306_create_volunteerbeforeactivities_table.php',
+        'CreateVolunteercriteriapointsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_28_223502_create_volunteercriteriapoints_table.php',
         'CreateVolunteercriteriasTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_26_005211_create_volunteercriterias_table.php',
         'CreateVolunteergroupsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_16_005347_create_volunteergroups_table.php',
         'CreateVolunteersTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_25_115809_create_volunteers_table.php',
@@ -1631,6 +1655,9 @@ class ComposerStaticInit56711270566107abf49bcc4db815b00d
         'Illuminate\\View\\ViewName' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewName.php',
         'Illuminate\\View\\ViewServiceProvider' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewServiceProvider.php',
         'InsertNameColumnInFoundationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_26_172834_insert_name_column_in_foundations_table.php',
+        'JD\\Cloudder\\CloudderServiceProvider' => __DIR__ . '/..' . '/jrm2k6/cloudder/src/JD/Cloudder/CloudderServiceProvider.php',
+        'JD\\Cloudder\\CloudinaryWrapper' => __DIR__ . '/..' . '/jrm2k6/cloudder/src/JD/Cloudder/CloudinaryWrapper.php',
+        'JD\\Cloudder\\Facades\\Cloudder' => __DIR__ . '/..' . '/jrm2k6/cloudder/src/JD/Cloudder/Facades/Cloudder.php',
         'JakubOnderka\\PhpConsoleColor\\ConsoleColor' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/JakubOnderka/PhpConsoleColor/ConsoleColor.php',
         'JakubOnderka\\PhpConsoleColor\\InvalidStyleException' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/JakubOnderka/PhpConsoleColor/InvalidStyleException.php',
         'JakubOnderka\\PhpConsoleHighlighter\\Highlighter' => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src/JakubOnderka/PhpConsoleHighlighter/Highlighter.php',

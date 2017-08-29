@@ -15,9 +15,10 @@ class Drop2ColumnsInVolunteercriterias extends Migration
     {
         Schema::table('volunteercriterias', function (Blueprint $table) {
             //
+            
             $table->dropColumn('no_of_raters');
             $table->dropColumn('average_rating');
-            
+
         });
     }
 

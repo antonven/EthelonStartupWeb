@@ -37,12 +37,13 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/joinactivity','VolunteerController@joinActivity');
 		Route::get('/leaderboard','VolunteerController@leaderboard');
 		Route::post('/activitycriteria','ActivityController@criteria');
-		
+		Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
+		Route::post('/groupmatestorate','ActivityController@volunteersToRate');
 		Route::post('/portfolio','ActivityController@portfolio');
 		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 });
 	
-Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
+
 Route::post('/test','ActivityController@test');
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
