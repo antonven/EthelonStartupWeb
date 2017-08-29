@@ -217,10 +217,9 @@ class ActivityController extends Controller
             $file->move($destinationPath, $filename);
 
             $file_decoded = json_decode($file);
-            return dd($file);
+            //return dd($file);
 
-            \Cloudder::upload(url('/file_attachments').'/'.$file_decoded['filename']);
-
+            \Cloudder::upload(url('/file_attachments').'/'.$file->['filename']);
 
 
             $url = \Cloudder::getResult();
