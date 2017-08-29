@@ -215,8 +215,8 @@ class ActivityController extends Controller
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
 
             $file->move($destinationPath, $filename);
-
-            \Cloudder::upload( public_path('file_attachments').'/'.$file);
+            
+            \Cloudder::upload(url('/file_attachments').'/'.$file);
             $url = \Cloudder::getResult();
 
             if($url){
