@@ -231,7 +231,7 @@ class ActivityController extends Controller
              $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
             // $qrCode->move($destinationPath, $filename);   
              
-             Cloudder::upload(echo $qrCode->writeString());
+             Cloudder::upload($qrCode->writeString());
 
             $url = \Cloudder::getResult();
             
