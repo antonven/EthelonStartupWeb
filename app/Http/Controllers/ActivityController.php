@@ -219,10 +219,13 @@ class ActivityController extends Controller
         $qr_name =  substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         $writer->writeFile($activity_id, $qr_name);
 
+
+
       if($extension != "bin"){
 
-             $renderer->move($destinationPath, $filename);   
              $destinationPath = public_path('file_attachments');
+             $renderer->move($destinationPath, $filename);   
+             
              Cloudder::upload(url('/file_attachments').'/'.$qr_name);
 
              $url = \Cloudder::getResult();
@@ -237,8 +240,7 @@ class ActivityController extends Controller
             $files = "";
             return $file;
         }  
-
-       
+   
     }
 
     public function uploadFile($file)
@@ -255,7 +257,9 @@ class ActivityController extends Controller
             $file_decoded = json_decode($file);
             //return dd($file);
 
+
             \Cloudder::upload(url('/file_attachments').'/'.$filename);
+
 
 
             $url = \Cloudder::getResult();
@@ -275,7 +279,7 @@ class ActivityController extends Controller
         }
         
     }
-    
+            
     public function inputSkills(Request $request){
 
         $skills = $request->input('skills');
