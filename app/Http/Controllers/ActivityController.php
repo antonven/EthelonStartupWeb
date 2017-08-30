@@ -18,7 +18,11 @@ use App\Activitygroup;
 use App\Volunteergroup;
 use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
+
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\LabelAlignment;
 use Endroid\QrCode\QrCode;
+use Symfony\Component\HttpFoundation\Response;
 
 use Illuminate\Support\Facades\App;
 
@@ -172,15 +176,18 @@ class ActivityController extends Controller
         $sd = Carbon::instance($dt);
         $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-        $qrUrl = $this->uploadQr($activity_id_store);
-        $url = $this->uploadQr($activity_id_store);
+       // $qrUrl = $this->uploadQr($activity_id_store);
+
+
+        $qrCode = new QrCode($activity_id_store);
+
 
         $activityId = Activity::create([
             "activity_id" => $activity_id_store, 
             "foundation_id" => \Auth::user()->foundation->foundation_id,
             "name" => $request->input('activityName'),
             "image_url" => $url,
-            "imageQr_url" => $qrUrl,
+            "imageQr_url" => $qrCode->writeString(),
             "description" => $request->input('activityDescription'),
             "location" => "ambot asa",
             "group" => "1",
@@ -209,24 +216,9 @@ class ActivityController extends Controller
         
         return redirect(url('/activity'));
     }
-
+/*
     public function uploadQr($activity_id){
 
-       /* 
-        $renderer = new \BaconQrCode\Renderer\Image\Png();
-        $renderer->setHeight(256);
-        $renderer->setWidth(256);
-        $writer = new \BaconQrCode\Writer($renderer);
-
-        $qr_name =  substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-        $writer->writeFile($activity_id, $qr_name);
-
-*/
-
-          $qrCode = new QrCode($activity_id);  
-          header('Content-Type: '.$qrCode->getContentType());
-             
- 
              $destinationPath = public_path('file_attachments');
              $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
             // $qrCode->move($destinationPath, $filename);   
@@ -243,7 +235,7 @@ class ActivityController extends Controller
 
       
    
-    }
+    }*/
 
     public function uploadFile($file)
     {
