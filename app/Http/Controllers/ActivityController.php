@@ -176,18 +176,27 @@ class ActivityController extends Controller
         $sd = Carbon::instance($dt);
         $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-        $qrUrl = $this->uploadQr($activity_id_store);
+        //$qrUrl = $this->uploadQr($activity_id_store);
 
+        $qrCode = new QrCode($activity_id);
 
-        
-
+         $qrCode
+            ->setWriterByName('png')
+            ->setMargin(10)
+            ->setEncoding('UTF-8')
+            ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
+                ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
+                ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
+                ->setValidateResult(false);   
+                
+        $qrUrl = base64_encode($qrCode->writeString());    
 
         $activityId = Activity::create([
             "activity_id" => $activity_id_store, 
             "foundation_id" => \Auth::user()->foundation->foundation_id,
             "name" => $request->input('activityName'),
             "image_url" => $url,
-            "imageQr_url" => $qrCode->writeString(),
+            "imageQr_url" => $qrUrl,
             "description" => $request->input('activityDescription'),
             "location" => "ambot asa",
             "group" => "1",
@@ -217,25 +226,17 @@ class ActivityController extends Controller
         return redirect(url('/activity'));
     }
 
-    public function uploadQr($activity_id){
+/*    public function uploadQr($activity_id){
 
-            $qrCode = new QrCode($activity_id);
+            
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
             $destinationPath = public_path('file_attachments');
 
-            $qrCode
-            ->setWriterByName($filename)
-            ->setMargin(10)
-            ->setEncoding('UTF-8')
-            ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
-                ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
-                ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
-                ->setLabel('Scan the code', 16, __DIR__.'/../assets/noto_sans.otf', LabelAlignment::CENTER)
-                ->setLogoPath($destinationPath.'/'.$filename)
-                ->setLogoWidth(150)
-                ->setValidateResult(false);     
+             
   
             // $qrCode->move($destinationPath, $filename);   
+
+            
              
              \Cloudder::upload(url('/file_attachments').'/'.$filename);
 
@@ -249,7 +250,7 @@ class ActivityController extends Controller
 
       
    
-    }
+    }*/
 
     public function uploadFile($file)
     {
