@@ -219,7 +219,7 @@ class ActivityController extends Controller
 
     public function uploadQr($activity_id){
 
-            $qrCode = new QrCode($activity_id_store);
+            $qrCode = new QrCode($activity_id);
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
             $destinationPath = public_path('file_attachments');
 
