@@ -178,7 +178,7 @@ class ActivityController extends Controller
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         //$qrUrl = $this->uploadQr($activity_id_store);
 
-        $qrCode = new QrCode($activity_id);
+        $qrCode = new QrCode($activity_id_store);
 
          $qrCode
             ->setWriterByName('png')
@@ -188,7 +188,7 @@ class ActivityController extends Controller
                 ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
                 ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
                 ->setValidateResult(false);   
-                
+
         $qrUrl = base64_encode($qrCode->writeString());    
 
         $activityId = Activity::create([
