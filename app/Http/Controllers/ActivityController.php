@@ -18,6 +18,7 @@ use App\Activitygroup;
 use App\Volunteergroup;
 use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
+use Endroid\QrCode\QrCode;
 
 use Illuminate\Support\Facades\App;
 
@@ -172,6 +173,7 @@ class ActivityController extends Controller
         $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         $qrUrl = $this->uploadQr($activity_id_store);
+        $url = $this->uploadQr($activity_id_store);
 
         $activityId = Activity::create([
             "activity_id" => $activity_id_store, 
@@ -210,7 +212,7 @@ class ActivityController extends Controller
 
     public function uploadQr($activity_id){
 
-        
+       /* 
         $renderer = new \BaconQrCode\Renderer\Image\Png();
         $renderer->setHeight(256);
         $renderer->setWidth(256);
@@ -219,16 +221,19 @@ class ActivityController extends Controller
         $qr_name =  substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         $writer->writeFile($activity_id, $qr_name);
 
+*/
 
-
-      if($extension != "bin"){
-
-             $destinationPath = public_path('file_attachments');
-             $renderer->move($destinationPath, $filename);   
+          $qrCode = new QrCode($activity_id);  
+          header('Content-Type: '.$qrCode->getContentType());
              
-             Cloudder::upload(url('/file_attachments').'/'.$qr_name);
+ 
+             $destinationPath = public_path('file_attachments');
+             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+            // $qrCode->move($destinationPath, $filename);   
+             
+             Cloudder::upload(echo $qrCode->writeString());
 
-             $url = \Cloudder::getResult();
+            $url = \Cloudder::getResult();
             
             if($url){
 
@@ -236,10 +241,7 @@ class ActivityController extends Controller
 
             }
 
-      }else{
-            $files = "";
-            return $file;
-        }  
+      
    
     }
 
@@ -259,8 +261,6 @@ class ActivityController extends Controller
 
 
             \Cloudder::upload(url('/file_attachments').'/'.$filename);
-
-
 
             $url = \Cloudder::getResult();
             //return dd($url);
@@ -583,7 +583,6 @@ class ActivityController extends Controller
              }
 
    }
-
 
 
 }
