@@ -188,7 +188,7 @@ public function webtest($id){
     {
         $dt = new \DateTime($request->input('startDate'));
         $sd = Carbon::instance($dt);
-        //$url = $this->uploadFile($request->file('file'));
+        $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         //$qrUrl = $this->uploadQr($activity_id_store);
 
@@ -211,8 +211,8 @@ public function webtest($id){
             "activity_id" => $activity_id_store, 
             "foundation_id" => \Auth::user()->foundation->foundation_id,
             "name" => $request->input('activityName'),
-            "image_url" => '',
-            "imageQr_url" => $qrUrl,
+            "image_url" => $url,
+            "imageQr_url" => ,
             "description" => $request->input('activityDescription'),
             "location" => "ambot asa",
             "group" => "1",
