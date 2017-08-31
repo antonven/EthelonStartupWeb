@@ -10,7 +10,7 @@ class Activity extends Model
     protected $primaryKey='activity_id';
     public $incrementing = false;
 
-    protected $fillable=['activity_id','foundation_id','name','image_url','imageQr_url','description','location','start_time','end_time','startDate','group', 'long', 'lat', 'points_equivalent','status','created_at'
+    protected $fillable=['activity_id','foundation_id','name','image_url','imageQr_url','description','location','start_time','end_time','startDate','group', 'long', 'lat', 'points_equivalent','status','created_at','endDate','registration_deadline'
     ];
 
     public function foundation(){

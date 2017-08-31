@@ -61,7 +61,7 @@ class RunScheduler extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @    return void
      */
     public function __construct()
     {
@@ -79,7 +79,7 @@ class RunScheduler extends Command
 
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true])->get();
 
-          
+        $this->randomAllocation($activities);  
 
 
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
@@ -95,7 +95,87 @@ class RunScheduler extends Command
      * in your queue within 60 seconds.
      *
      */
-    
+    public function randomAllocation($activities){
+        
+          foreach($activities as $activity){
+
+                $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+                
+                $vol_per_group = $activity->group; 
+                $count = 0;
+                $countforId = 1;
+                $id = '';
+                $volunteerCount = 0;   
+
+                    foreach($volunteers as $volunteer){
+
+                        $this->create_volunteer_criteria_points($activity, $volunteer->volunteer_id);
+
+                      if($count < $vol_per_group){
+                            if($count == 0){
+
+                                $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                                Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id  
+                                    ]);   
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    
+
+                                $count++;
+                                $countforId++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+
+                            }else{
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]); 
+
+                                $count++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+                            }
+                      }
+                      else{
+
+                        $count = 0;
+
+                           $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                                    
+                                Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id  
+                                    ]);   
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    
+
+                                $count++;
+                                $countforId++;
+                                
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+
+                      }     
+                      $volunteerCount++;
+                    }                    
+                    
+            }
+    }
+
+
     protected function runScheduler()
     {
         $fn = $this->option('queue') ? 'queue' : 'call';

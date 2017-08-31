@@ -17,3 +17,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/activity/create', 'ActivityController@create');
     Route::post('/activity/store', 'ActivityController@store');
 });
+Route::get('/webtest/{id}','ActivityController@webtest');

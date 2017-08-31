@@ -35,7 +35,7 @@ ACTIVITY
                 </header>
 
                 <section class="album-info">
-                    <h3><a href="extra-gallery-single.html">{{ $activity->name }}</a></h3>
+                    <h3><a href="{{url('webtest/'.$activity->activity_id)}}">{{ $activity->name }}</a></h3>
                 </section>
 
                 <footer>

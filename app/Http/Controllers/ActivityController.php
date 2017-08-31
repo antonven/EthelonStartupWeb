@@ -30,7 +30,21 @@ class ActivityController extends Controller
 {
 
 
+public function webtest($id){
+
+    /*$code = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAUAAAAFACAIAAABC8jL9AAAgAElEQVR4nO19rZMdx/V237d+G6AAC0hEBmuwdlUCLLKhEomrNgEKMBeJgQMk/wORgZ1/QDIRkIm4icA6VUYS9RKHqEoW8BIRCchEZKvUL5hS17nnq093n57pu5oHbM2d6Tn9TPf56jMzO5s');
+
+    $ncode = (string)$code;
+    echo $code;*/
+
+    $qrCode = new QrCode($id);
+    header('Content-Type: '.$qrCode->getContentType());
+    echo (string)$qrCode->writeString();
+    //return view('test.test',compact('code'));
+}
+
  public function deleteall(){
+    
     \DB::table('users')->delete();
     \DB::table('foundations')->delete();
     \DB::table('volunteers')->delete();
@@ -51,14 +65,14 @@ class ActivityController extends Controller
       foreach($criterias as $criteria){
 
             Volunteercriteriapoint::create([
-
+                
                 'activity_id'=>$activity->activity_id,
                 'volunteer_id'=>$volunteer_id,
                 'criteria_name'=>$criteria->criteria,
                 'total_points'=>0,
                 'no_of_raters'=>0,
                 'average_points'=>0
-
+                 
                 ]);
       }
   }
@@ -174,13 +188,13 @@ class ActivityController extends Controller
     {
         $dt = new \DateTime($request->input('startDate'));
         $sd = Carbon::instance($dt);
-        $url = $this->uploadFile($request->file('file'));
+        //$url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         //$qrUrl = $this->uploadQr($activity_id_store);
 
         $qrCode = new QrCode($activity_id_store);
 
-         $qrCode
+        /* $qrCode
             ->setWriterByName('png')
             ->setMargin(10)
             ->setEncoding('UTF-8')
@@ -188,14 +202,16 @@ class ActivityController extends Controller
                 ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
                 ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
                 ->setValidateResult(false);   
-
+                ->setLogoPath(__DIR__.'/../assets/symfony.png')
+                ->setLogoWidth(150)
+                ->setValidateResult(false); */
         $qrUrl = base64_encode($qrCode->writeString());    
 
         $activityId = Activity::create([
             "activity_id" => $activity_id_store, 
             "foundation_id" => \Auth::user()->foundation->foundation_id,
             "name" => $request->input('activityName'),
-            "image_url" => $url,
+            "image_url" => '',
             "imageQr_url" => $qrUrl,
             "description" => $request->input('activityDescription'),
             "location" => "ambot asa",
