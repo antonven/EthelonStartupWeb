@@ -46,7 +46,6 @@ public function webtest($id){
     ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
     ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
     ->setLogoWidth(150)
-    ->setLogoPath(__DIR__.'/../assets/symfony.png')
     ->setValidateResult(false);
 
     header('Content-Type: '.$qrCode->getContentType());
