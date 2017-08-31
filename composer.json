@@ -14,6 +14,7 @@
         "laravel/tinker": "~1.0",
         "nesbot/carbon": "^1.22",
         "pusher/pusher-php-server": "^3.0",
+        "simplesoftwareio/simple-qrcode": "~1",
         "vinkla/pusher": "^3.0"
     },
     "require-dev": {

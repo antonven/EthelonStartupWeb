@@ -1,1 +1,1 @@
-{{$code}}
+{!! QrCode::generate(); !!}
