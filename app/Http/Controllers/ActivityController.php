@@ -49,7 +49,7 @@ public function webtest($id){
     header('Content-Type: '.$qrCode->getContentType());
     echo (string)$qrCode->writeString();*/
 
-    echo \QrCode::format('png')->size(400)->generate($id);
+    echo \QrCode::size(400)->generate($id);
     //return view('test.test',compact('code'));
 }
 
