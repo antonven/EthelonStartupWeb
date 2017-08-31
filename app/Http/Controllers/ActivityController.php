@@ -38,6 +38,16 @@ public function webtest($id){
     echo $code;*/
 
     $qrCode = new QrCode($id);
+    $qrCode
+    ->setWriterByName('png')
+    ->setMargin(10)
+    ->setEncoding('UTF-8')
+    ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
+    ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
+    ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
+    ->setLogoWidth(150)
+    ->setValidateResult(false);
+    
     header('Content-Type: '.$qrCode->getContentType());
     echo (string)$qrCode->writeString();
     //return view('test.test',compact('code'));
