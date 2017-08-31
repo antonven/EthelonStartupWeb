@@ -19,9 +19,7 @@ use App\Volunteergroup;
 use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
 
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\LabelAlignment;
-use Endroid\QrCode\QrCode;
+
 use Symfony\Component\HttpFoundation\Response;
 
 use Illuminate\Support\Facades\App;
