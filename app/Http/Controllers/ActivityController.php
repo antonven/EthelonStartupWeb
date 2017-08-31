@@ -212,7 +212,7 @@ public function webtest($id){
             "foundation_id" => \Auth::user()->foundation->foundation_id,
             "name" => $request->input('activityName'),
             "image_url" => $url,
-            "imageQr_url" => ,
+            "imageQr_url" =>'',
             "description" => $request->input('activityDescription'),
             "location" => "ambot asa",
             "group" => "1",
