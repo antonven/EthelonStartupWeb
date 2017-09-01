@@ -87,10 +87,24 @@ public function webtest($id){
       }
   }
 
-  
+  public function test2(){
+
+    $users = Volunteer::all();
+
+        foreach($users as $user){
+            
+            Volunteerbeforeactivity::create([
+                'volunteer_id'=> $user->volunteer_id,
+                'activity_id'=> 'd7a75'
+            ]);
+
+    }
+
+  }
+
   public function test(Request $request){
    
-   $activities = Activity::where('activity_id','df89c1e')->get();
+   $activities = Activity::where('activity_id','d7a75')->get();
 
       foreach($activities as $activity){
 
