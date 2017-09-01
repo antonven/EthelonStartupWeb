@@ -99,8 +99,10 @@ public function webtest($id){
     //         ]);
 
     // }
-
-    Volunteerbeforeactivity::where('volunteer_id','3e95576')->where('activity_id','d7a75')->delete();
+    \DB::table('activitygroups')->delete();
+    \DB::table('volunteergroups')->delete();
+    
+    //Volunteerbeforeactivity::where('volunteer_id','3e95576')->where('activity_id','d7a75')->delete();
 
   }
 
