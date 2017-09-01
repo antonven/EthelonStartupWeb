@@ -89,16 +89,18 @@ public function webtest($id){
 
   public function test2(){
 
-    $users = Volunteer::all();
+    // $users = Volunteer::all();
 
-        foreach($users as $user){
+    //     foreach($users as $user){
             
-            Volunteerbeforeactivity::create([
-                'volunteer_id'=> $user->volunteer_id,
-                'activity_id'=> 'd7a75'
-            ]);
+    //         Volunteerbeforeactivity::create([
+    //             'volunteer_id'=> $user->volunteer_id,
+    //             'activity_id'=> 'd7a75'
+    //         ]);
 
-    }
+    // }
+
+    Volunteerbeforeactivity::where('volunteer_id','3e95576')->where('activity_id','712821b')->delete();
 
   }
 
