@@ -52,7 +52,7 @@ Route::post('/test','ActivityController@test');
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
 Route::get('/deleteall','ActivityController@deleteall');
-
+Route::post('/test2','ActivityController@test2');
 Route::post('/register','RegistrationController@register');
 Route::post('/login','LoginController@login');
 
