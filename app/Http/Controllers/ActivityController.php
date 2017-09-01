@@ -100,7 +100,7 @@ public function webtest($id){
 
     // }
 
-    Volunteerbeforeactivity::where('volunteer_id','d7a75')->where('activity_id','712821b')->delete();
+    Volunteerbeforeactivity::where('volunteer_id','3e95576')->where('activity_id','d7a75')->delete();
 
   }
 
