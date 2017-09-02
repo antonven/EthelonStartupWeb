@@ -99,10 +99,10 @@ public function webtest($id){
     //         ]);
 
     // }
-    \DB::table('activitygroups')->delete();
-    \DB::table('volunteergroups')->delete();
+    /*\DB::table('activitygroups')->delete();
+    \DB::table('volunteergroups')->delete();*/
     
-    //Volunteerbeforeactivity::where('volunteer_id','3e95576')->where('activity_id','d7a75')->delete();
+    Volunteerbeforeactivity::where('volunteer_id','c7afbe0')->where('activity_id','d7a75')->delete();
 
   }
 
@@ -608,7 +608,7 @@ public function webtest($id){
                                                                    'no_of_raters'=>$num_of_raters,
                                                                    'average_points'=>$average_points]);
                                     if($volunteercriteriapoints){
-
+                                        
                                         $data = array("message"=>"Success");
 
                                         return response()->json($data);
@@ -625,7 +625,7 @@ public function webtest($id){
 
                                 return response()->json($data);
                             }                             
-
+                            
              }else{
 
                 $data = array("message"=>"Something's wrong");
