@@ -7,6 +7,8 @@
     "require": {
         "php": ">=5.6.4",
         "bacon/bacon-qr-code": "^1.0",
+        "brozot/laravel-fcm": "^1.2",
+        "davibennun/laravel-push-notification": "dev-laravel5",
         "endroid/qrcode": "^2.3",
         "fideloper/proxy": "^3.3",
         "jrm2k6/cloudder": "0.4.*",
@@ -14,8 +16,7 @@
         "laravel/tinker": "~1.0",
         "nesbot/carbon": "^1.22",
         "pusher/pusher-php-server": "^3.0",
-        "simplesoftwareio/simple-qrcode": "~1",
-        "vinkla/pusher": "^3.0"
+        "simplesoftwareio/simple-qrcode": "~1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -18,7 +18,12 @@ use App\Activitygroup;
 use App\Volunteergroup;
 use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use FCM;
 
+use Davibennun\LaravelPushNotification\Facades\PushNotification;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -102,7 +107,39 @@ public function webtest($id){
     /*\DB::table('activitygroups')->delete();
     \DB::table('volunteergroups')->delete();*/
     
-    Volunteerbeforeactivity::where('volunteer_id','c7afbe0')->where('activity_id','d7a75')->delete();
+   // Volunteerbeforeactivity::where('volunteer_id','c7afbe0')->where('activity_id','d7a75')->delete();
+
+   /*  $push = \PushNotification::app(['environment' =>'production',
+        'apiKey'=>'AAAAP-7SOA8:APA91bFskoDrufDXWC67vwWUkK7Cg7vMLDy_XWnwxDvoMMQfOJ6NvwKjb2BDn4jymbPwOJXfDUVKURcSwsS6BlEdvGJLB8qMqV9PmaODY7as4N5x3pU_Hv5pW4AyrJWIY2vvLyWq2kEB',
+        'service'=>'gcm'])
+                ->to('cXAXgfWrc-0:APA91bHOiEN2AwIplmCwUKXNuDckzvQwh6FZ1vgP9mru8VbSboVDqTit2sQZE--UF7c5qx9I5VJkl7QdQPxYYLzAMkw0pXkfBmbcnzAO3moDqh-VOw2NbjszRJzQQz5QimGBcLvU1iV4')
+                ->send('Hello World, i`m a push message');
+
+                 dd($push);*/
+
+    $optionBuilder = new OptionsBuilder();
+    $optionBuilder->setTimeToLive(60*20);
+
+    $notificationBuilder = new PayloadNotificationBuilder('my title');
+    $notificationBuilder->setBody('Fuck this shit')
+                        ->setSound('default');
+
+    $dataBuilder = new PayloadDataBuilder();
+    $dataBuilder->addData(['a_data' => 'my_data']);                    
+
+    $option = $optionBuilder->build();
+    $notification = $notificationBuilder->build();
+    $data = $dataBuilder->build();
+
+    $token = 'dtn89AKAyXE:APA91bFq-c-vWOiZWrcgOtr0_z2Nm1SzLUyuRGOMNiTe0pwa6epn0Gb_qO8r5Qw1efqqJ3lspSmH82Mhuo5ImILG0dcmdzbDet6VVuhntzrfkKaAp1ru_oP7k6Q84rzH-ZeCZb-2D-Vh';
+
+    $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+    
+    dd($downstreamResponse);
+
+
+
+
 
   }
 

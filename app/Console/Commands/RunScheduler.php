@@ -81,6 +81,9 @@ class RunScheduler extends Command
 
         $this->randomAllocation($activities);  
 
+        \PushNotification::app('appNameAndroid')
+                ->to($deviceToken)
+                ->send('Hello World, i`m a push message');
 
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
