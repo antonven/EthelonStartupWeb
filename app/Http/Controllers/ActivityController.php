@@ -120,7 +120,7 @@ public function webtest($id){
     $optionBuilder = new OptionsBuilder();
     $optionBuilder->setTimeToLive(60*20);
 
-    $notificationBuilder = new PayloadNotificationBuilder('my title');
+    $notificationBuilder = new PayloadNotificationBuilder('ANTON BOGO');
     $notificationBuilder->setBody('Fuck this shit')
                         ->setSound('default');
 
@@ -131,7 +131,7 @@ public function webtest($id){
     $notification = $notificationBuilder->build();
     $data = $dataBuilder->build();
 
-    $token = 'dtn89AKAyXE:APA91bFq-c-vWOiZWrcgOtr0_z2Nm1SzLUyuRGOMNiTe0pwa6epn0Gb_qO8r5Qw1efqqJ3lspSmH82Mhuo5ImILG0dcmdzbDet6VVuhntzrfkKaAp1ru_oP7k6Q84rzH-ZeCZb-2D-Vh';
+    $token = 'dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ';
 
     $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
     
