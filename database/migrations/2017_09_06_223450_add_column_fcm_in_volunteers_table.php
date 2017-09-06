@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddFcmTokenToVolunteersTable extends Migration
+class AddColumnFcmInVolunteersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,8 @@ class AddFcmTokenToVolunteersTable extends Migration
     public function up()
     {
         Schema::table('volunteers', function (Blueprint $table) {
-            //  
-            $table->string('fcm_token')->nullable();
-            
+            //
+             $table->string('fcm_token')->nullable();
         });
     }
 
