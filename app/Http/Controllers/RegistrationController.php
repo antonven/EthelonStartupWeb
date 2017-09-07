@@ -44,7 +44,8 @@ class RegistrationController extends Controller
                         'volunteer_id' => $volunteer_id,
                          'user_id'=>$user_id,
                          'location'=>$request->input('location'),
-                         'image_url'=>$request->input('image_url')
+                         'image_url'=>$request->input('image_url'),
+                         'fcm_token'=>$request->input('fcm_token')
                        ]);
 
                        $data = array("api_token"=>$api_token,"volunteer_id" => $volunteer_id,"name"=>$request->input('name'),"message"=>"success");

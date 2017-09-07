@@ -36,7 +36,7 @@ class ActivityController extends Controller
 public function webtest($id){
 
     /*$code = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAUAAAAFACAIAAABC8jL9AAAgAElEQVR4nO19rZMdx/V237d+G6AAC0hEBmuwdlUCLLKhEomrNgEKMBeJgQMk/wORgZ1/QDIRkIm4icA6VUYS9RKHqEoW8BIRCchEZKvUL5hS17nnq093n57pu5oHbM2d6Tn9TPf56jMzO5s');
-
+        
     $ncode = (string)$code;
     echo $code;*/
 /*
@@ -119,27 +119,25 @@ public function webtest($id){
 
     $optionBuilder = new OptionsBuilder();
     $optionBuilder->setTimeToLive(60*20);
+     $optionBuilder->setPriority('high');
 
     $notificationBuilder = new PayloadNotificationBuilder('ANTON BOGO');
-    $notificationBuilder->setBody('Fuck this shit')
+    $notificationBuilder->setBody('Fuck this life')
                         ->setSound('default');
 
     $dataBuilder = new PayloadDataBuilder();
-    $dataBuilder->addData(['a_data' => 'my_data']);                    
+    $dataBuilder->addData(['a_data' => 'my_data',
+                            'activityname'=>'ethelonFoundation']);                    
 
     $option = $optionBuilder->build();
     $notification = $notificationBuilder->build();
     $data = $dataBuilder->build();
 
-    $token = 'dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ';
+    $token = 'fKXhDYhrSQ4:APA91bECXTQZxHZaA8b47wsSp-jbRF_S4ye2lPqyXyrm2E36ryxvsy64PR4uokvlAQvg2S9QCNhGCF4cHzsn2HHn_YYJJqtt4qoLrIJ5e_mpvfqNRorr4AsG_5kzQ7_UIWw66TbbqK-D';
 
     $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
     
     dd($downstreamResponse);
-
-
-
-
 
   }
 

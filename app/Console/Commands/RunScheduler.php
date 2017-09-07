@@ -34,6 +34,11 @@ use App\Volunteerbeforeactivity;
 use App\Activitygroup;
 use App\Volunteergroup;
 
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use FCM;
+
 /**
  *
  * Runs the scheduler every 60 seconds as expected to be done by cron.
@@ -81,9 +86,7 @@ class RunScheduler extends Command
 
         $this->randomAllocation($activities);  
 
-        \PushNotification::app('appNameAndroid')
-                ->to($deviceToken)
-                ->send('Hello World, i`m a push message');
+        $this->sendNotifications($activities);
 
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
@@ -98,6 +101,70 @@ class RunScheduler extends Command
      * in your queue within 60 seconds.
      *
      */
+    public function sendNotifications($activities){
+
+        $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60*20);
+       
+
+        foreach($activities as $activity){
+
+            $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+
+          $volunteersKeeper = array();  
+            foreach($volunteers as $volunteer){
+
+                $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
+                                                        ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
+                                                        ->where('volunteergroups.volunteer_id',$volunter->volunteer_id)
+                                                        ->where('activitygroups.activity_id',$activity->activity_id)
+                                                        ->first();
+
+                $volunteersToRate = \DB::table('users')->select('users.name','volunteers.volunteer_id','volunteers.image_url')
+                                                ->join('volunteers','volunteers.user_id','=','users.user_id')
+                                                ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')
+                                                ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
+                                                ->where('volunteergroups.volunteer_id','!=',$volunter->volunteer_id)
+                                                ->get();   
+
+
+                     foreach($volunteersToRate as $volunteerToRate){
+
+                             $data = array("name"=>$volunteerToRate->name,
+                                            "volunteer_id"=>$volunteerToRate->volunteer_id,
+                                            "image_url"=>$volunteerToRate->image_url,
+                                            "activity_group_id"=>$activity_group_id->id,
+                                            "num_of_vol"=>$activity_group_id->numOfVolunteers);
+
+                             array_push($volunteersKeeper,$data);
+                     }                           
+
+                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder->setBody('Your groupmates for ' + $activity->name + ' has been revealed')
+                                              ->setSound('default'); 
+
+                            $dataBuilder = new PayloadDataBuilder();
+                            $dataBuilder->addData([
+                                'activity'=>$activity,
+                                'volunteersToRate'=>$volunteersKeeper
+                                ]);
+
+                             $option = $optionBuilder->build();
+                             $notification = $notificationBuilder->build();
+                             $data = $dataBuilder->build();
+                             
+                            $token = $volunter->token;
+
+                            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+
+            }
+        }
+
+
+        
+
+    }
+
     public function randomAllocation($activities){
         
           foreach($activities as $activity){
@@ -177,6 +244,26 @@ class RunScheduler extends Command
                     
             }
     }
+
+    public function create_volunteer_criteria_points($activity, $volunteer_id){
+
+     $criterias = Activitycriteria::where('activity_id',$activity->activity_id)->get();
+
+      foreach($criterias as $criteria){
+
+            Volunteercriteriapoint::create([
+                
+                'activity_id'=>$activity->activity_id,
+                'volunteer_id'=>$volunteer_id,
+                'criteria_name'=>$criteria->criteria,
+                'total_points'=>0,
+                'no_of_raters'=>0,
+                'average_points'=>0
+                 
+                ]);
+      }
+  }
+
 
 
     protected function runScheduler()
