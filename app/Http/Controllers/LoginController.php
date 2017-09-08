@@ -48,11 +48,12 @@ class LoginController extends Controller
 
                 $emailWatcher = User::where('email',$request->input('email'))->get();
 
-                $watch = Volunteer::where('user_id',$request->input('facebook_id'))
+                Volunteer::where('user_id',$request->input('facebook_id'))
                                     ->update([
                                         "fcm_token" => $request->input('fcm_token')    
-                                        ])->first();
+                                        ]);
 
+                $watch = Volunteer::where('user_id',$request->input('facebook_id'))->first();                    
                 $watcher = User::where('user_id',$request->input('facebook_id'))->first();
 
 
