@@ -33,6 +33,7 @@ use App\Activity;
 use App\Volunteerbeforeactivity;
 use App\Activitygroup;
 use App\Volunteergroup;
+use App\Groupnotification;
 
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -109,7 +110,7 @@ class RunScheduler extends Command
 
         foreach($activities as $activity){
 
-            $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+          $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
 
           $volunteersKeeper = array();  
             foreach($volunteers as $volunteer){
@@ -154,10 +155,18 @@ class RunScheduler extends Command
                              $data = $dataBuilder->build();
                              
                             $token = $volunter->token;
+
                             if($token != null){
+
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+
                              }else{
-                                
+
+                                Groupnotification::create([
+                                    'volunteer_id'=>$volunteer->volunteer_id,
+                                    'activity_id'=>$activity->activity_id,
+                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d')
+                                    ]);
 
                              }
                            

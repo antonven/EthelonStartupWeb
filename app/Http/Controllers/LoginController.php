@@ -22,7 +22,6 @@ class LoginController extends Controller
 
     	}else{
             
-          
                     $user = User::where('email',$request->input('email'))->first();
                     $volunteer = Volunteer::where('user_id',$user->user_id)->first();
                     $message = "Success";
@@ -48,8 +47,15 @@ class LoginController extends Controller
             if($watcher->count()){
 
                 $emailWatcher = User::where('email',$request->input('email'))->get();
-                $watch = Volunteer::where('user_id',$request->input('facebook_id'))->first();
+
+                $watch = Volunteer::where('user_id',$request->input('facebook_id'))
+                                    ->update([
+                                        "fcm_token" => $request->input('fcm_token')    
+                                        ])->first();
+
                 $watcher = User::where('user_id',$request->input('facebook_id'))->first();
+
+
 
                   $data = array("message"=>"Not First Time","volunteer_id"=>$watch->volunteer_id,"api_token"=>$watcher->api_token);      
                      

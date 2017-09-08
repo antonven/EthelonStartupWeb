@@ -44,6 +44,8 @@ Route::group(['middleware'=>'auth:api'],function(){
 
 		Route::post('/groupmatestorate','ActivityController@volunteersToRate');
 		Route::post('/rategroupmate','ActivityController@rategroupmate');
+
+		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
 	
