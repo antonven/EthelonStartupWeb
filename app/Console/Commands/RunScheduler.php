@@ -154,14 +154,16 @@ class RunScheduler extends Command
                              $data = $dataBuilder->build();
                              
                             $token = $volunter->token;
+                            if($token != null){
+                                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+                             }else{
+                                
 
-                            $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+                             }
+                           
 
             }
         }
-
-
-        
 
     }
 
