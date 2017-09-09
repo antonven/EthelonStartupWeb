@@ -101,7 +101,7 @@ public function webtest($id){
 
   public function test(Request $request){
    
-         $activity = Activity::where('activity_id','ecbb19a')->first();s
+         $activity = Activity::where('activity_id','ecbb19a')->first();
 
                 $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
