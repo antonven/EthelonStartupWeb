@@ -117,27 +117,29 @@ public function webtest($id){
 
                  dd($push);*/
 
-    $optionBuilder = new OptionsBuilder();
-    $optionBuilder->setTimeToLive(60*20);
-     $optionBuilder->setPriority('high');
+    // $optionBuilder = new OptionsBuilder();
+    // $optionBuilder->setTimeToLive(60*20);
+    //  $optionBuilder->setPriority('high');
 
-    $notificationBuilder = new PayloadNotificationBuilder('ANTON BOGO');
-    $notificationBuilder->setBody('Fuck this life')
-                        ->setSound('default');
+    // $notificationBuilder = new PayloadNotificationBuilder('ANTON BOGO');
+    // $notificationBuilder->setBody('Fuck this life')
+    //                     ->setSound('default');
 
-    $dataBuilder = new PayloadDataBuilder();
-    $dataBuilder->addData(['a_data' => 'my_data',
-                            'activityname'=>'ethelonFoundation']);                    
+    // $dataBuilder = new PayloadDataBuilder();
+    // $dataBuilder->addData(['a_data' => 'my_data',
+    //                         'activityname'=>'ethelonFoundation']);                    
 
-    $option = $optionBuilder->build();
-    $notification = $notificationBuilder->build();
-    $data = $dataBuilder->build();
+    // $option = $optionBuilder->build();
+    // $notification = $notificationBuilder->build();
+    // $data = $dataBuilder->build();
 
-    $token = 'fKXhDYhrSQ4:APA91bECXTQZxHZaA8b47wsSp-jbRF_S4ye2lPqyXyrm2E36ryxvsy64PR4uokvlAQvg2S9QCNhGCF4cHzsn2HHn_YYJJqtt4qoLrIJ5e_mpvfqNRorr4AsG_5kzQ7_UIWw66TbbqK-D';
+    // $token = 'fKXhDYhrSQ4:APA91bECXTQZxHZaA8b47wsSp-jbRF_S4ye2lPqyXyrm2E36ryxvsy64PR4uokvlAQvg2S9QCNhGCF4cHzsn2HHn_YYJJqtt4qoLrIJ5e_mpvfqNRorr4AsG_5kzQ7_UIWw66TbbqK-D';
 
-    $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+    // $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
     
-    dd($downstreamResponse);
+    // dd($downstreamResponse);
+
+                 dd(\Carbon\Carbon::tomorrow()->format('Y-m-d'));
 
   }
 
@@ -255,7 +257,7 @@ public function webtest($id){
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         //$qrUrl = $this->uploadQr($activity_id_store);
 
-        $qrCode = new QrCode($activity_id_store);
+        //$qrCode = new QrCode($activity_id_store);
 
         /* $qrCode
             ->setWriterByName('png')
@@ -268,7 +270,7 @@ public function webtest($id){
                 ->setLogoPath(__DIR__.'/../assets/symfony.png')
                 ->setLogoWidth(150)
                 ->setValidateResult(false); */
-        $qrUrl = base64_encode($qrCode->writeString());    
+        //$qrUrl = base64_encode($qrCode->writeString());    
 
         $activityId = Activity::create([
             "activity_id" => $activity_id_store, 
