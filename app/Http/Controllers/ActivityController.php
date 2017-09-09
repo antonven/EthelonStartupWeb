@@ -90,64 +90,18 @@ public function webtest($id){
                  
                 ]);
       }
-  }
+    }
 
   public function test2(){
 
-    // $users = Volunteer::all();
-
-    //     foreach($users as $user){
-            
-    //         Volunteerbeforeactivity::create([
-    //             'volunteer_id'=> $user->volunteer_id,
-    //             'activity_id'=> 'd7a75'
-    //         ]);
-
-    // }
-    /*\DB::table('activitygroups')->delete();
-    \DB::table('volunteergroups')->delete();*/
-    
-   // Volunteerbeforeactivity::where('volunteer_id','c7afbe0')->where('activity_id','d7a75')->delete();
-
-   /*  $push = \PushNotification::app(['environment' =>'production',
-        'apiKey'=>'AAAAP-7SOA8:APA91bFskoDrufDXWC67vwWUkK7Cg7vMLDy_XWnwxDvoMMQfOJ6NvwKjb2BDn4jymbPwOJXfDUVKURcSwsS6BlEdvGJLB8qMqV9PmaODY7as4N5x3pU_Hv5pW4AyrJWIY2vvLyWq2kEB',
-        'service'=>'gcm'])
-                ->to('cXAXgfWrc-0:APA91bHOiEN2AwIplmCwUKXNuDckzvQwh6FZ1vgP9mru8VbSboVDqTit2sQZE--UF7c5qx9I5VJkl7QdQPxYYLzAMkw0pXkfBmbcnzAO3moDqh-VOw2NbjszRJzQQz5QimGBcLvU1iV4')
-                ->send('Hello World, i`m a push message');
-
-                 dd($push);*/
-
-    // $optionBuilder = new OptionsBuilder();
-    // $optionBuilder->setTimeToLive(60*20);
-    //  $optionBuilder->setPriority('high');
-
-    // $notificationBuilder = new PayloadNotificationBuilder('ANTON BOGO');
-    // $notificationBuilder->setBody('Fuck this life')
-    //                     ->setSound('default');
-
-    // $dataBuilder = new PayloadDataBuilder();
-    // $dataBuilder->addData(['a_data' => 'my_data',
-    //                         'activityname'=>'ethelonFoundation']);                    
-
-    // $option = $optionBuilder->build();
-    // $notification = $notificationBuilder->build();
-    // $data = $dataBuilder->build();
-
-    // $token = 'fKXhDYhrSQ4:APA91bECXTQZxHZaA8b47wsSp-jbRF_S4ye2lPqyXyrm2E36ryxvsy64PR4uokvlAQvg2S9QCNhGCF4cHzsn2HHn_YYJJqtt4qoLrIJ5e_mpvfqNRorr4AsG_5kzQ7_UIWw66TbbqK-D';
-
-    // $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-    
-    // dd($downstreamResponse);
-
+   
                  dd(\Carbon\Carbon::tomorrow()->format('Y-m-d'));
 
   }
 
   public function test(Request $request){
    
-   $activities = Activity::where('activity_id','d7a75')->get();
-
-      foreach($activities as $activity){
+         $activity = Activity::where('activity_id','ecbb19a')->first();s
 
                 $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
@@ -221,8 +175,6 @@ public function webtest($id){
                       }     
                       $volunteerCount++;
                     }                    
-                    
-            }
 
     
     $groups = Activitygroup::all();
