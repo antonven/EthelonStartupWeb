@@ -251,9 +251,9 @@ public function webtest($id){
                             $token = $volunteer->fcm_token;
 
 
-                                 $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
+                                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
 
-                                 dd($downstreamResponse);
+                                 dd($downstreamResponse)
 
                             /*f($token != null){
 
