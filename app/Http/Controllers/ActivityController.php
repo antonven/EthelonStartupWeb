@@ -102,7 +102,9 @@ public function webtest($id){
     Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
 
-    $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
+    //$activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
+
+    $activities = Activity::where('activity_id','d7a75')->get();
 
     $this->randomAllocation($activities);
     $this->sendNotifications($activities);
