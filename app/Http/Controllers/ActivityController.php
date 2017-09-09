@@ -197,8 +197,8 @@ public function webtest($id){
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
        
-    $activity = Activity::where('activity_id','ecbb19a')->first();
-        
+    
+    foreach($activities as $activity){
 
           $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
 
@@ -263,6 +263,8 @@ public function webtest($id){
                              }
                            
             }
+
+        }
         
 
     }
