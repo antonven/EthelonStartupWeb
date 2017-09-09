@@ -87,9 +87,9 @@ class RunScheduler extends Command
 
         $activities = Activity::where('activity_id','d7a75')->update(['name'=> 'NA CHANGE'])->get();
 
-        $activity = Activity::where('activity_id','ecbb19a')->first();
+        $activity = Activity::where('activity_id','d7a75')->first();
 
-            $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+            $volunteers = Volunteerbeforeactivity::where('activity_id','d7a75')->inRandomOrder()->get();
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
