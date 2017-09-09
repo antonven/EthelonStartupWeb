@@ -103,7 +103,7 @@ public function webtest($id){
 
 
     $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
-   
+
     //$activities = Activity::where('activity_id','d7a75')->get();
 
     $this->randomAllocation($activities);
@@ -190,7 +190,6 @@ public function webtest($id){
                       }      
                     }              
                     
-            
     }
 
 
@@ -201,7 +200,8 @@ public function webtest($id){
         $optionBuilder->setTimeToLive(60*20);
         $optionBuilder->setPriority('high');
        
-    
+        return dd($activities);
+
     foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
