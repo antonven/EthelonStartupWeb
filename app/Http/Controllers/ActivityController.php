@@ -60,16 +60,18 @@ public function webtest($id){
 
  public function deleteall(){
     
-    \DB::table('users')->delete();
-    \DB::table('foundations')->delete();
-    \DB::table('volunteers')->delete();
-    \DB::table('activityskills')->delete();
+    //\DB::table('users')->delete();
+    //\DB::table('foundations')->delete();
+    //\DB::table('volunteers')->delete();
+    //\DB::table('activityskills')->delete();
     \DB::table('volunteergroups')->delete();
-    \DB::table('volunteerbeforeactivities')->delete();
-    \DB::table('volunteerafteractivities')->delete();
+    //\DB::table('volunteerbeforeactivities')->delete();
+    //\DB::table('volunteerafteractivities')->delete();
     \DB::table('activitycriterias')->delete();
-    \DB::table('volunteerskills')->delete();
+    //\DB::table('volunteerskills')->delete();
     \DB::table('volunteeractivities')->delete();
+    \DB::table('activitygroups')->delete();
+    \DB::table('Volunteercriterias')->delete();
 
  }
 

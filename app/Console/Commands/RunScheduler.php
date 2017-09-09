@@ -84,10 +84,85 @@ class RunScheduler extends Command
 
 
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true])->get();
-        
+
         $activity = Activity::where('activity_id','ecbb19a')->first();
+
+            $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+                
+                $vol_per_group = $activity->group; 
+                $count = 0;
+                $countforId = 1;
+                $id = '';
+                $volunteerCount = 0;   
+
+                    foreach($volunteers as $volunteer){
+
+                        $this->create_volunteer_criteria_points($activity, $volunteer->volunteer_id);
+
+                      if($count < $vol_per_group){
+                            if($count == 0){
+
+                                $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                                Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id  
+                                    ]);   
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    
+
+                                $count++;
+                                $countforId++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+
+                            }else{
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]); 
+
+                                $count++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+                            }
+                      }
+                      else{
+
+                        $count = 0;
+
+                           $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                                    
+                                Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id  
+                                    ]);   
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    
+
+                                $count++;
+                                $countforId++;
+                                
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+
+                      }     
+                      $volunteerCount++;
+                    }                    
+
         
-        $this->randomAllocation($activity);  
+
+        //$this->randomAllocation($activity);  
 
         $this->sendNotifications($activity);
 
