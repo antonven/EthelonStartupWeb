@@ -230,7 +230,7 @@ public function webtest($id){
                      }                           
 
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates for ' + $activity->name + ' has been revealed')
+                          $notificationBuilder->setBody('Your groupmates for has been revealed')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -248,6 +248,8 @@ public function webtest($id){
                             if($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+
+                                 return dd($downstreamResponse);
 
                              }else{
 
