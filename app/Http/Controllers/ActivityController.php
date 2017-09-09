@@ -248,17 +248,15 @@ public function webtest($id){
                              $notification = $notificationBuilder->build();
                              $data = $dataBuilder->build();
                              
-                            $token = $volunteer->fcm_token;
+                             if($volunteer->volunteer_id == 'efc9fcc'){
+                                return dd($volunteer->$fcm_token);
+                             }
 
+                           /* $token = $volunteer->fcm_token;
+
+                            ($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-
-                                 dd($downstreamResponse);
-
-                            /*f($token != null){
-
-                                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-
                                  return dd($downstreamResponse);
 
                              }else{
