@@ -204,7 +204,9 @@ public function webtest($id){
     
     foreach($activities as $activity){
 
-          $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+          $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
+                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
+                                                               ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
 
           $volunteersKeeper = array();  
             foreach($volunteers as $volunteer){
