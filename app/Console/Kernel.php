@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
      
-     //Commands\RunScheduler::class
+     Commands\RunScheduler::class
     ];
 
     /**
@@ -27,8 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
          
-      /*  $schedule->command('custom:command')->daily();
-        $schedule->command('schedule:cron {--queue}')->daily();*/
+        
+        $schedule->command('schedule:cron {--queue}')->daily();
 
     }
 
