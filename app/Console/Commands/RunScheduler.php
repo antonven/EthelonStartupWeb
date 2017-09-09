@@ -83,9 +83,6 @@ class RunScheduler extends Command
     {
 
 
-        
-
-
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))
                                 ->where('status',false)
                                 ->get();
@@ -119,7 +116,6 @@ class RunScheduler extends Command
 
         foreach($activities as $activity){
 
-         
           $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
                                                                ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
                                                                ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 

@@ -37,7 +37,14 @@ class LoginController extends Controller
     	}
     }
 
+ 
+   public function logout(Request $request){
+    
+        Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update([
+                    "fcm_token"=> null
+            ]);
 
+   }
     
 
     public function loginwithFb(Request $request){

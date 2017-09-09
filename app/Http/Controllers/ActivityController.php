@@ -66,7 +66,7 @@ public function webtest($id){
     //\DB::table('volunteers')->delete();
     //\DB::table('activityskills')->delete();
     \DB::table('volunteergroups')->delete();
-    //\DB::table('volunteerbeforeactivities')->delete();
+    \DB::table('volunteerbeforeactivities')->delete();
     //\DB::table('volunteerafteractivities')->delete();
     \DB::table('activitycriterias')->delete();
     \DB::table('volunteercriteriapoints');
