@@ -85,7 +85,7 @@ class RunScheduler extends Command
 
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true])->get();
 
-         $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['name'=> 'NA CHANGE'])->get();
+        $activities = Activity::where('activity_id','06a73a7')->update(['name'=> 'NA CHANGE'])->get();
 
         $activity = Activity::where('activity_id','ecbb19a')->first();
 
