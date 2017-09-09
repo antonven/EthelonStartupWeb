@@ -22,6 +22,7 @@ use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
+use App\Groupnotification;
 
 use Davibennun\LaravelPushNotification\Facades\PushNotification;
 
