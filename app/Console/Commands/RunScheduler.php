@@ -160,7 +160,7 @@ class RunScheduler extends Command
                              $notification = $notificationBuilder->build();
                              $data = $dataBuilder->build();
                              
-                            $token = $volunter->fcm_token;
+                            $token = $volunteer->fcm_token;
 
                             if($token != null){
 
