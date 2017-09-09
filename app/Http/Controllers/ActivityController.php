@@ -244,7 +244,7 @@ public function webtest($id){
                              $notification = $notificationBuilder->build();
                              $data = $dataBuilder->build();
                              
-                            $token = $volunteer->token;
+                            $token = $volunteer->fcm_token;
 
                             if($token != null){
 
