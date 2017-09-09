@@ -196,6 +196,7 @@ public function webtest($id){
 
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
+        $optionBuilder->priority('high');
        
     
     foreach($activities as $activity){
