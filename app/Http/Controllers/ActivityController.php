@@ -97,7 +97,7 @@ public function webtest($id){
    
                //  dd(\Carbon\Carbon::tomorrow()->format('Y-m-d'));
 
-                // $activity = Activity::where('activity_id','ecbb19a')->first();
+                 $activity = Activity::where('activity_id','ecbb19a')->first();
 
                  dd($activity);
 
