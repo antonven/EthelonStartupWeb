@@ -84,8 +84,9 @@ class RunScheduler extends Command
 
 
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true])->get();
+        
         $activity = Activity::where('activity_id','ecbb19a')->first();
-
+        
         $this->randomAllocation($activity);  
 
         $this->sendNotifications($activity);

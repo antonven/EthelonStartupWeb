@@ -95,7 +95,11 @@ public function webtest($id){
   public function test2(){
 
    
-                 dd(\Carbon\Carbon::tomorrow()->format('Y-m-d'));
+               //  dd(\Carbon\Carbon::tomorrow()->format('Y-m-d'));
+
+                // $activity = Activity::where('activity_id','ecbb19a')->first();
+
+                 dd($activity);
 
   }
 
@@ -207,22 +211,7 @@ public function webtest($id){
         $sd = Carbon::instance($dt);
         $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-        //$qrUrl = $this->uploadQr($activity_id_store);
-
-        //$qrCode = new QrCode($activity_id_store);
-
-        /* $qrCode
-            ->setWriterByName('png')
-            ->setMargin(10)
-            ->setEncoding('UTF-8')
-            ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
-                ->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0])
-                ->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255])
-                ->setValidateResult(false);   
-                ->setLogoPath(__DIR__.'/../assets/symfony.png')
-                ->setLogoWidth(150)
-                ->setValidateResult(false); */
-        //$qrUrl = base64_encode($qrCode->writeString());    
+       
 
         $activityId = Activity::create([
             "activity_id" => $activity_id_store, 
