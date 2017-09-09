@@ -177,7 +177,7 @@ class RunScheduler extends Command
 
     }
 
-    public function randomAllocation(){
+    public function randomAllocation($activity){
         
                 
 
