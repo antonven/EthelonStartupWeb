@@ -97,12 +97,22 @@ public function webtest($id){
 
   public function test2(){
 
-   
-        $activities = Activity::where('activity_id','d7a75')->update(['name'=> 'NA CHANGE'])->get();
+    Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
-        $activity = Activity::where('activity_id','d7a75')->first();
 
-            $volunteers = Volunteerbeforeactivity::where('activity_id','d7a75')->inRandomOrder()->get();
+    $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
+
+    $this->randomAllocation($activities);
+    $this->sendNotifications($activities);
+  }
+
+ public function randomAllocation($activities){
+        
+                
+      foreach($activities as $activity){
+
+
+                $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
@@ -173,8 +183,13 @@ public function webtest($id){
 
                       }     
                       $volunteerCount++;
-                    }                    
-  }
+                      }      
+                    }              
+                    
+            
+    }
+
+
 
  public function sendNotifications($activities){
 
@@ -244,7 +259,6 @@ public function webtest($id){
 
                              }
                            
-
             }
         
 
