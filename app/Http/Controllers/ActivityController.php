@@ -253,6 +253,8 @@ public function webtest($id){
 
                                  $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
 
+                                 dd($downstreamResponse);
+
                             /*f($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
