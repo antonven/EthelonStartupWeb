@@ -249,14 +249,11 @@ public function webtest($id){
                              $option = $optionBuilder->build();
                              $notification = $notificationBuilder->build();
                              $data = $dataBuilder->build();
-                             
-                             if($volunteer->volunteer_id == 'efc9fcc'){
-                                return dd($volunteer);
-                             }
+                            
 
-                           /* $token = $volunteer->fcm_token;
+                            $token = $volunteer->fcm_token;
 
-                            ($token != null){
+                            if($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
                                  return dd($downstreamResponse);
@@ -269,7 +266,7 @@ public function webtest($id){
                                     'date'=>\Carbon\Carbon::now()->format('Y-m-d')
                                     ]);
 
-                             }*/
+                             }
                            
             }
 
