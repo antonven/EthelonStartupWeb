@@ -250,7 +250,10 @@ public function webtest($id){
                              
                             $token = $volunteer->fcm_token;
 
-                            if($token != null){
+
+                                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+
+                            /*f($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
 
@@ -264,7 +267,7 @@ public function webtest($id){
                                     'date'=>\Carbon\Carbon::now()->format('Y-m-d')
                                     ]);
 
-                             }
+                             }*/
                            
             }
 
