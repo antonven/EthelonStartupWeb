@@ -214,7 +214,7 @@ public function webtest($id){
                                                 ->join('volunteers','volunteers.user_id','=','users.user_id')
                                                 ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')
                                                 ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
-                                                ->where('volunteergroups.volunteer_id','!=',$volunter->volunteer_id)
+                                                ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
                                                 ->get();   
 
 
