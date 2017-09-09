@@ -206,7 +206,7 @@ public function webtest($id){
 
                 $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
                                                         ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
-                                                        ->where('volunteergroups.volunteer_id',$volunter->volunteer_id)
+                                                        ->where('volunteergroups.volunteer_id',$volunteer->volunteer_id)
                                                         ->where('activitygroups.activity_id',$activity->activity_id)
                                                         ->first();
 
