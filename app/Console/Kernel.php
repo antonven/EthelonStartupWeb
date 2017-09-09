@@ -14,8 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-     Commands\CustomCommand::class,
-     Commands\RunScheduler::class
+     
+     //Commands\RunScheduler::class
     ];
 
     /**
@@ -26,11 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
          
-        $schedule->command('custom:command')->daily();
-        $schedule->command('schedule:cron {--queue}')->daily();
+      /*  $schedule->command('custom:command')->daily();
+        $schedule->command('schedule:cron {--queue}')->daily();*/
 
     }
 
