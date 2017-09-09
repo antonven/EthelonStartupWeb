@@ -200,7 +200,7 @@ public function webtest($id){
         $optionBuilder->setTimeToLive(60*20);
         $optionBuilder->setPriority('high');
        
-        return dd($activities);
+        
 
     foreach($activities as $activity){
 
@@ -265,7 +265,7 @@ public function webtest($id){
                                     'activity_id'=>$activity->activity_id,
                                     'date'=>\Carbon\Carbon::now()->format('Y-m-d')
                                     ]);
-                                
+
                                 if($volunteer->volunteer_id == 'efc9fcc'){
                                     return "kayata naas else";
                                 }
