@@ -83,14 +83,16 @@ class RunScheduler extends Command
     {
 
 
+        
+
+
+        $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))
+                                ->where('status',false)
+                                ->get();
+
         Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
-
-        $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
-
-       
-
-
+    
         $this->randomAllocation($activities);  
 
         $this->sendNotifications($activities);
@@ -117,7 +119,10 @@ class RunScheduler extends Command
 
         foreach($activities as $activity){
 
-          $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+         
+          $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
+                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
+                                                               ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
 
           $volunteersKeeper = array();  
             foreach($volunteers as $volunteer){
