@@ -103,7 +103,7 @@ public function webtest($id){
 
 
     $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
-    dd($activities);
+   
     //$activities = Activity::where('activity_id','d7a75')->get();
 
     $this->randomAllocation($activities);
