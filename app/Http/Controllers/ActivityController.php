@@ -249,7 +249,7 @@ public function webtest($id){
                              $data = $dataBuilder->build();
                              
                              if($volunteer->volunteer_id == 'efc9fcc'){
-                                return dd($volunteer->$fcm_token);
+                                return dd($volunteer->fcm_token);
                              }
 
                            /* $token = $volunteer->fcm_token;
