@@ -84,10 +84,11 @@ class RunScheduler extends Command
 
 
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true])->get();
+        $activity = Activity::where('activity_id','ecbb19a')->first();
 
-        $this->randomAllocation($activities);  
+        $this->randomAllocation($activity);  
 
-        $this->sendNotifications($activities);
+        $this->sendNotifications($activity);
 
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
@@ -176,9 +177,9 @@ class RunScheduler extends Command
 
     }
 
-    public function randomAllocation($activities){
+    public function randomAllocation(){
         
-          foreach($activities as $activity){
+                
 
                 $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
@@ -253,7 +254,7 @@ class RunScheduler extends Command
                       $volunteerCount++;
                     }                    
                     
-            }
+            
     }
 
     public function create_volunteer_criteria_points($activity, $volunteer_id){
