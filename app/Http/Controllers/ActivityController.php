@@ -99,15 +99,15 @@ public function webtest($id){
 
   public function test2(){
 
- /*   Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+    Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
 
-    $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();*/
+    //$activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();*/
 
-    //$activities = Activity::where('activity_id','d7a75')->get();
+    $activities = Activity::where('activity_id','d7a75')->get();
 
-    // $this->randomAllocation($activities);
-    // $this->sendNotifications($activities);
+     $this->randomAllocation($activities);
+     $this->sendNotifications($activities);
 
 
 
@@ -307,6 +307,26 @@ public function webtest($id){
 
 
   public function test(Request $request){
+
+
+
+        $volunteers = Volunteer::all();
+
+    /*    foreach($volunteers as $volunteer){
+            Volunteerbeforeactivity::create([
+                'activity_id'=>'d7a75',
+                'volunteer_id' => $volunteer->volunteer_id]);
+        }*/
+        foreach($volunteers as $volunteer){
+            Volunteeractivity::create([
+                'volunteer_id'=> $volunteer->volunteer_id,
+                'activity_id'=>'d7a75',
+                'status'=>false
+                ]);
+        }
+
+        return "good";
+
    
          $activity = Activity::where('activity_id','ecbb19a')->first();
 
@@ -678,7 +698,6 @@ public function webtest($id){
 
         return response()->json($activities);
 
-           
     }
 
     public function prac(Request $request){

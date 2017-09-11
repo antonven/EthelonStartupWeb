@@ -112,25 +112,7 @@ class RunScheduler extends Command
         $optionBuilder->setTimeToLive(60*20);
         $optionBuilder->setPriority('high');
 
-         
-
-        $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates for  has been revealed')
-                                              ->setSound('default'); 
-
-                            $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
-                                'activity'=>'wew',
-                                'volunteersToRate'=>'yawa'
-                                ]);
-
-                             $option = $optionBuilder->build();
-                             $notification = $notificationBuilder->build();
-                             $data = $dataBuilder->build();
-
-                             $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
-
-       
+        
 
         foreach($activities as $activity){
 
@@ -177,15 +159,15 @@ class RunScheduler extends Command
                                 'volunteersToRate'=>$volunteersKeeper
                                 ]);
 
-                             $option = $optionBuilder->build();
-                             $notification = $notificationBuilder->build();
-                             $data = $dataBuilder->build();
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
                              
                             $token = $volunteer->fcm_token;
 
                             if($token != null){
 
-                                 $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
+                                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
 
                              }else{
 
