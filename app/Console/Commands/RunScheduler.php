@@ -83,14 +83,14 @@ class RunScheduler extends Command
     {
 
 
-        $activities = App\Activity::whereDate('startDate',\Carbon\Carbon::yesterday()->format('Y-m-d'))
+        $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
                                 ->where('status',false)
                                 ->get();
 
-        Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+        Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
 
       if($activities->count()){
-        
+
          $this->randomAllocation($activities);  
 
         $this->sendNotifications($activities);
@@ -112,10 +112,7 @@ class RunScheduler extends Command
      */
     public function sendNotifications($activities){
 
-        $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-        $optionBuilder->setPriority('high');
-
+       
         
 
         foreach($activities as $activity){
@@ -153,6 +150,12 @@ class RunScheduler extends Command
                              array_push($volunteersKeeper,$data);
                      }                           
 
+
+
+                            $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+ 
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
                           $notificationBuilder->setBody('Your groupmates has been revealed')
                                               ->setSound('default'); 
