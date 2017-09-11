@@ -305,7 +305,7 @@ public function webtest($id){
                             if($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-                                 return response()->json($downstreamResponse);
+                                 
 
                                    array_push($downstreams,$downstreamResponse);
 
