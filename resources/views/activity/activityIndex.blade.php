@@ -20,7 +20,7 @@
                     <img src="{{ $activity->image_url }}" class="thumb-img">
                 </div>
                 <div class="panel-body">
-                    <h3 class="panel-title" style="color:#ff5b5b;"> <a href="url('/webtest/'.{{$activity_activity_id}})">{{ $activity->name }}</a></h3>
+                    <h3 class="panel-title" style="color:#ff5b5b;"> <a href="{{url('/webtest/'.$activity_activity_id)}}">{{ $activity->name }}</a></h3>
                     <p>
                         {{ $activity->description }}
                     </p>
