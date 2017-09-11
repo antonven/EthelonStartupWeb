@@ -249,6 +249,8 @@ public function webtest($id){
 
         
 
+        $downstreams = array();
+
         foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
@@ -303,6 +305,9 @@ public function webtest($id){
                             if($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+                                 return response()->json($downstreamResponse);
+
+                                   array_push($downstreams,$downstreamResponse);
 
                              }else{
 
@@ -318,6 +323,8 @@ public function webtest($id){
             }
         }
         
+
+        return response()->json($downstreams);
 
     }
 
