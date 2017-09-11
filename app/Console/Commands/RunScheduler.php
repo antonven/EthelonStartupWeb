@@ -89,7 +89,6 @@ class RunScheduler extends Command
 
         Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
-    
         $this->randomAllocation($activities);  
 
         $this->sendNotifications($activities);
@@ -120,7 +119,8 @@ class RunScheduler extends Command
                                                                ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
                                                                ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
 
-          $volunteersKeeper = array();  
+          $volunteersKeeper = array();
+
             foreach($volunteers as $volunteer){
 
                 $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
@@ -166,7 +166,7 @@ class RunScheduler extends Command
 
                             if($token != null){
 
-                                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+                                 $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
 
                              }else{
 

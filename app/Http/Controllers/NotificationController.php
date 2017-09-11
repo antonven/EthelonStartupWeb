@@ -21,8 +21,10 @@ class NotificationController extends Controller
         $optionBuilder->setTimeToLive(60*20);
         $optionBuilder->setPriority('high');
 
+
 		$notifications = Groupnotification::where('volunteer_id',$request->input('volunteer_id'))->get();
 		$volunteer = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->first();
+
 
 		if($notifications->count()){
 
@@ -83,7 +85,7 @@ class NotificationController extends Controller
 
                             }
                             
-				}
+				 }
 			 }	
 			 
 			 $data = array("message"=>"good");
