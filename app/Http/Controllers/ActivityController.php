@@ -377,6 +377,8 @@ public function webtest($id){
     {
         $dt = new \DateTime($request->input('startDate'));
         $sd = Carbon::instance($dt);
+        $dtt = new \DateTime($request->input('endDate').' '.$request->input('endTime'));
+        $ed = Carbon::instance($dt);
         $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
        
@@ -388,13 +390,18 @@ public function webtest($id){
             "image_url" => $url,
             "imageQr_url" =>'',
             "description" => $request->input('activityDescription'),
-            "location" => "ambot asa",
-            "group" => "1",
+            "location" => $request->input('activityLocation'),
+            "start_time" => $request->input('startTime'),
+            "end_time" => $ed,
+            "group" => $request->input('group'),
             "long" => $request->input('long'),
             "lat" => $request->input('lat'),
             "points_equivalent" => 1,
             "status" => 0,
-            "startDate" => $sd->toDateTimeString()
+            "startDate" => $sd->toDateTimeString(),
+            "contactperson" => $request->input('contactPerson'),
+            "contact" => $request->input('contactInfo'),
+            "startDate" => $sd
         ])->activity_id;
         
         foreach($request->input('criteria') as $criterion)

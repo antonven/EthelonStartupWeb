@@ -44,7 +44,6 @@
             <!-- directory -->
             <h2>@yield('directory')</h2>
             <!-- directory -->
-            <hr />
             <br />
             <!-- CONTENT -->
             @yield('content')
