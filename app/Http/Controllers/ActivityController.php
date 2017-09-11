@@ -99,15 +99,41 @@ public function webtest($id){
 
   public function test2(){
 
-    Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+ /*   Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
 
-    $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
+    $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();*/
 
     //$activities = Activity::where('activity_id','d7a75')->get();
 
-    $this->randomAllocation($activities);
-    $this->sendNotifications($activities);
+    // $this->randomAllocation($activities);
+    // $this->sendNotifications($activities);
+
+
+
+    $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60*20);
+        $optionBuilder->setPriority('high');
+
+        $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder->setBody('Your groupmates for  has been revealed')
+                                              ->setSound('default'); 
+
+                            $dataBuilder = new PayloadDataBuilder();
+                            $dataBuilder->addData([
+                                'activity'=>'wew',
+                                'volunteersToRate'=>'yawa'
+                                ]);
+
+                             $option = $optionBuilder->build();
+                             $notification = $notificationBuilder->build();
+                             $data = $dataBuilder->build();
+
+                             $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
+
+                             return dd($downstreamResponse);
+
+
   }
 
  public function randomAllocation($activities){

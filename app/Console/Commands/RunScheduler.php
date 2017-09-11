@@ -110,7 +110,7 @@ class RunScheduler extends Command
 
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
-        $optionBuilder->priority('high');
+        $optionBuilder->setPriority('high');
 
          
 
