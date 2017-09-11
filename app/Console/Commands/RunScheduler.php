@@ -113,7 +113,7 @@ class RunScheduler extends Command
         $optionBuilder->priority('high');
 
          $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
-        
+
 
         $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
                           $notificationBuilder->setBody('Your groupmates for ' + $activity->name + ' has been revealed')
@@ -121,8 +121,8 @@ class RunScheduler extends Command
 
                             $dataBuilder = new PayloadDataBuilder();
                             $dataBuilder->addData([
-                                'activity'=>$activity,
-                                'volunteersToRate'=>$volunteersKeeper
+                                'activity'=>'wew',
+                                'volunteersToRate'=>'yawa'
                                 ]);
 
                              $option = $optionBuilder->build();
