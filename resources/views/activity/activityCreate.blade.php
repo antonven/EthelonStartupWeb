@@ -1,273 +1,498 @@
-@extends('layouts.neonMaster')
-
-@section('page_title')
+@extends('layouts.hybridMaster')
+@section('title')
+    Ethelon | Create Activity
 @endsection
-
 @section('additional_styles')
-@endsection
-
-@section('sidebar')
-    @include('neon_includes.sidebar')
-@endsection
-
-@section('header')
-    @include('neon_includes.header')
+<style>
+    #map {
+        height: 100%;
+    }
+</style>
 @endsection
 
 @section('content')
-    <div class="row">
-        <form id="rootwizard" method="post" action="{{ url('/activity/store') }}" class="form-horizontal form-wizard validate" enctype="multipart/form-data">
+    <!-- PROGRESSBAR WIZARD -->
+    <div class="col-lg-7 col-md-offset-2">
+        <div class="card-box p-b-0">
+            
+
+            <h4 class="header-title m-t-0 m-b-30">Create a new activity</h4>
+            <form id="commentForm2" method="POST" action="{{url('/activity/store')}}" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                <div class="steps-progress">
-                        <div class="progress-indicator"></div>
-                </div>
-
-                <ul>
-                        <li class="active">
-                                <a href="#tab1" data-toggle="tab"><span>1</span>ACTIVITY INFO</a>
-                        </li>
-                        <li>
-                                <a href="#tab2" data-toggle="tab"><span>2</span>TIME & LOCATION</a>
-                        </li>
-                        <li>
-                                <a href="#tab3" data-toggle="tab"><span>3</span>CRITERIA AND GROUPS</a>
-                        </li>
-                        <li>
-                                <a href="#tab4" data-toggle="tab"><span>4</span>FINISH</a>
-                        </li>
+            <input type="text" id="long" name="long" hidden="hidden">
+            <input type="text" id="lat" name="lat" hidden="hidden">
+            <div id="progressbarwizard" class="pull-in">
+                <!-- TABS -->
+                <ul class="ul">
+                    <li><a href="#first" data-toggle="tab">Activity Info</a></li>
+                    <li><a href="#second" data-toggle="tab">Time & Location</a></li>
+                    <li><a href="#third" data-toggle="tab">Criteria & Groups</a></li>
+                    <li><a href="#fourth" data-toggle="tab">Finish</a></li>
                 </ul>
-                <hr>
-                <div class="tab-content">
+                <!-- END OF TABS -->
+                <div class="tab-content b-0 m-b-0">
 
-                        <div class="tab-pane active" id="tab1">
+                    <div id="bar" class="progress progress-striped progress-bar-primary-alt active">
+                        <div class="bar progress-bar progress-bar-primary"></div>
+                    </div>
 
-                                <div class="row">
-                                        <div class="col-md-6 col-md-offset-3">
-                                                <div class="form-group">
-                                                        <label class="control-label" for="full_name">Activity Name</label>
-                                                        <input class="form-control" name="activityName" id="full_name" data-validate="required" placeholder="" />
-                                                </div>
-                                        </div>
-                                </div>
-
-                                <div class="row">
-                                        <div class="col-md-6 col-md-offset-3">
-                                                <div class="form-group">
-                                                        <label class="control-label">Activity Skills</label>
-
-                                                                <select name="activitySkills[]" class="select2" multiple data-validate="required">
-                                                                        <option value="Environmental" >Environmental</option>
-                                                                        <option value="Youth Work" >Youth Work</option>
-                                                                        <option value="Education" >Education</option>
-                                                                        <option value="Livelihood" >Livelihood</option>
-                                                                </select>
-                                                </div>
-                                        </div>
-                                </div>
-
-                                <div class="row">
-                                        <div class="col-md-6 col-md-offset-3">
-                                                <div class="form-group">
-                                                        <label for="field-1" class="control-label">Picture</label>
-                                                        <input type="file" name="file" class="form-control" id="field-file" placeholder="Placeholder">
-                                                </div>
-                                        </div>
-                                </div>
-
-                                <div class="row">
-                                        <div class="col-md-6 col-md-offset-3">
-                                                <div class="form-group">
-                                                        <label for="field-1" class="control-label">Description</label>
-                                                        <textarea class="form-control wysihtml5" data-stylesheet-url="assets/css/wysihtml5-color.css" name="activityDescription" data-validate="required" id="sample_wysiwyg"></textarea>
-                                                </div>
-                                        </div>
-                                </div>
-
-                                <div class="row">
-                                        <div class="col-md-6 col-md-offset-3">
-                                                <div class="form-group">
-                                                        <label for="field-1" class="control-label">Number of volunteers</label>
-                                                        <div class="input-spinner ">
-                                                                <button type="button" class="btn btn-default">-</button>
-                                                                <input type="text" class="form-control size-5" value="0" data-min="0" data-max="9999" name="numberOfVolunteers" data-validate="required" />
-                                                                <button type="button" class="btn btn-default">+</button>
-                                                        </div>
-                                                </div>
-                                        </div>
-                                </div>
-
-                        </div>
-                        <div class="tab-pane" id="tab2">
-                            <div class="row">
-                                    <div class="col-md-6 col-md-offset-3">
-                                            <div class="form-group">
-                                                    <label for="field-1" class="control-label">Start Date & Time</label>
-                                                    <div class="date-and-time">
-                                                        <input type="text" class="form-control datepicker" data-format="yyyy-mm-dd" name="startDate" data-validate="required">
-                                                        <input type="text" class="form-control timepicker" data-template="dropdown" data-show-meridian="true" data-minute-step="1" name="startTime" data-validate="required"/>
-                                                    </div>
-                                            </div>
-                                    </div>
-                            </div>
-
-                            <div class="row">
-                                    <div class="col-md-6 col-md-offset-3">
-                                            <div class="form-group">
-                                                    <label for="field-1" class="control-label">End Date & Time</label>
-                                                    <div class="date-and-time">
-                                                        <input type="text" class="form-control datepicker" data-format="D, dd MM yyyy" name="endDate" data-validate="required">
-                                                        <input type="text" class="form-control timepicker" data-template="dropdown" data-show-meridian="true" data-minute-step="1" name="endTime" data-validate="required" />
-                                                    </div>
-                                            </div>
-                                    </div>
-                            </div>
-                            <div class="row">
-                                    <div class="col-md-6 col-md-offset-3">
-                                            <div class="form-group">
-                                                    <label for="field-1" class="control-label">Location</label>
-                                                    <div class="date-and-time">
-                                                            <div id="map" style="height:500px"></div>
-                                                    </div>
-                                            </div>
-                                    </div>
-                            </div>
-                        </div>
-                    <div class="tab-pane" id="tab3">
+                    <div class="tab-pane p-t-10 fade" id="first">
                         <div class="row">
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="form-group">
-                                    <label for="field-1" class="control-label">Criteria</label>
-                    <script type="text/javascript">
-                            // Code used to add Todo Tasks
-                            jQuery(document).ready(function($)
-                            {
-                                    var $todo_tasks = $("#todo_tasks");
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <label class="control-label " for="activityName">Activity Name</label>
+                                <input  name="activityName" id="activityName" type="text" class="required form-control" placeholder="">
+                            </div>
+                            
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <label class="control-label " for="file">Picture</label>
+                                <input type="file" class="dropify form-control" name="file" data-height="300" required="required" />
+                            </div>
+                            
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <label class="control-label " for="activityDescription">Description</label>
+                                <textarea class="required form-control" name="activityDescription" id="activityDescription" rows="10" style="resize: none;"></textarea>
+                            </div>
 
-                                    $todo_tasks.find('input[type="text"]').on('keydown', function(ev)
-                                    {
-                                            if(ev.keyCode == 13)
-                                            {
-                                                    ev.preventDefault();
-
-                                                    if($.trim($(this).val()).length)
-                                                    {
-                                                            var $todo_entry = $('<li><div class="checkbox checkbox-replace color-white"><label>'+$(this).val()+'</label></div></li>');
-                                                            var $hidden = $('<input type="text" name="criteria[]" value="'+$(this).val()+'" hidden>');
-                                                            $(this).val('');
-                                                            $hidden.appendTo($(".tile-content"));
-                                                            $todo_entry.appendTo($todo_tasks.find('.todo-list'));
-                                                            $todo_entry.hide().slideDown('fast');
-                                                            replaceCheckboxes();
-                                                    }
-                                            }
-                                    });
-                            });
-                    </script>
-
-                                    <div class="tile-block" id="todo_tasks">
-
-                                            <div class="tile-header">
-                                                    <i class="entypo-list"></i>
-
-                                                    <a href="#">
-                                                            Criteria
-                                                            <span>Add criteria for the event</span>
-                                                    </a>
-                                            </div>
-
-                                            <div class="tile-content">
-
-                                                    <input type="text" class="form-control" placeholder="Add Task" />
-
-
-                                                    <ul class="todo-list">
-                                                    </ul>
-
-                                            </div>
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <label class="control-label " for="activitySkills">Skills</label>
+                                <select class="select2 select2-multiple required" name="activitySkills[]" id="activitySkills" multiple="multiple" multiple data-placeholder="">
+                                    <option value="Environment">Environment</option>
+                                    <option value="Livelihood">Livelihood</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Charity">Charity</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="Culinary">Culinary</option>
+                                    <option value="Medicine">Medicine</option>
+                                    <option value="Arts">Arts</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <div class="col-lg-6" style="padding-left: 0;">
+                                    <label class="control-label " for="contactPerson">Contact Person</label>
+                                    <input  name="contactPerson" id="contactPerson" type="text" class="required form-control" placeholder="">
+                                </div>
+                                <div class="col-lg-6" style="padding: 0;">
+                                    <label class="control-label " for="contactInfo">Contact Info</label>
+                                    <input  name="contactInfo" id="contactInfo" type="text" class="required form-control" placeholder="">
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="tab-pane p-t-10 fade" id="second">
+                        <div class="row">
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <div class="col-lg-6" style="padding-left: 0;">
+                                    <label class="control-label " for="startDate">Start Date</label>
+                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose" name="startDate">
+                                </div>
+                                <div class="col-lg-6" style="padding: 0;">
+                                    <label class="control-label " for="startTime">Start Time</label>
+                                    <div class="bootstrap-timepicker">
+                                        <input id="timepicker3" name="startTime" type="text" class="required form-control">
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <div class="col-lg-6" style="padding-left: 0;">
+                                    <label class="control-label " for="endDate">End Date</label>
+                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose2" name="endDate">
+                                </div>
+                                <div class="col-lg-6" style="padding: 0;">
+                                    <label class="control-label " for="endTime">End Time</label>
+                                    <div class="bootstrap-timepicker">
+                                        <input id="timepicker4" name="endTime" type="text" class="required form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group col-lg-8 col-lg-offset-2" id="mapWindow">
+                                <label class="control-label " for="activityLocation">Location</label>
+                                <div id="locationField">
+                                    <input name="activityLocation" type="text" id="pac-input" class="required form-control" placeholder="">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <div id="map" style="height:350px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane p-t-10 fade" id="third">
+                        <div class="row">
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <div class="col-lg-8" style="padding-left: 0;">
+                                    <label class="control-label " for="Criteria">Criteria</label>
+                                    <input  name="criteria" id="criteria" type="text" class="form-control" placeholder="">
+                                </div>
+                                <div class="col-lg-4" style="padding: 0;">
+                                    <label class="control-label " for="Criteria"><span style="color: transparent;">a</span></label>
+                                    <input type="button" class="btn-danger form-control" id="addCriterion" value="Add">
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-8 col-lg-offset-2" id="criteriaList">
+                                
+                            </div>
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <label class="control-label " for="group">Number of Groups</label>
+                                <input  name="group" id="group" type="number" class="required form-control" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane p-t-10 fade" id="fourth">
+                        <div class="row">
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <dl class="dl-horizontal m-b-0">
+                                    <dt>
+                                        Activity Name
+                                    </dt>
+                                    <dd id="displayActivityName">
+                                        
+                                    </dd>
+                                    <dt>
+                                        Activity Description
+                                    </dt>
+                                    <dd id="displayActivityDescription">
+                                        
+                                    </dd>
+                                    <dt>
+                                        Activity Skills
+                                    </dt>
+                                    <dd id="displayActivitySkills">
+                                        
+                                    </dd>
+                                    <dt>
+                                        Contact Person
+                                    </dt>
+                                    <dd id="displayContactPerson">
+                                        
+                                    </dd>
+                                    <dd id="displayContactPersonInfo">
+                                        
+                                    </dd>
+                                    <dt>
+                                        Activity Time
+                                    </dt>
+                                    <dd id="displayStartDateTime">
+                                        
+                                    </dd>
+                                    <dd id="displayEndDateTime">
+                                        
+                                    </dd>
+                                    <dt>
+                                        Location
+                                    </dt>
+                                    <dd id="displayLocation">
+                                        
+                                    </dd>
+                                    <dt>
+                                        Criteria
+                                    </dt>
+                                    <dd id="displayCriteria">
+                                        
+                                    </dd>
+                                    <dt>
+                                        Number of Groups
+                                    </dt>
+                                    <dd id="displayNumberGroups">
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="form-group clearfix">
+                                <div class="col-lg-3 col-lg-offset-5">
+                                    <button type="submit" class="btn btn-danger btn-block btn-bordred waves-effect w-md waves-light">Create Activity</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                        <div class="tab-pane" id="tab4">
-                                <button type="submit" class="btn btn-default">Create Activity</button>
-                        </div>
-
-
-
-                        <ul class="pager wizard">
-                                <li class="previous first">
-                                        <a href="#">First</a>
-                                </li>
-                                <li class="previous">
-                                        <a href="#"><i class="entypo-left-open"></i> Previous</a>
-                                </li>
-
-                                <li class="next last">
-                                        <a href="#">Last</a>
-                                </li>
-                                <li class="next">
-                                        <a href="#">Next <i class="entypo-right-open"></i></a>
-                                </li>
-                        </ul>
-
+                    <ul class="pager m-b-0 wizard">
+                        <li class="previous first" style="display:none;"><a href="#">First</a>
+                        </li>
+                        <li class="previous"><a href="#" class="btn btn-primary waves-effect waves-light map">Previous</a></li>
+                        <li class="next last" style="display:none;"><a href="#">Last</a></li>
+                        <li class="next"><a href="#" id="nexttt" class="btn btn-primary waves-effect waves-light map">Next</a></li>
+                    </ul>
                 </div>
-            <!-- hidden input diri para long lat sa maps -->
-            <input type="text" id="long" name="long" hidden="hidden">
-            <input type="text" id="lat" name="lat" hidden="hidden">
-        </form>
+            </div>
+            </form>
+        </div>
     </div>
+    <!-- END PROGRESSBAR -->
 @endsection
 
 @section('additional_scripts')
-	<script src="{{ asset('neonAssets/js/gsap/main-gsap.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/bootstrap.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/joinable.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/resizeable.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/neon-api.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/jquery.bootstrap.wizard.min.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/jquery.validate.min.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/jquery.inputmask.bundle.min.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/selectboxit/jquery.selectBoxIt.min.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/bootstrap-datepicker.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/bootstrap-switch.min.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/jquery.multi-select.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/neon-chat.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/neon-custom.js') }}"></script>
-	<script src="{{ asset('neonAssets/js/neon-demo.js') }}"></script>
-    <script>
-      // Note: This example requires that you consent to location sharing when
-      // prompted by your browser. If you see the error "The Geolocation service
-      // failed.", it means you probably did not give permission for the browser to
-      // locate you.
-      var map, infoWindow;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 20
+    <script type="text/javascript">
+        var $criteria = "";
+        $(window).load(function(){
+            
+            $('#commentForm2').on('keyup keypress click mousemove', function(e){
+               $('#displayActivityName').text($('#activityName').val());
+               $('#displayActivityDescription').text($('#activityDescription').val());
+               var $skills = [];
+               $.each($('#activitySkills').val(), function(key,val){
+                  $skills = $skills +"  "+val;
+               });
+               $('#displayActivitySkills').text($skills);
+               $('#displayContactPerson').text($('#contactPerson').val());
+               $('#displayContactPersonInfo').text($('#contactInfo').val());
+               $('#displayStartDateTime').text($('#datepicker-autoclose').val()+' '+$('#timepicker3').val());
+               $('#displayEndDateTime').text($('#datepicker-autoclose2').val()+' '+$('#timepicker4').val());
+               $('#displayLocation').text($('#pac-input').val());
+               console.log($criteria);
+               $('#displayCriteria').text($criteria);
+               $('#displayNumberGroups').text($('#group').val());
+            });
+            
+            $('#commentForm2').on('keyup keypress', function(e){
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) { 
+                  e.preventDefault();
+                  return false;
+                } 
+            });
+            
+            $('#createActivity').on('click', function(){
+               window.location = "{{ url('/') }}";
+            });
+            
+            $('#addCriterion').on('click', function (){
+                //condition to check if input is not null/empty
+                if($("#criteria").val())
+                {
+                    $criteria = $criteria +' '+ $("#criteria").val();
+                    //var $card = '<div class="panel panel-color panel-inverse" style="margin-bottom=0!important;"><div class="panel-heading"><h3 class="panel-title">'+$('#criteria').val()+'</h3></div></div><input type="text" name="activityCriteria[]" hidden>';
+                    var $card = '<pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$criteria+'">';
+                    //add criteria to the list
+                    $('#criteriaList').append($card);
+                    $('#criteria').val("");
+                }
+            });
+            
+            //initialize the multiple select
+            $(".select2").select2();
+            
+            //initialize the spinner
+            $("input[name='demo3']").TouchSpin({
+                buttondown_class: "btn btn-primary",
+                buttonup_class: "btn btn-primary"
+            });
+            
+            //initialize the date picker
+            jQuery('#datepicker-autoclose').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+            jQuery('#datepicker-autoclose2').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+            
+            //initialize the time picker
+            jQuery('#timepicker3').timepicker({
+                minuteStep : 1,
+                defaultTIme : true
+            });
+            jQuery('#timepicker4').timepicker({
+                minuteStep : 1,
+                defaultTIme : true
+            });
+            
+            //initialize the gallery/portfolio
+            var $container = $('.portfolioContainer');
+            $container.isotope({
+                filter: '*',
+                animationOptions: {
+                    duration: 750,
+                    easing: 'linear',
+                    queue: false
+                }
+            });
+
+            $('.portfolioFilter a').click(function(){
+                $('.portfolioFilter .current').removeClass('current');
+                $(this).addClass('current');
+
+                var selector = $(this).attr('data-filter');
+                $container.isotope({
+                    filter: selector,
+                    animationOptions: {
+                        duration: 750,
+                        easing: 'linear',
+                        queue: false
+                    }
+                });
+                return false;
+            });
         });
-        infoWindow = new google.maps.InfoWindow;
+        $(document).ready(function() {
+            $('.image-popup').magnificPopup({
+                type: 'image',
+                closeOnContentClick: true,
+                mainClass: 'mfp-fade',
+                gallery: {
+                    enabled: true,
+                    navigateByImgClick: true,
+                    preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+                }
+            });
+        });
+        
+    </script>
+    <!-- SCRIPT FOR FORM WIZZARD -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#basicwizard').bootstrapWizard({'tabClass': 'nav nav-tabs navtab-wizard nav-justified bg-muted'});
 
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
+            $('#progressbarwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+                var $total = navigation.find('li').length;
+                var $current = index+1;
+                var $percent = ($current/$total) * 100;
+                $('#progressbarwizard').find('.bar').css({width:$percent+'%'});
+            },
+            'tabClass': 'nav nav-tabs navtab-wizard nav-justified bg-muted'});
 
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
-            infoWindow.open(map);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
+            $('#btnwizard').bootstrapWizard({'tabClass': 'nav nav-tabs navtab-wizard nav-justified bg-muted','nextSelector': '.button-next', 'previousSelector': '.button-previous', 'firstSelector': '.button-first', 'lastSelector': '.button-last'});
+
+            var $validator = $("#commentForm2").validate({
+                rules: {
+                    emailfield: {
+                        required: true,
+                        email: true,
+                        minlength: 3
+                    },
+                    namefield: {
+                        required: true,
+                        minlength: 3
+                    },
+                    urlfield: {
+                        required: true,
+                        minlength: 3,
+                        url: true
+                    }
+                }
+            });
+
+            $('#nexttt').on('click', function(){
+                var $valid = $("#commentForm2").valid();
+                console.log($("#commentForm2"));
+                    if (!$valid) {
+                        $validator.focusInvalid();
+                        return false;
+                    }
+            });
+            $('#progressbarwizard').bootstrapWizard({
+                'tabClass': 'nav nav-tabs navtab-wizard nav-justified bg-muted',
+                'onNext': function (tab, navigation, index) {
+                    var $valid = $("#commentForm2").valid();
+                    if (!$valid) {
+                        $validator.focusInvalid();
+                        return false;
+                    }
+                }
+            });
+
+            $(".ul").on('click', function(){
+                var $valid = $("#commentForm2").valid();
+                if (!$valid) {
+                    $validator.focusInvalid();
+                    return false;
+                }
+            });
+
+        });
+
+    </script>
+    <!-- END SCRIPT FOR FORM WIZZARD -->
+    <!-- SCRIPT FOR FILE UPLOAD DROP -->
+    <script type="text/javascript">
+        $('.dropify').dropify({
+            messages: {
+                'default': 'Drag and drop a file here or click',
+                'replace': 'Drag and drop or click to replace',
+                'remove': 'Remove',
+                'error': 'Ooops, something wrong appended.'
+            },
+            error: {
+                'fileSize': 'The file size is too big (1M max).'
+            }
+        });
+    </script>
+    <!-- END SCRIPT FOR FILE UPLOAD DROP -->
+    <!-- SCRIPT FOR MAPS -->
+        <script>
+      // This example adds a search box to a map, using the Google Place Autocomplete
+      // feature. People can enter geographical searches. The search box will return a
+      // pick list containing a mix of places and predicted search terms.
+
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+      var map;
+      function initAutocomplete() {
+         map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 80.397, lng: 160.644},
+          zoom: 1,
+          minZoom: 1,
+          mapTypeId: 'roadmap'
+        });
+        console.log(map.map);
+        
+        
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
           });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
-        }
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+            
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+        
+        
         
         var marker;
 
@@ -293,18 +518,13 @@
           console.log($('#long').val());
           console.log($('#lat').val());
         });
-        }
-
-        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
       }
-     
+
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnOLaiuE2JgkqIlsyzsSvw_WKbSoEqdoM&callback=initMap">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh9Zof4j3ivJSWjB_YEnAvDsCjwr8h978&libraries=places&callback=initAutocomplete"
+         async defer></script>
+    <!-- END SCRIPT FOR MAPS -->
+    <!-- Form wizard -->
+    <script src="{{ asset('adminitoAssets/assets/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js').'?'.rand() }}"></script>
+    <script src="{{ asset('adminitoAssets/assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
 @endsection

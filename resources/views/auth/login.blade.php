@@ -39,17 +39,9 @@
 
 <div class="login-container">
 	
-    <div class="login-header" style="background-color: #303641;">
-		
-		<div class="login-content">
-			
-
-		</div>
-		
-	</div>
 
 	
-	<div class="login-form">
+	<div class="login-form" style="padding-top:20em;">
 		
 		<div class="login-content">
 			

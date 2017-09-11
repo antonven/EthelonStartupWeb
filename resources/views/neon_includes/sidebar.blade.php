@@ -41,7 +41,7 @@
 					<img src="{{ asset('neonAssets/images/thumb-1.png') }}" alt="" class="img-circle" />
 					
 					<span>Welcome,</span>
-					<strong>Art Ramadani</strong>
+					<strong>{{ \Auth::user()->name }}</strong>
 				</a>
 			</div>
 			

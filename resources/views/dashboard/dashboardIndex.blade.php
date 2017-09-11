@@ -1,21 +1,16 @@
-@extends('layouts.neonMaster')
+@extends('layouts.hybridMaster')
 
-@section('page_title')
+@section('title')
+    Ethelon
 @endsection
-
 @section('additional_styles')
+
 @endsection
 
-@section('sidebar')
-    @include('neon_includes.sidebar')
-@endsection
-
-@section('header')
-    @include('neon_includes.header')
-@endsection
-
-@section('contents')
+@section('content')
+   
 @endsection
 
 @section('additional_scripts')
+
 @endsection

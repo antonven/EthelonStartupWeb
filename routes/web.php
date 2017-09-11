@@ -18,3 +18,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/activity/store', 'ActivityController@store');
 });
 Route::get('/webtest/{id}','ActivityController@webtest');
+Route::get('test', 'DashboardController@test');
