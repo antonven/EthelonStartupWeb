@@ -111,7 +111,7 @@ public function webtest($id){
 
 
 
-    $optionBuilder = new OptionsBuilder();
+    /*$optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
         $optionBuilder->setPriority('high');
 
@@ -131,13 +131,30 @@ public function webtest($id){
 
                              $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
 
-                             return dd($downstreamResponse);
+                             return dd($downstreamResponse);*/
+
+
+
+
+        $activities = App\Activity::whereDate('activity_id','d7a75')
+                                ->where('status',true)
+                                ->get();
+
+        Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+
+      if($activities->count()){
+        
+         $this->randomAllocation($activities);  
+
+        $this->sendNotifications($activities);
+      }
 
 
   }
 
  public function randomAllocation($activities){
         
+                
                 
       foreach($activities as $activity){
 
@@ -216,25 +233,27 @@ public function webtest($id){
                       }      
                     }              
                     
+               
     }
 
 
 
  public function sendNotifications($activities){
 
-        $optionBuilder = new OptionsBuilder();
+      $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
         $optionBuilder->setPriority('high');
-       
+
         
 
-    foreach($activities as $activity){
+        foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
                                                                ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
                                                                ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
 
-          $volunteersKeeper = array();  
+          $volunteersKeeper = array();
+
             foreach($volunteers as $volunteer){
 
                 $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
@@ -263,7 +282,7 @@ public function webtest($id){
                      }                           
 
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates for has been revealed')
+                          $notificationBuilder->setBody('Your groupmates has been revealed')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -272,17 +291,15 @@ public function webtest($id){
                                 'volunteersToRate'=>$volunteersKeeper
                                 ]);
 
-                             $option = $optionBuilder->build();
-                             $notification = $notificationBuilder->build();
-                             $data = $dataBuilder->build();
-                            
-
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+                             
                             $token = $volunteer->fcm_token;
 
                             if($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-                                 
 
                              }else{
 
@@ -292,14 +309,10 @@ public function webtest($id){
                                     'date'=>\Carbon\Carbon::now()->format('Y-m-d')
                                     ]);
 
-                                if($volunteer->volunteer_id == 'efc9fcc'){
-                                    return "kayata naas else";
-                                }
-
                              }
                            
-            }
 
+            }
         }
         
 

@@ -83,15 +83,19 @@ class RunScheduler extends Command
     {
 
 
-        $activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))
+        $activities = App\Activity::whereDate('startDate',\Carbon\Carbon::yesterday()->format('Y-m-d'))
                                 ->where('status',false)
                                 ->get();
 
         Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
-        $this->randomAllocation($activities);  
+      if($activities->count()){
+        
+         $this->randomAllocation($activities);  
 
         $this->sendNotifications($activities);
+      }
+       
 
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
