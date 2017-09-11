@@ -136,7 +136,7 @@ public function webtest($id){
 
 
 
-        $activities = App\Activity::whereDate('activity_id','d7a75')
+        $activities = Activity::whereDate('activity_id','d7a75')
                                 ->where('status',true)
                                 ->get();
 
