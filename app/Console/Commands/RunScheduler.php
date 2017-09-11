@@ -98,6 +98,8 @@ Activity::where('activity_id','d7a75')->update(['name'=>'POTAAAAA!!!!!']);
          $this->sendNotifications($activities);
 
 
+      }else{
+        Activity::where('activity_id','d7a75')->update(['name'=>'WALAAAAAAAAA!!!!!']);
       }
        
 
