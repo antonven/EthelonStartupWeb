@@ -146,12 +146,11 @@ public function webtest($id){
 
       if($activities->count()){
         
-
          $this->randomAllocation($activities);  
 
         $returns = $this->sendNotifications($activities);
 
-        return $returns;
+        return response()->json($returns);
       }
 
 
@@ -245,10 +244,6 @@ public function webtest($id){
 
  public function sendNotifications($activities){
 
-      $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-        $optionBuilder->setPriority('high');
-
         
 
         $downstreams = array();
@@ -286,7 +281,14 @@ public function webtest($id){
                                             "num_of_vol"=>$activity_group_id->numOfVolunteers);
 
                              array_push($volunteersKeeper,$data);
-                     }                           
+                     }                 
+
+
+
+                         $optionBuilder = new OptionsBuilder();
+                         $optionBuilder->setTimeToLive(60*20);
+                         $optionBuilder->setPriority('high');
+          
 
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
                           $notificationBuilder->setBody('Your groupmates has been revealed')
@@ -294,8 +296,8 @@ public function webtest($id){
 
                             $dataBuilder = new PayloadDataBuilder();
                             $dataBuilder->addData([
-                                'activity'=>$activity,
-                                'volunteersToRate'=>$volunteersKeeper
+                                'activity'=>'wa lang sa',
+                                'volunteersToRate'=>'ataya'
                                 ]);
 
                             $option = $optionBuilder->build();
@@ -326,7 +328,7 @@ public function webtest($id){
         }
         
 
-        return response()->json($downstreams);
+        return $downstreams;
 
     }
 
