@@ -65,13 +65,13 @@ public function webtest($id){
     //\DB::table('foundations')->delete();
     //\DB::table('volunteers')->delete();
     //\DB::table('activityskills')->delete();
-    \DB::table('volunteergroups')->delete();
-    \DB::table('volunteerbeforeactivities')->delete();
+    //\DB::table('volunteergroups')->delete();
+    //\DB::table('volunteerbeforeactivities')->delete();
     //\DB::table('volunteerafteractivities')->delete();
-    \DB::table('activitycriterias')->delete();
+    //\DB::table('activitycriterias')->delete();
     \DB::table('volunteercriteriapoints');
     //\DB::table('volunteerskills')->delete();
-    \DB::table('volunteeractivities')->delete();
+   // \DB::table('volunteeractivities')->delete();
     \DB::table('activitygroups')->delete();
     \DB::table('volunteercriterias')->delete();
     \DB::table('groupnotifications')->delete();
