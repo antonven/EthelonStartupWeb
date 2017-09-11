@@ -149,7 +149,9 @@ public function webtest($id){
 
          $this->randomAllocation($activities);  
 
-        $this->sendNotifications($activities);
+        $returns = $this->sendNotifications($activities);
+
+        return $returns;
       }
 
 
