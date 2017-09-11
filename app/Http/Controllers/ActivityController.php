@@ -110,7 +110,7 @@ public function webtest($id){
      $this->sendNotifications($activities);
 
 
-
+/*
     $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
         $optionBuilder->setPriority('high');
@@ -131,7 +131,7 @@ public function webtest($id){
 
                              $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
 
-                             return dd($downstreamResponse);
+                             return dd($downstreamResponse);*/
 
 
   }
@@ -282,7 +282,7 @@ public function webtest($id){
                             if($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-                                 return dd($downstreamResponse);
+                                 
 
                              }else{
 
