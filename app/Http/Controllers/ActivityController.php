@@ -99,18 +99,18 @@ public function webtest($id){
 
   public function test2(){
 
-    Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+    //Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
 
     //$activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();*/
-
+/*
     $activities = Activity::where('activity_id','d7a75')->get();
 
      $this->randomAllocation($activities);
-     $this->sendNotifications($activities);
+     $this->sendNotifications($activities);*/
 
 
-/*
+
     $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
         $optionBuilder->setPriority('high');
@@ -129,9 +129,9 @@ public function webtest($id){
                              $notification = $notificationBuilder->build();
                              $data = $dataBuilder->build();
 
-                             $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
+                             $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
 
-                             return dd($downstreamResponse);*/
+                             return dd($downstreamResponse);
 
 
   }

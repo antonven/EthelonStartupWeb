@@ -150,7 +150,7 @@ class RunScheduler extends Command
                      }                           
 
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates for ' + $activity->name + ' has been revealed')
+                          $notificationBuilder->setBody('Your groupmates has been revealed')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
