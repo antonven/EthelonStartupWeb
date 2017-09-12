@@ -109,7 +109,7 @@ public function webtest($id){
      $this->randomAllocation($activities);
      $this->sendNotifications($activities);*/
 
-
+//fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4
 
     /*$optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
@@ -322,8 +322,7 @@ public function webtest($id){
 
         
 
-        $downstreams = array();
-
+       $downstreams = array();
         foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
@@ -357,23 +356,22 @@ public function webtest($id){
                                             "num_of_vol"=>$activity_group_id->numOfVolunteers);
 
                              array_push($volunteersKeeper,$data);
-                     }                 
+                     }                           
 
 
 
-                         $optionBuilder = new OptionsBuilder();
-                         $optionBuilder->setTimeToLive(60*20);
-                         $optionBuilder->setPriority('high');
-          
-
+                            $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+ 
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
                           $notificationBuilder->setBody('Your groupmates has been revealed')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
                             $dataBuilder->addData([
-                                'activity'=>'wa lang sa',
-                                'volunteersToRate'=>'ataya'
+                                'activity'=>$activity,
+                                'volunteersToRate'=>$volunteersKeeper
                                 ]);
 
                             $option = $optionBuilder->build();
@@ -385,9 +383,8 @@ public function webtest($id){
                             if($token != null){
 
                                  $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-                                 
 
-                                   array_push($downstreams,$downstreamResponse);
+                                 array_push($downstreams, $downstreamResponse);
 
                              }else{
 
@@ -402,9 +399,8 @@ public function webtest($id){
 
             }
         }
-        
 
-        return $downstreams;
+        return response()->json($downstreams);
 
     }
 
