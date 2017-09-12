@@ -108,7 +108,7 @@ class RunScheduler extends Command
          $this->randomAllocation($activities);  
          $this->sendNotifications($activities);
 
-         Activity::where('activity_id','d7a75')->update(['name'=>'POTANG INAAA!!!!!']);
+         Activity::where('activity_id','d7a75')->update(['name'=>'POTANG INAAAZZZZZZZZZZZ!!!!!']);
 
       }else{
         Activity::where('activity_id','d7a75')->update(['name'=>'WALAAAAAAAAA!!!!!']);
