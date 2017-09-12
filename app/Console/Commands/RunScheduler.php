@@ -86,11 +86,25 @@ class RunScheduler extends Command
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
                                 ->get();
 
-        //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
+      $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60*20);
+        $optionBuilder->setPriority('high');
 
-                                $activities = Activity::where('activity_id','d7a75')
-                                                            ->where('status',true)->get();
+        $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder->setBody('Your groupmates for  has been revealed')
+                                              ->setSound('default'); 
 
+                            $dataBuilder = new PayloadDataBuilder();
+                            $dataBuilder->addData([
+                                'activity'=>'wew',
+                                'volunteersToRate'=>'yawa'
+                                ]);
+
+                             $option = $optionBuilder->build();
+                             $notification = $notificationBuilder->build();
+                             $data = $dataBuilder->build();
+
+                             $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
 
       if($activities->count()){
 

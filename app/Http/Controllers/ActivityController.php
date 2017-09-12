@@ -134,15 +134,13 @@ public function webtest($id){
                              return dd($downstreamResponse);*/
 
 
-
-
         $activities = Activity::where('activity_id','d7a75')->get();
 
         Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
 
       if($activities->count()){
         
-         $this->randomAllocation($activities);  
+        $this->randomAllocation($activities);  
 
         $returns = $this->sendNotifications($activities);
 
