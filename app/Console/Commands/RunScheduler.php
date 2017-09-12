@@ -102,17 +102,13 @@ class RunScheduler extends Command
                                 $activities = Activity::where('activity_id','d7a75')
                                                             ->where('status',false)->get();
 
-                                                            Activity::where('activity_id','d7a75')->update(['name'=>'ANIMAL!!!!!']);
-
 
       if($activities->count()){
 
          $this->randomAllocation($activities);  
-
          $this->sendNotifications($activities);
 
-Activity::where('activity_id','d7a75')->update(['name'=>'ANIMALzzxzxzxzxzx!!!!!']);
-Activity::where('activity_id','d7a75')->update(['status'=>false]);
+         Activity::where('activity_id','d7a75')->update(['name'=>'POTANG INAAA!!!!!']);
 
       }else{
         Activity::where('activity_id','d7a75')->update(['name'=>'WALAAAAAAAAA!!!!!']);
