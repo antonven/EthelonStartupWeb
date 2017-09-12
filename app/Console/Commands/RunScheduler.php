@@ -92,6 +92,8 @@ class RunScheduler extends Command
                                 $activities = Activity::where('activity_id','d7a75')
                                                             ->where('status',true)->get();
 
+                                                            Activity::where('activity_id','d7a75')->update(['name'=>'ANIMAL!!!!!']);
+
 
       if($activities->count()){
 
@@ -99,7 +101,7 @@ class RunScheduler extends Command
 
          $this->sendNotifications($activities);
 
-Activity::where('activity_id','d7a75')->update(['name'=>'ANIMAL!!!!!']);
+Activity::where('activity_id','d7a75')->update(['name'=>'ANIMALzzxzxzxzxzx!!!!!']);
 Activity::where('activity_id','d7a75')->update(['status'=>false]);
 
       }else{
