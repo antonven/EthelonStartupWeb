@@ -34,7 +34,8 @@ use App\Volunteerbeforeactivity;
 use App\Activitygroup;
 use App\Volunteergroup;
 use App\Groupnotification;
-
+use App\Activitycriteria;
+use App\Volunteercriteriapoint;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
@@ -83,28 +84,14 @@ class RunScheduler extends Command
     {
 
 
-        $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
-                                ->get();
+        // $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
+        //                         ->get();
 
-      $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-        $optionBuilder->setPriority('high');
+        //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
 
-        $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates for  has been revealed')
-                                              ->setSound('default'); 
+                                $activities = Activity::where('activity_id','d7a75')
+                                                            ->where('status',true)->get();
 
-                            $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
-                                'activity'=>'wew',
-                                'volunteersToRate'=>'yawa'
-                                ]);
-
-                             $option = $optionBuilder->build();
-                             $notification = $notificationBuilder->build();
-                             $data = $dataBuilder->build();
-
-                             $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
 
       if($activities->count()){
 
@@ -217,7 +204,7 @@ Activity::where('activity_id','d7a75')->update(['status'=>false]);
 
     public function randomAllocation($activities){
         
-                
+      
       foreach($activities as $activity){
 
 
@@ -298,7 +285,7 @@ Activity::where('activity_id','d7a75')->update(['status'=>false]);
             
     }
 
-    public function create_volunteer_criteria_points($activity, $volunteer_id){
+  public function create_volunteer_criteria_points($activity, $volunteer_id){
 
      $criterias = Activitycriteria::where('activity_id',$activity->activity_id)->get();
 
