@@ -98,6 +98,26 @@ public function webtest($id){
       }
     }
 
+public function test3(){
+    $volunteers = Volunteer::all();
+
+    foreach($volunteers as $volunteer){
+        Volunteerbeforeactivity::create([
+            'activity_id' => '654eacd',
+            'volunteer_id' => $volunteer->volunteer_id
+            ]);
+        Volunteeractivity::create([
+            
+            'activity_id' => '654eacd',
+            'volunteer_id'=> $vlunteer->volunteer_id,
+            'status' => false
+
+            ]);
+
+    }
+}
+
+
   public function test2(){
 
     //Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
