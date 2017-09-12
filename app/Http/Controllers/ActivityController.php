@@ -107,9 +107,9 @@ public function test3(){
             'volunteer_id' => $volunteer->volunteer_id
             ]);
         Volunteeractivity::create([
-            
+
             'activity_id' => '654eacd',
-            'volunteer_id'=> $vlunteer->volunteer_id,
+            'volunteer_id'=> $volunteer->volunteer_id,
             'status' => false
 
             ]);
