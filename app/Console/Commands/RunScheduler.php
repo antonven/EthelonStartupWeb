@@ -27,19 +27,28 @@ I highly recommend using Artisan::queue to run your cron jobs so that your sched
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Carbon\Carbon;
+
 use Illuminate\Support\Facades\Artisan;
-use App\Activity;
 use App\Volunteerbeforeactivity;
+use App\Volunteerafteractivity;
+use App\Activity;
+use App\Volunteeractivity;
+use App\Volunteerskill;
+use App\Activityskill;
+use App\User;
+use App\Events\HelloPusherEvent;
+use App\Volunteer;
+use App\Activitycriteria;
+use Carbon\Carbon;
 use App\Activitygroup;
 use App\Volunteergroup;
-use App\Groupnotification;
-use App\Activitycriteria;
+use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
+use App\Groupnotification;
 
 /**
  *
