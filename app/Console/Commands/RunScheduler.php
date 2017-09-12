@@ -100,7 +100,7 @@ class RunScheduler extends Command
         //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
 
                                 $activities = Activity::where('activity_id','d7a75')
-                                                            ->where('status',true)->get();
+                                                            ->where('status',false)->get();
 
                                                             Activity::where('activity_id','d7a75')->update(['name'=>'ANIMAL!!!!!']);
 
@@ -136,7 +136,7 @@ Activity::where('activity_id','d7a75')->update(['status'=>false]);
 
        
         
-/*
+
         foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
@@ -210,92 +210,7 @@ Activity::where('activity_id','d7a75')->update(['status'=>false]);
                            
 
             }
-        }*/
-
-        
-        $downstreams = array();
-
-        foreach($activities as $activity){
-
-          $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
-                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
-                                                               ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
-
-          $volunteersKeeper = array();
-
-            foreach($volunteers as $volunteer){
-
-                $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
-                                                        ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
-                                                        ->where('volunteergroups.volunteer_id',$volunteer->volunteer_id)
-                                                        ->where('activitygroups.activity_id',$activity->activity_id)
-                                                        ->first();
-
-                $volunteersToRate = \DB::table('users')->select('users.name','volunteers.volunteer_id','volunteers.image_url')
-                                                ->join('volunteers','volunteers.user_id','=','users.user_id')
-                                                ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')
-                                                ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
-                                                ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
-                                                ->get();   
-
-
-                     foreach($volunteersToRate as $volunteerToRate){
-
-                             $data = array("name"=>$volunteerToRate->name,
-                                            "volunteer_id"=>$volunteerToRate->volunteer_id,
-                                            "image_url"=>$volunteerToRate->image_url,
-                                            "activity_group_id"=>$activity_group_id->id,
-                                            "num_of_vol"=>$activity_group_id->numOfVolunteers);
-
-                             array_push($volunteersKeeper,$data);
-                     }                 
-
-
-
-                         $optionBuilder = new OptionsBuilder();
-                         $optionBuilder->setTimeToLive(60*20);
-                         $optionBuilder->setPriority('high');
-          
-
-                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates has been revealed')
-                                              ->setSound('default'); 
-
-                            $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
-                                'activity'=>'wa lang sa',
-                                'volunteersToRate'=>'ataya'
-                                ]);
-
-                            $option = $optionBuilder->build();
-                            $notification = $notificationBuilder->build();
-                            $data = $dataBuilder->build();
-                             
-                            $token = $volunteer->fcm_token;
-
-                            if($token != null){
-
-                                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-                                 
-
-                                   array_push($downstreams,$downstreamResponse);
-
-                             }else{
-
-                                Groupnotification::create([
-                                    'volunteer_id'=>$volunteer->volunteer_id,
-                                    'activity_id'=>$activity->activity_id,
-                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d')
-                                    ]);
-
-                             }
-                           
-
-            }
         }
-        
-
-        return $downstreams;
 
     }
 
