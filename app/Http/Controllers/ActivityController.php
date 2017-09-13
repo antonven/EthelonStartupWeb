@@ -128,7 +128,7 @@ public function test3(){
     Activitycriteria::create([
       'activity_id'=>'6b1d8fe',
       'criteria'=>'creativity']);
-    
+
 }
 
 
@@ -840,7 +840,7 @@ public function test3(){
         $count = $request->input('count');
 
 
-        for($i,)
+       
 
 
    foreach($rating )
