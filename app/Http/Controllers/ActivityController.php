@@ -843,7 +843,7 @@ public function test3(){
        
 
 
-   foreach($rating )
+ 
         $mate = Volunteercriteria::create([
                     'volunteer_id' => $volunteer_id,
                     'name'=> $criteria_name,
