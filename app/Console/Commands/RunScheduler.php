@@ -108,7 +108,7 @@ class RunScheduler extends Command
          $this->sendNotifications($activities);
 
          Activity::where('activity_id','654eacd')->update(['name'=>'POTANG INAAAZZZZZZZZZZZ!!!!!']);
-         
+
       }else{
         Activity::where('activity_id','d7a75')->update(['name'=>'WALAAAAAAAAA!!!!!']);
       }
@@ -310,7 +310,6 @@ class RunScheduler extends Command
                 ]);
       }
     }
-
 
 
     protected function runScheduler()

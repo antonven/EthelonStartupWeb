@@ -99,7 +99,8 @@ public function webtest($id){
     }
 
 public function test3(){
-    $volunteers = Volunteer::all();
+
+   /* $volunteers = Volunteer::all();
 
     foreach($volunteers as $volunteer){
         Volunteerbeforeactivity::create([
@@ -113,7 +114,21 @@ public function test3(){
 
             ]);
 
-    }
+    }*/
+
+
+    Activitycriteria::create([
+      'activity_id'=>'6b1d8fe',
+      'criteria'=>'stamina']);
+
+    Activitycriteria::create([
+      'activity_id'=>'6b1d8fe',
+      'criteria'=>'patience']);
+
+    Activitycriteria::create([
+      'activity_id'=>'6b1d8fe',
+      'criteria'=>'creativity']);
+    
 }
 
 
@@ -822,12 +837,13 @@ public function test3(){
         $activity_id = $request->input('activity_id');
         $criteria_name = $request->input('criteria_name');
         $rating = $request->input('rating');
+        $count = $request->input('count');
 
 
+        for($i,)
 
 
-
-
+   foreach($rating )
         $mate = Volunteercriteria::create([
                     'volunteer_id' => $volunteer_id,
                     'name'=> $criteria_name,
@@ -836,6 +852,8 @@ public function test3(){
                     'sum_of_rating' => $rating,          
                     'criteria_name' => $criteria_name     
             ]);
+
+
 
             if($mate){
 
