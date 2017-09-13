@@ -43,12 +43,13 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 
 		Route::post('/groupmatestorate','ActivityController@volunteersToRate');
-		Route::post('/rategroupmate','ActivityController@rategroupmate');
+		
 
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
 	
+Route::post('/rategroupmate','VolunteerController@rategroupmate');	
 Route::post('/sendnotif','ActivityController@sendNotifications');
 Route::post('/test','ActivityController@test');
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');

@@ -2,12 +2,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Volunteerskill;
-use App\Activity;
 use App\Volunteerbeforeactivity;
 use App\Volunteerafteractivity;
-use App\Http\Controllers\DB;
+use App\Activity;
 use App\Volunteeractivity;
+use App\Volunteerskill;
+use App\Activityskill;
+use App\User;
+use App\Events\HelloPusherEvent;
+use App\Volunteer;
+use App\Activitycriteria;
+use Carbon\Carbon;
+use App\Activitygroup;
+use App\Volunteergroup;
+use App\Volunteercriteria;
+use App\Volunteercriteriapoint;
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use FCM;
+use App\Groupnotification;
 
 
 
@@ -16,6 +30,150 @@ class VolunteerController extends Controller
 
 
     //
+
+    public function rategroupmate(Request $request){
+
+    $vol_activity = Volunteerafteractivity::where('volunteer_id',$request->input('volunteer_id'))
+                                          ->where('activity_id',$request->input('activity_id'))->get();
+
+                                
+
+
+
+  if($vol_activity->count()){
+
+            $data = array("message"=>"Gyetey");
+            return 'naka register naman ka bai';
+
+     }else{
+
+        $rate_result = $this->rate($request);
+
+        if($rate_result == "success")
+        $result = $this->successAttendance($request);
+
+        return $result;
+
+     }
+
+ 
+   }
+
+   public function rate($request){
+
+        $activity_group_id = $request->input('activitygroups_id');
+        $volunteer_id = $request->input('volunteer_id');
+        $volunteer_id_to_rate = $request->input('volunteer_id_to_rate');
+        $activity_id = $request->input('activity_id');
+        $count = $request->input('count');
+
+
+     for($i = 0; $i < $count; $i++){
+
+        $criteria =  $request->input('criteriaParams'.$i);
+        $rating = $request->input('ratingParams'.$i);
+
+          $mate = Volunteercriteria::create([
+
+                    'volunteer_id' => $volunteer_id_to_rate,
+                    'actvity_id'=>$activity_id,
+                    'activitygroups_id'=>$activity_group_id,
+                    'sum_of_rating' => $rating,          
+                    'criteria_name' => $criteria     
+            ]);
+
+
+            if($mate){
+
+                    $volunteercriteriapoints = Volunteercriteriapoint::where('activity_id',$activity_id)
+                                                         ->where('volunteer_id',$volunteer_id_to_rate)
+                                                         ->where('criteria_name',$criteria)->first();
+                       if($volunteercriteriapoints){
+
+                                $total_points = $volunteercriteriapoints->total_points + $rating;   
+                                $num_of_raters = $volunteercriteriapoints->no_of_raters + 1;
+                                $average_points = $total_points / $num_of_raters;   
+
+                                    $volunteercriteriapoints = \DB::table('volunteercriteriapoints')->where('activity_id',$activity_id)->where('volunteer_id',$volunteer_id_to_rate)
+                                                         ->where('criteria_name',$criteria)
+                                                         ->update(['total_points'=>$total_points,
+                                                                   'no_of_raters'=>$num_of_raters,
+                                                                   'average_points'=>$average_points]);
+                                    if($volunteercriteriapoints){
+                                      
+                                       return "maayo";
+
+
+                                    }else{
+                                         $data = array("message"=>"Something's wrong");
+
+                                         return "animal";
+                                    }                     
+
+                            }else{
+
+                                $data = array("message"=>"Something's wrong");
+
+                                 return "animal";
+                            }                             
+                            
+             }else{
+
+                $data = array("message"=>"Something's wrong");
+
+                 return "animal";
+             }
+      }
+   }
+
+   public function successAttendance($request){
+  
+          Volunteerafteractivity::create([
+
+            'volunteer_id'=>$request->input('volunteer_id'),
+             'activity_id'=>$request->input('activity_id')
+
+            ]);
+
+             \DB::table('volunteeractivities')
+                ->where('volunteer_id',$request->input('volunteer_id'))
+                ->where('activity_id',$request->input('activity_id'))
+                ->update(['status' => true]);
+
+                
+                   $sumOfPoints = 0;
+
+
+               $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
+               
+               foreach($activity_skills as $activity_skill){
+
+                $skill = $activity_skill->name;
+                $sumOfPoints = $this->points($skill,$sumOfPoints);
+
+               }    
+
+            $hours = $request->input('hours');
+            $sumOfPoints = $sumOfPoints * $hours;
+
+            $volunteer_points = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->select('points')->first();
+
+            $new_points = $volunteer_points->points + $sumOfPoints;
+
+            $volunteers = Volunteer::all();
+
+            return response()->json(Volunteer::all());
+
+            Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
+            \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
+
+            
+
+            return "success";
+        
+         
+    }
+
 
     public function inputSkills(Request $request){
     	
@@ -92,58 +250,7 @@ class VolunteerController extends Controller
             }
     }
 
-    public function successAttendance(Request $request){
-      //see if naka attendance nabah siya
-    $vol_activity = Volunteerafteractivity::where('volunteer_id',$request->input('volunteer_id'))
-                                          ->where('activity_id',$request->input('activity_id'))->get();
-
-     if($vol_activity->count()){
-
-            $data = array("message"=>"Attended already");
-            return response()->json($data);
-
-     }else{
-
-        	Volunteerafteractivity::create([
-
-        		'volunteer_id'=>$request->input('volunteer_id'),
-        		 'activity_id'=>$request->input('activity_id')
-
-        		]);
-
-             \DB::table('volunteeractivities')
-                ->where('volunteer_id',$request->input('volunteer_id'))
-                ->where('activity_id',$request->input('activity_id'))
-                ->update(['status' => true]);
-
-                
-                   $sumOfPoints = 0;
-
-            if($count = $request->input('count')){
-                for($i = 0; $i<$count; $i++){
-
-                    $skill = $request->input('params'.$i);
-                    $sumOfPoints = points($skill,$sumOfPoints);
-
-                }
-            }
-            
-            $hours = $request->input('hours');
-            $sumOfPoints = $sumOfPoints * $hours;
-            $volunteer_points = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->select('points')->first();
-
-            $new_points = $volunteer_points->points + $sumOfPoints;
-
-            Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
-            \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
-
-            $data = array("message"=>"Success");
-
-            return response()->json($data);
-        }
-         
-    }
-
+    
     public function points($skill, $sumOfPoints){
 
 
@@ -205,6 +312,8 @@ class VolunteerController extends Controller
     public function volunteeractivitycriteria(){
         
     }
+
+
 
 
 }

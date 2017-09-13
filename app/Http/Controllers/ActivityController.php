@@ -64,11 +64,11 @@ public function webtest($id){
     //\DB::table('users')->delete();
     //\DB::table('foundations')->delete();
     //\DB::table('volunteers')->delete();
-    \DB::table('activityskills')->delete();
+    //\DB::table('activityskills')->delete();
     \DB::table('volunteergroups')->delete();
-    \DB::table('volunteerbeforeactivities')->delete();
+    //\DB::table('volunteerbeforeactivities')->delete();
     \DB::table('volunteerafteractivities')->delete();
-    \DB::table('activitycriterias')->delete();
+    //\DB::table('activitycriterias')->delete();
     \DB::table('volunteercriteriapoints');
     //\DB::table('volunteerskills')->delete();
     \DB::table('volunteeractivities')->delete();
@@ -830,72 +830,11 @@ public function test3(){
 
    }
 
-   public function rategroupmate(Request $request){
-    
-        $activity_group_id = $request->input('activitygroups_id');
-        $volunteer_id = $request->input('volunteer_id');
-        $activity_id = $request->input('activity_id');
-        $criteria_name = $request->input('criteria_name');
-        $rating = $request->input('rating');
-        $count = $request->input('count');
-
-
-       
-
+   
 
  
-        $mate = Volunteercriteria::create([
-                    'volunteer_id' => $volunteer_id,
-                    'name'=> $criteria_name,
-                    'actvity_id'=>$activity_id,
-                    'activitygroups_id'=>$activity_group_id,
-                    'sum_of_rating' => $rating,          
-                    'criteria_name' => $criteria_name     
-            ]);
 
-
-
-            if($mate){
-
-                    $volunteercriteriapoints = Volunteercriteriapoint::where('activity_id',$activity_id)
-                                                         ->where('volunteer_id',$volunteer_id)
-                                                         ->where('criteria_name',$criteria_name)->first();
-                       if($volunteercriteriapoints){
-
-                                $total_points = $volunteercriteriapoints->total_points + $rating;   
-                                $num_of_raters = $volunteercriteriapoints->no_of_raters + 1;
-                                $average_points = $total_points / $num_of_raters;   
-
-                                    $volunteercriteriapoints = \DB::table('volunteercriteriapoints')->where('activity_id',$activity_id)->where('volunteer_id',$volunteer_id)
-                                                         ->where('criteria_name',$criteria_name)
-                                                         ->update(['total_points'=>$total_points,
-                                                                   'no_of_raters'=>$num_of_raters,
-                                                                   'average_points'=>$average_points]);
-                                    if($volunteercriteriapoints){
-                                        
-                                        $data = array("message"=>"Success");
-
-                                        return response()->json($data);
-
-                                    }else{
-                                         $data = array("message"=>"Something's wrong");
-
-                                         return response()->json($data);
-                                    }                     
-
-                            }else{
-
-                                $data = array("message"=>"Something's wrong");
-
-                                return response()->json($data);
-                            }                             
-                            
-             }else{
-
-                $data = array("message"=>"Something's wrong");
-
-                return reponse()->json($data);
-             }
+   public function successAttendanceAndPointsEarned(){
 
    }
 

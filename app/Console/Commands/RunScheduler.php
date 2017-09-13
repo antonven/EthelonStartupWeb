@@ -99,7 +99,7 @@ class RunScheduler extends Command
 
         //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
 
-                                $activities = Activity::where('status',false)->get();
+                                $activities = Activity::where('name','false')->get();
 
 
       if($activities->count()){
