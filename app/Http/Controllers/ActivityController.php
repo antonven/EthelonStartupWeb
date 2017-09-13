@@ -75,7 +75,7 @@ public function webtest($id){
     \DB::table('activitygroups')->delete();
     \DB::table('volunteercriterias')->delete();
     \DB::table('groupnotifications')->delete();
-    \DB::table('activities')->delete();
+    //\DB::table('activities')->delete();
 
  }
 
@@ -103,12 +103,11 @@ public function test3(){
 
     foreach($volunteers as $volunteer){
         Volunteerbeforeactivity::create([
-            'activity_id' => '654eacd',
+            'activity_id' => '6b1d8fe',
             'volunteer_id' => $volunteer->volunteer_id
             ]);
         Volunteeractivity::create([
-
-            'activity_id' => '654eacd',
+            'activity_id' => '6b1d8fe',
             'volunteer_id'=> $volunteer->volunteer_id,
             'status' => false
 
@@ -155,9 +154,7 @@ public function test3(){
                              return dd($downstreamResponse);*/
 
 
-        $activities = Activity::where('activity_id','d7a75')->get();
-
-        Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
+        $activities = Activity::where('status',false)->get();
 
       if($activities->count()){
         
