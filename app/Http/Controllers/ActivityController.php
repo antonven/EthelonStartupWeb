@@ -66,7 +66,7 @@ public function webtest($id){
     //\DB::table('volunteers')->delete();
     //\DB::table('activityskills')->delete();
     \DB::table('volunteergroups')->delete();
-    //\DB::table('volunteerbeforeactivities')->delete();
+    \DB::table('volunteerbeforeactivities')->delete();
     \DB::table('volunteerafteractivities')->delete();
     //\DB::table('activitycriterias')->delete();
     \DB::table('volunteercriteriapoints');
@@ -100,7 +100,7 @@ public function webtest($id){
 
 public function test3(){
 
-   /* $volunteers = Volunteer::all();
+    $volunteers = Volunteer::all();
 
     foreach($volunteers as $volunteer){
         Volunteerbeforeactivity::create([
@@ -114,7 +114,7 @@ public function test3(){
 
             ]);
 
-    }*/
+    }
 
 
     Activitycriteria::create([

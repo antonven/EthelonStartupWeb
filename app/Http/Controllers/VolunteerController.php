@@ -49,11 +49,8 @@ class VolunteerController extends Controller
 
         $rate_result = $this->rate($request);
 
-        if($rate_result == "success")
-        $result = $this->successAttendance($request);
 
-        return $result;
-
+        return $rate_result;
      }
 
  
@@ -67,6 +64,7 @@ class VolunteerController extends Controller
         $activity_id = $request->input('activity_id');
         $count = $request->input('count');
 
+        $errors = 0;
 
      for($i = 0; $i < $count; $i++){
 
@@ -100,33 +98,35 @@ class VolunteerController extends Controller
                                                                    'no_of_raters'=>$num_of_raters,
                                                                    'average_points'=>$average_points]);
                                     if($volunteercriteriapoints){
-                                      
-                                       return "maayo";
+                                          
+                                       
 
 
                                     }else{
                                          $data = array("message"=>"Something's wrong");
 
-                                         return "animal";
+                                        $errors++;
                                     }                     
 
-                            }else{
+                      }else{
 
                                 $data = array("message"=>"Something's wrong");
 
-                                 return "animal";
-                            }                             
+                                $errors++;
+                         }                             
                             
              }else{
 
-                $data = array("message"=>"Something's wrong");
+              $data = array("message"=>"Something's wrong");
 
-                 return "animal";
+              $errors++;
              }
       }
+
+      return "success";
    }
 
-   public function successAttendance($request){
+   public function successAttendance(Request $request){
   
           Volunteerafteractivity::create([
 
