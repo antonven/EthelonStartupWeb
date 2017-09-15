@@ -146,8 +146,7 @@ public function test3(){
       if($activities->count()){
 
          $this->randomAllocation($activities);  
-         $this->sendNotifications($activities);
-
+        
       }else{
         return 'atay';
       }
@@ -318,7 +317,12 @@ public function test3(){
                       }     
                       $volunteerCount++;
                       }      
-                    }              
+                    }   
+
+                     $this->sendNotifications($activities);
+
+
+                               
     }
 
 
