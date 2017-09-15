@@ -410,7 +410,7 @@ public function test3(){
         }
         
        
-        return response()->json($downstreams,$volunteers,$activity_group_id,$volunteersToRate);
+        return response()->json($downstreams)->json($volunteers)->json($activity_group_id)->json($volunteersToRate);
 
     }
 
