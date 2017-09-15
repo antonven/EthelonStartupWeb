@@ -130,7 +130,7 @@ public function test3(){
 
 
       if($activities->count()){
-         $this->randomAllocation($activities);  
+         //$this->randomAllocation($activities);  
          $this->sendNotifications($activities);
       }else{
         return 'atay';
@@ -276,7 +276,6 @@ public function test3(){
  public function sendNotifications($activities){
 
         
-
        $downstreams = array();
        
         foreach($activities as $activity){
@@ -353,6 +352,7 @@ public function test3(){
 
             }
         }
+        
         return response()->json($downstreams);
 
     }
