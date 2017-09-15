@@ -344,8 +344,8 @@ public function test3(){
                                                            
           $volunteersKeeper = array();
           $groupmates = array();
-          $activity_group_id = array();
-          $volunteersToRate = array();
+          $activity_group_ids= array();
+          $volunteersToRates = array();
 
             foreach($volunteers as $volunteer){
 
@@ -361,6 +361,9 @@ public function test3(){
                                                 ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
                                                 ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
                                                 ->get();   
+
+                           array_push($volunteersToRates,$volunteersToRate);       
+                           array_push($activity_group_ids,$activity_group_id);                  
 
 
                      foreach($volunteersToRate as $volunteerToRate){
@@ -416,7 +419,7 @@ public function test3(){
         }
         
        
-        return response()->json(array("downstreas"=>$downstreams, "volunteerstoRate"=>$volunteersToRate, "activity_groups"=>$activity_group_id));
+        return response()->json(array("downstreas"=>$downstreams, "volunteerstoRate"=>$volunteersToRates, "activity_groups"=>$activity_group_ids));
 
     }
 
