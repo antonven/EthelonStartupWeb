@@ -24,7 +24,7 @@ use FCM;
 use App\Groupnotification;
 
 
-
+  
 class VolunteerController extends Controller
 {
 
@@ -53,7 +53,7 @@ class VolunteerController extends Controller
         return $rate_result;
      }
 
- 
+    
    }
 
    public function rate($request){
@@ -217,8 +217,8 @@ class VolunteerController extends Controller
     //join activity nga wala pa nahitabo
     public function joinActivity(Request $request){
 
-       $watch = Volunteerbeforeactivity::where('volunteer_id',$request->input('volunteer_id'))
-                                       ->where('activity_id',$request->input('activity_id'))->get();
+       $watch = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
+                                  ->where('activity_id',$request->input('activity_id'))->get();
 
          if($watch->count()){
 
@@ -228,13 +228,7 @@ class VolunteerController extends Controller
          }                                   
          else{
 
-        	Volunteerbeforeactivity::create([
-
-        		 'volunteer_id'=>$request->input('volunteer_id'),
-        		 'activity_id'=>$request->input('activity_id'),
-        		 
-        		]);
-
+      
             Volunteeractivity::create([
                  'volunteer_id'=>$request->input('volunteer_id'),
                  'activity_id'=>$request->input('activity_id'),

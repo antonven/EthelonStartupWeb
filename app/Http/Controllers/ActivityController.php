@@ -103,16 +103,12 @@ public function test3(){
     $volunteers = Volunteer::all();
 
     foreach($volunteers as $volunteer){
-        Volunteerbeforeactivity::create([
-            'activity_id' => 'df89c1e',
-            'volunteer_id' => $volunteer->volunteer_id
-            ]);
-        /*Volunteeractivity::create([
-            'activity_id' => 'df89c1e',
+
+        Volunteeractivity::create([
+            'activity_id' => '6b1d8fe',
             'volunteer_id'=> $volunteer->volunteer_id,
             'status' => false
-
-            ]);*/
+            ]);
 
     }
 
@@ -189,7 +185,8 @@ public function test3(){
       foreach($activities as $activity){
 
 
-                $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+                $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)
+                                                 ->where('status',false)->inRandomOrder()->get();
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
