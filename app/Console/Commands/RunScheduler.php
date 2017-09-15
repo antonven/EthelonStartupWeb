@@ -283,7 +283,7 @@ class RunScheduler extends Command
                       $volunteerCount++;
                       }      
                     }              
-                    
+                    $this->sendNotifications($activities);
             
     }
 
