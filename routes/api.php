@@ -48,7 +48,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
-	
+Route::post('/sendNotif','ActivityController@sendnotif');	
 Route::post('/rategroupmate','VolunteerController@rategroupmate');	
 Route::post('/sendnotif','ActivityController@sendNotifications');
 Route::post('/test','ActivityController@test');
@@ -62,7 +62,7 @@ Route::post('/test3','ActivityController@test3');
 Route::post('/register','RegistrationController@register');
 Route::post('/login','LoginController@login');
 
-Route::post('/session','LoginController@sessionwatch');
+Route::post('/test4','ActivityController@test4');
 Route::post('/volunteerstorate','ActivityController@volunteersToRate');
 
 Route::group(['middleware'=>'foundation'],function(){

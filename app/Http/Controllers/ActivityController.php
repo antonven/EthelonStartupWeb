@@ -98,6 +98,18 @@ public function webtest($id){
       }
     }
 
+public function test4(){
+  
+   $volunteers = Volunteer::all();
+
+        Volunteeractivity::create([
+            'activity_id' => '6b1d8fe',
+            'volunteer_id'=> $volunteer->volunteer_id,
+            'status' => false
+            ]);
+
+}
+
 public function test3(){
 
     $volunteers = Volunteer::all();
@@ -128,14 +140,14 @@ public function test3(){
 
       $activities = Activity::where('status',false)->get();
 
-
       if($activities->count()){
-         //$this->randomAllocation($activities);  
+
+         $this->randomAllocation($activities);  
          $this->sendNotifications($activities);
+
       }else{
         return 'atay';
       }
-
 
 }
 
@@ -188,7 +200,42 @@ public function test3(){
         return response()->json($returns);
       }
 
+  }
 
+  public function sendnoTif(){
+    $volunteers = Volunteer::all();
+
+
+    $downstreams = array();
+    foreach($volunteers as $volunteer){
+
+      if($volunteer->fcm_token != null){
+
+                            $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+ 
+                          $notificationBuilder = new PayloadNotificationBuilder('Emperador');
+                          $notificationBuilder->setBody('HANNAH ASANG TAGAY??????')
+                                              ->setSound('default'); 
+
+                            $dataBuilder = new PayloadDataBuilder();
+                            $dataBuilder->addData([
+                                'activity'=>'fasds',
+                                'volunteersToRate'=>'few'
+                                ]);
+
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+                             
+                            
+                            $downstreams = FCM::sendTo($volunteer->fcm_token, $option, $notification, $data);
+               }
+
+            }
+            return 'kayata';
+     return response()->json($downstreams);
   }
 
  public function randomAllocation($activities){
@@ -300,6 +347,8 @@ public function test3(){
                                                 ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
                                                 ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
                                                 ->get();   
+
+
 
 
                      foreach($volunteersToRate as $volunteerToRate){
