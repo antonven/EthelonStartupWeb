@@ -99,7 +99,7 @@ public function webtest($id){
     }
 
 public function test4(){
-  
+
    $volunteers = Volunteer::all();
 
         Volunteeractivity::create([
@@ -243,7 +243,7 @@ public function test3(){
      
       foreach($activities as $activity){
 
-                $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+                $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
