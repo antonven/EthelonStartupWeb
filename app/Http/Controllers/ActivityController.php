@@ -405,6 +405,7 @@ public function test3(){
             }
         }
         
+        return 'kayata';
         return response()->json($downstreams);
 
     }
