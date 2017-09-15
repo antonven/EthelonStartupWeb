@@ -335,7 +335,7 @@ public function test3(){
                                                                ->where('volunteeractivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
 
           $volunteersKeeper = array();
-
+          
             foreach($volunteers as $volunteer){
 
                 $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
@@ -350,8 +350,6 @@ public function test3(){
                                                 ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
                                                 ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
                                                 ->get();   
-
-
 
 
                      foreach($volunteersToRate as $volunteerToRate){

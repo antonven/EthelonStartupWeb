@@ -105,7 +105,7 @@ class RunScheduler extends Command
                             $volunteers = Volunteer::all();
 
 
-    
+    $downstreams = array();
     foreach($volunteers as $volunteer){
 
       if($volunteer->fcm_token != null){
@@ -115,7 +115,7 @@ class RunScheduler extends Command
                             $optionBuilder->setPriority('high');
  
                           $notificationBuilder = new PayloadNotificationBuilder('Emperador');
-                          $notificationBuilder->setBody('DAPAT PERMI KA MAKADAWAT OG NOTIFICATION')
+                          $notificationBuilder->setBody('DAPAT PERMI KA MAKADAWAT FUCK')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
