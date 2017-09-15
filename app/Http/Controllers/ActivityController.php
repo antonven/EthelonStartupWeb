@@ -322,15 +322,16 @@ public function test3(){
                      $this->sendNotifications($activities);
 
 
-                               
+
     }
 
 
 
  public function sendNotifications($activities){
 
+        $activities = Activity::where('status',false)->get();
         
-       $downstreams = array();
+        $downstreams = array();
        
         foreach($activities as $activity){
 

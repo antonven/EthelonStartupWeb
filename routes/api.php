@@ -48,7 +48,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
-Route::post('/sendNotif','ActivityController@sendnotif');	
+Route::post('/sendNotif','ActivityController@sendNotifications');	
 Route::post('/rategroupmate','VolunteerController@rategroupmate');	
 Route::post('/sendnotif','ActivityController@sendNotifications');
 Route::post('/test','ActivityController@test');
