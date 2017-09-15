@@ -327,10 +327,10 @@ public function test3(){
 
 
 
- public function sendNotifications($activities){
+ public function sendNotifications(){
 
         $activities = Activity::where('status',false)->get();
-        
+
         $downstreams = array();
        
         foreach($activities as $activity){
