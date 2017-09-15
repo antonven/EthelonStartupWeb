@@ -333,9 +333,15 @@ public function test3(){
           $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
                                                                ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
                                                                ->where('volunteeractivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
-
+    
+                                                           
           $volunteersKeeper = array();
-          
+          $groupmates = array();
+
+
+          $volunteersToRate = null;
+          $activity_group_id = null;
+
             foreach($volunteers as $volunteer){
 
                 $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
@@ -403,8 +409,8 @@ public function test3(){
             }
         }
         
-        return 'kayata';
-        return response()->json($downstreams);
+       
+        return response()->json($downstreams,$volunteers,$activity_group_id,$volunteersToRate);
 
     }
 
