@@ -99,13 +99,13 @@ class RunScheduler extends Command
 
         //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
 
-                                $activities = Activity::where('name','false')->get();
+                                $activities = Activity::where('status',true)->get();
 
 
       if($activities->count()){
 
          $this->randomAllocation($activities);  
-         $this->sendNotifications($activities);
+        // $this->sendNotifications($activities);
 
          Activity::where('activity_id','654eacd')->update(['name'=>'POTANG INAAAZZZZZZZZZZZ!!!!!']);
 
@@ -113,7 +113,7 @@ class RunScheduler extends Command
         Activity::where('activity_id','d7a75')->update(['name'=>'WALAAAAAAAAA!!!!!']);
       }
        
-         
+
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
         $this->runScheduler();

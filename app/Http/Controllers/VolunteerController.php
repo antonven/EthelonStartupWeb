@@ -126,6 +126,8 @@ class VolunteerController extends Controller
       return "success";
    }
 
+   
+
    public function successAttendance(Request $request){
   
           Volunteerafteractivity::create([
@@ -153,6 +155,8 @@ class VolunteerController extends Controller
 
                }    
 
+               return $sumOfPoints;
+
             $hours = $request->input('hours');
             $sumOfPoints = $sumOfPoints * $hours;
 
@@ -160,15 +164,10 @@ class VolunteerController extends Controller
 
             $new_points = $volunteer_points->points + $sumOfPoints;
 
-            $volunteers = Volunteer::all();
-
-            return response()->json(Volunteer::all());
-
             Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
             \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
 
             
-
             return "success";
         
          

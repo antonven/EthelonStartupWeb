@@ -63,7 +63,7 @@ return [
             'prefix' => '',
         ],
 
-    /*    'mysql' => [
+        'mysql' => [
             'driver' => 'mysql',
             'host' => $host,
             'database' => $database,
@@ -73,8 +73,8 @@ return [
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
-        ],*/
-
+        ],
+        /*    
          'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
@@ -88,7 +88,7 @@ return [
             'prefix' => '',
             'strict' => false,
             'engine' => null,
-        ],
+        ],*/
 
         'pgsql' => [
             'driver' => 'pgsql',
