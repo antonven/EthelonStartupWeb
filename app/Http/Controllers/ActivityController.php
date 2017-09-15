@@ -115,32 +115,7 @@ public function test4(){
 
 public function test3(){
 
-    $volunteers = Volunteer::all();
-
-    /*foreach($volunteers as $volunteer){
-
-        Volunteeractivity::create([
-            'activity_id' => '6b1d8fe',
-            'volunteer_id'=> $volunteer->volunteer_id,
-            'status' => false
-            ]);
-
-    }
-
-
-    Activitycriteria::create([
-      'activity_id'=>'6b1d8fe',
-      'criteria'=>'stamina']);
-
-    Activitycriteria::create([
-      'activity_id'=>'6b1d8fe',
-      'criteria'=>'patience']);
-
-    Activitycriteria::create([
-      'activity_id'=>'6b1d8fe',
-      'criteria'=>'creativity']);*/
-
-
+  
       $activities = Activity::where('status',false)->get();
 
       if($activities->count()){
@@ -318,6 +293,7 @@ public function test3(){
                       $volunteerCount++;
                       }      
                     }   
+
 
                      $this->sendNotifications($activities);
 

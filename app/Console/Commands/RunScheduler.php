@@ -106,9 +106,6 @@ class RunScheduler extends Command
         
         $this->randomAllocation($activities);  
 
-        $returns = $this->sendNotifications($activities);
-
-        
       }                             
         
 
@@ -213,7 +210,7 @@ class RunScheduler extends Command
       foreach($activities as $activity){
 
 
-                $volunteers = Volunteerbeforeactivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+                $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
