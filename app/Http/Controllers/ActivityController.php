@@ -333,6 +333,8 @@ public function test3(){
 
         $downstreams = array();
        
+        $jsons = array();
+
         foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
@@ -342,10 +344,8 @@ public function test3(){
                                                            
           $volunteersKeeper = array();
           $groupmates = array();
-
-
-          $volunteersToRate = null;
-          $activity_group_id = null;
+          $activity_group_id = array();
+          $volunteersToRate = array();
 
             foreach($volunteers as $volunteer){
 
@@ -372,6 +372,7 @@ public function test3(){
                                             "num_of_vol"=>$activity_group_id->numOfVolunteers);
 
                              array_push($volunteersKeeper,$data);
+
                      }                           
 
 
@@ -415,7 +416,7 @@ public function test3(){
         }
         
        
-        return response()->json($downstreams);
+        return response()->json(array("downstreas"=>$downstreams, "volunteerstoRate"=>$volunteersToRate, "activity_groups"=>$activity_group_ids));
 
     }
 
