@@ -102,11 +102,14 @@ public function test4(){
 
    $volunteers = Volunteer::all();
 
-        Volunteeractivity::create([
+  foreach($volunteers as $volunteer){
+      Volunteeractivity::create([
             'activity_id' => '6b1d8fe',
             'volunteer_id'=> $volunteer->volunteer_id,
             'status' => false
             ]);
+    }
+    
 
 }
 
