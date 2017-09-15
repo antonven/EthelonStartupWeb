@@ -100,7 +100,7 @@ public function webtest($id){
 
 public function test4(){
 
-   $volunteers = Volunteer::all();
+  $volunteers = Volunteer::all();
 
   foreach($volunteers as $volunteer){
       Volunteeractivity::create([
@@ -330,9 +330,9 @@ public function test3(){
        
         foreach($activities as $activity){
 
-          $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
-                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
-                                                               ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
+          $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
+                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
+                                                               ->where('volunteeractivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
 
           $volunteersKeeper = array();
 
