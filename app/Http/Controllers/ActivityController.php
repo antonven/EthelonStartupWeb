@@ -349,7 +349,7 @@ public function test3(){
 
             foreach($volunteers as $volunteer){
 
-                $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
+               /* $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
                                                         ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
                                                         ->where('volunteergroups.volunteer_id',$volunteer->volunteer_id)
                                                         ->where('activitygroups.activity_id',$activity->activity_id)
@@ -377,7 +377,7 @@ public function test3(){
                              array_push($volunteersKeeper,$data);
 
                      }                           
-
+*/
 
 
                             $optionBuilder = new OptionsBuilder();
@@ -390,8 +390,8 @@ public function test3(){
 
                             $dataBuilder = new PayloadDataBuilder();
                             $dataBuilder->addData([
-                                'activity'=>$activity,
-                                'volunteersToRate'=>$volunteersKeeper
+                                'activity'=>'s',
+                                'volunteersToRate'=>'we'
                                 ]);
 
                             $option = $optionBuilder->build();
