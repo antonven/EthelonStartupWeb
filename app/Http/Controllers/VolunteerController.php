@@ -130,13 +130,7 @@ class VolunteerController extends Controller
 
    public function successAttendance(Request $request){
   
-          Volunteerafteractivity::create([
-
-            'volunteer_id'=>$request->input('volunteer_id'),
-             'activity_id'=>$request->input('activity_id')
-
-            ]);
-
+  
              \DB::table('volunteeractivities')
                 ->where('volunteer_id',$request->input('volunteer_id'))
                 ->where('activity_id',$request->input('activity_id'))
