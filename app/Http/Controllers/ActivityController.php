@@ -327,10 +327,9 @@ public function test3(){
 
 
 
- public function sendNotifications(){
+ public function sendNotifications($activities){
 
-        $activities = Activity::where('status',false)->get();
-
+      
         $downstreams = array();
        
         $jsons = array();

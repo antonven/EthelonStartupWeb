@@ -102,37 +102,14 @@ class RunScheduler extends Command
                                 $activities = Activity::where('status',false)->get();
 
 
-                            $volunteers = Volunteer::all();
+      if($activities->count()){
+        
+        $this->randomAllocation($activities);  
 
+        $returns = $this->sendNotifications($activities);
 
-    $downstreams = array();
-    foreach($volunteers as $volunteer){
-
-      if($volunteer->fcm_token != null){
-
-                            $optionBuilder = new OptionsBuilder();
-                            $optionBuilder->setTimeToLive(60*20);
-                            $optionBuilder->setPriority('high');
- 
-                          $notificationBuilder = new PayloadNotificationBuilder('Emperador');
-                          $notificationBuilder->setBody('DAPAT PERMI KA MAKADAWAT FUCK')
-                                              ->setSound('default'); 
-
-                            $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
-                                'activity'=>'fasds',
-                                'volunteersToRate'=>'few'
-                                ]);
-
-                            $option = $optionBuilder->build();
-                            $notification = $notificationBuilder->build();
-                            $data = $dataBuilder->build();
-                             
-                            
-                            $downstreams = FCM::sendTo($volunteer->fcm_token, $option, $notification, $data);
-               }
-
-            }    
+        
+      }                             
         
 
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
