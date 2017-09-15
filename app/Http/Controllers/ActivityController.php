@@ -416,7 +416,7 @@ public function test3(){
         }
         
        
-        return response()->json(array("downstreas"=>$downstreams, "volunteerstoRate"=>$volunteersToRate, "activity_groups"=>$activity_group_ids));
+        return response()->json(array("downstreas"=>$downstreams, "volunteerstoRate"=>$volunteersToRate, "activity_groups"=>$activity_group_id));
 
     }
 
