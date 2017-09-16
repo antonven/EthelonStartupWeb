@@ -125,8 +125,6 @@ class RunScheduler extends Command
     public function sendNotifications($activities){
 
        
-        
-
         foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
