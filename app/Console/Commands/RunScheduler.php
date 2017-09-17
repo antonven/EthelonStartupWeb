@@ -98,13 +98,15 @@ class RunScheduler extends Command
         //                         ->get();
 
         //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
+/*
+                                $activities = Activity::where('status',false)
+                                                        ->whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();*/
 
-                                $activities = Activity::where('status',false)->get();
-
-
+                                                        
       if($activities->count()){
         
         $this->randomAllocation($activities);  
+        Activity::where('activity_id',$activities->activity_id)->update(['status']=>true);
 
       }                             
         

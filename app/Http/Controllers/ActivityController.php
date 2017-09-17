@@ -67,7 +67,7 @@ public function webtest($id){
     //\DB::table('activityskills')->delete();
     \DB::table('volunteergroups')->delete();
 
-    
+
     //\DB::table('volunteerbeforeactivities')->delete();
     //\DB::table('volunteerafteractivities')->delete();
     //\DB::table('activitycriterias')->delete();
@@ -117,7 +117,6 @@ public function test4(){
 
 public function test3(){
 
-  
       $activities = Activity::where('status',false)->get();
 
       if($activities->count()){
