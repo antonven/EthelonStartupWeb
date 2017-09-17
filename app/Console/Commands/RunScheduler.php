@@ -106,7 +106,7 @@ class RunScheduler extends Command
       if($activities->count()){
         
         $this->randomAllocation($activities);  
-        Activity::where('activity_id',$activities->activity_id)->update(['status']=>true);
+        Activity::where('activity_id',$activities->activity_id)->update(['status'=>true]);
 
       }                             
         
