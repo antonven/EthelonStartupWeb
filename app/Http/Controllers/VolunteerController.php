@@ -69,7 +69,7 @@ class VolunteerController extends Controller
      for($i = 0; $i < $count; $i++){
 
         $criteria =  $request->input('criteriaParams'.$i);
-        $rating = $request->input('ratingParams'.$i);
+        $rating = $request->input(' '.$i);
 
           $mate = Volunteercriteria::create([
 
@@ -127,7 +127,6 @@ class VolunteerController extends Controller
    }
 
    
-
    public function successAttendance(Request $request){
   
   

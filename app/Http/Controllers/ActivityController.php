@@ -687,8 +687,6 @@ public function test3(){
         $newActivities = array();
         
 
-                
-    	$activities = Activity::where('status',false)->get();
         $activities = \DB::table('activities')->select('activities.*','foundations.name as foundtion_name') 
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
                                                ->where('activities.status',false)->get();    
@@ -704,6 +702,9 @@ public function test3(){
 
                     $watch = Volunteerbeforeactivity::where('volunteer_id',$request->input('volunteer_id'))
                                        ->where('activity_id',$activity->activity_id)->get();
+
+                    $volunteerCount = Volunteerafteractivity::where('activity_id',$activity->activity_id)->get();                   
+
                     if($watch->count()){
                         $data = "yes";
                     }else{
@@ -731,13 +732,9 @@ public function test3(){
                                             "contact"=>$activity->contact,
                                             "startDate"=>$activity->startDate,
                                             "foundtion_name"=>$activity->foundtion_name,
-                                            "volunteerstatus"=>$data);                     
+                                            "volunteerstatus"=>$data,
+                                            "volunteer_count"=>$volunteerCount->count());                     
 
-                    /*$act = \DB::table('activities')->select('activities.*','volunteeractivities.volunteer_id as vol_count')
-                                                   ->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('activities.activity_id',$activity->activity_id)->get();*/
-                                                                //problem here    
-                                                  // return response()->json($act); 
-                                 
                     foreach($activityskills as $activityskill){
 
                             foreach($skills as $skill){
@@ -795,6 +792,7 @@ public function test3(){
 
         $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.created_at','DESC')
                 ->get();
+
 
 
         return response()->json($activities);
