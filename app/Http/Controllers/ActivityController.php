@@ -703,7 +703,7 @@ public function test3(){
                     $watch = Volunteerbeforeactivity::where('volunteer_id',$request->input('volunteer_id'))
                                        ->where('activity_id',$activity->activity_id)->get();
 
-                    $volunteerCount = Volunteerafteractivity::where('activity_id',$activity->activity_id)->get();                   
+                    $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();                   
 
                     if($watch->count()){
                         $data = "yes";
