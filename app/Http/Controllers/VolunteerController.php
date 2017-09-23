@@ -33,16 +33,15 @@ class VolunteerController extends Controller
 
     public function rategroupmate(Request $request){
 
-    $vol_activity = Volunteerafteractivity::where('volunteer_id',$request->input('volunteer_id'))
-                                          ->where('activity_id',$request->input('activity_id'))->get();
+    $vol_activity = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
+                                          ->where('activity_id',$request->input('activity_id'))
+                                          ->where('status',true)->get();
 
                                 
 
-
-
   if($vol_activity->count()){
 
-            $data = array("message"=>"Gyetey");
+            $data = array("message"=>"Registered");
             return 'naka register naman ka bai';
 
      }else{
@@ -69,7 +68,7 @@ class VolunteerController extends Controller
      for($i = 0; $i < $count; $i++){
 
         $criteria =  $request->input('criteriaParams'.$i);
-        $rating = $request->input(' '.$i);
+        $rating = $request->input('ratingParams'.$i);
 
           $mate = Volunteercriteria::create([
 
@@ -135,6 +134,12 @@ class VolunteerController extends Controller
                 ->where('activity_id',$request->input('activity_id'))
                 ->update(['status' => true]);
 
+             $activity = Activity::where('activity_id',$request->input('activity_ids'))->first();
+             
+             $start_time = \Carbon\Carbon::parse($activity->start_time);   
+             $end_time =   \Carbon\Carbon::parse($activity->end_time); 
+
+             $numOfHours = $start_time->diffInHours($end_time);
                 
                    $sumOfPoints = 0;
 
@@ -150,12 +155,12 @@ class VolunteerController extends Controller
 
                return $sumOfPoints;
 
-            $hours = $request->input('hours');
-            $sumOfPoints = $sumOfPoints * $hours;
+            
+            $sumOfPoints = $sumOfPoints * $numOfHours;
 
             $volunteer_points = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->select('points')->first();
 
-            $new_points = $volunteer_points->points + $sumOfPoints;
+            $new_points = $volunteer_poinst->points + $sumOfPoints;
 
             Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
             \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
