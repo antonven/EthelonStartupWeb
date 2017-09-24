@@ -97,9 +97,9 @@ class RunScheduler extends Command
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
                                 ->get();*/
 
-        // $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
-        //                         ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
-        //                         ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
+        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
                 
 
                 //)
@@ -122,8 +122,16 @@ class RunScheduler extends Command
 
                             $dataBuilder = new PayloadDataBuilder();
                             $dataBuilder->addData([
-                                'activity'=>$activity,
-                                'volunteersToRate'=>"sd"
+                                'eventImage'=>$activity->image_url,
+                                'eventHost' =>$activity->foundation_name,
+                                'eventName'=>$activity->name,
+                                'activity_id'=>$activity->activity_id,
+                                 'eventDate'=>$activity->startDate, 
+                                 'eventTimeStart'=>$activity->start_time,
+                                 'eventLocation'=>$activity->location, 
+                                 'contactNo'=>$activity->contact, 
+                                 'contactPerson'=>$activity->contactperson,  
+                                
                                 ]);
 
                             $option = $optionBuilder->build();
@@ -131,7 +139,7 @@ class RunScheduler extends Command
                             $data = $dataBuilder->build();
                              
                         
-                                 $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
+                                 $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
 
                                                         
       if($activities->count()){
