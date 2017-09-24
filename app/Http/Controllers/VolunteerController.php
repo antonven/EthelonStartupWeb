@@ -104,7 +104,7 @@ class VolunteerController extends Controller
                                     }else{
                                          $data = array("message"=>"Something's wrong");
 
-                                        $errors++;
+                                         $errors++;
                                     }                     
 
                       }else{
@@ -153,10 +153,13 @@ class VolunteerController extends Controller
 
                }    
 
-               return $sumOfPoints;
-
-            
+                         
             $sumOfPoints = $sumOfPoints * $numOfHours;
+
+             \DB::table('volunteeractivities')
+                ->where('volunteer_id',$request->input('volunteer_id'))
+                ->where('activity_id',$request->input('activity_id'))
+                ->update(['points' => $sumOfPoints]);
 
             $volunteer_points = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->select('points')->first();
 

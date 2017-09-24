@@ -15,7 +15,7 @@ class AddPointsTableToVolunteeractivities extends Migration
     {
         Schema::table('volunteeractivities', function (Blueprint $table) {
             //
-            $table->integer('points');
+            
         });
     }
 

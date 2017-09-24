@@ -97,9 +97,9 @@ class RunScheduler extends Command
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
                                 ->get();*/
 
-        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
-                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
-                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
+        // $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+        //                         ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+        //                         ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
                 
 
                 //)
@@ -109,6 +109,9 @@ class RunScheduler extends Command
                                 $activities = Activity::where('status',false)
                                                         ->whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();*/
 
+
+            $activity = Activity::where('activity_id','6bd1d8fe')->first();
+                                                        
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -119,7 +122,7 @@ class RunScheduler extends Command
 
                             $dataBuilder = new PayloadDataBuilder();
                             $dataBuilder->addData([
-                                'activity'=>"sds",
+                                'activity'=>$activity,
                                 'volunteersToRate'=>"sd"
                                 ]);
 
