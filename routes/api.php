@@ -35,7 +35,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/activitypoints','VolunteerController@points');
 				
 		Route::post('/joinactivity','VolunteerController@joinActivity');
-		Route::get('/leaderboard','VolunteerController@leaderboard');
+		
 		Route::post('/activitycriteria','ActivityController@criteria');
 		Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
 		
@@ -48,6 +48,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
+Route::get('/leaderboard','VolunteerController@leaderboard');
 Route::post('/sendNotif','ActivityController@sendNotifications');	
 Route::post('/rategroupmate','VolunteerController@rategroupmate');	
 Route::post('/sendnotif','ActivityController@sendNotifications');
