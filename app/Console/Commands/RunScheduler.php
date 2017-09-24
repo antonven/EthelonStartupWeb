@@ -93,9 +93,16 @@ class RunScheduler extends Command
     public function handle()
     {
 
+/*
+        $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
+                                ->get();*/
 
-        // $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
-        //                         ->get();
+        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
+                
+
+                //)
 
         //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
 /*
@@ -196,7 +203,6 @@ class RunScheduler extends Command
                             $dataBuilder = new PayloadDataBuilder();
                             $dataBuilder->addData([
                                 'activity'=>$activity,
-                                'volunteersToRate'=>$volunteersKeeper
                                 ]);
 
                             $option = $optionBuilder->build();
