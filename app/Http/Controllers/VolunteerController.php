@@ -165,8 +165,11 @@ class VolunteerController extends Controller
             Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
             \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
 
+
+
+            $data = array("result"=>"Good");
+            return response()->json($data);            
             
-            return "success";
         
          
     }
@@ -175,7 +178,7 @@ class VolunteerController extends Controller
     public function inputSkills(Request $request){
     	
 
-        $arrays = array();
+      $arrays = array();
     	$volunteer_id = $request->input('volunteer_id');
 
 
@@ -247,11 +250,11 @@ class VolunteerController extends Controller
 
                     switch($skill){
 
-                         case 'Environmental': $sumOfPoints = $sumOfPoints + 30;
+                         case 'Environmental': $sumOfPoints = $sumOfPoints + 50;
                                       break;          
-                         case 'Sports': $sumOfPoints = $sumOfPoints + 20;                       
+                         case 'Sports': $sumOfPoints = $sumOfPoints + 40;                       
                                       break;
-                         case 'Culinary': $sumOfPoints = $sumOfPoints + 20;
+                         case 'Culinary': $sumOfPoints = $sumOfPoints + 40;
                                       break;
                          case 'Medical': $sumOfPoints = $sumOfPoints + 40;
                                       break;
@@ -261,7 +264,7 @@ class VolunteerController extends Controller
                                       break;
                          case 'Education': $sumOfPoints = $sumOfPoints + 40;
                                       break;
-                         case 'Arts': $sumOfPoints = $sumOfPoints + 20;
+                         case 'Arts': $sumOfPoints = $sumOfPoints + 40;
                                       break;
 
                     }        
