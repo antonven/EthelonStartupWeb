@@ -110,7 +110,7 @@ class RunScheduler extends Command
                                                         ->whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();*/
 
 
-            $activity = Activity::where('activity_id','6bd1d8fe')->first();
+            $activity = Activity::where('activity_id','6b1d8fe')->first();
                                                         
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
