@@ -48,6 +48,8 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
+
+Route::post('/checkIfAlreadyAttended','VolunteerController@checkIfAlreadyAttended');
 Route::get('/leaderboard','VolunteerController@leaderboard');
 Route::post('/sendNotif','ActivityController@sendNotifications');	
 Route::post('/rategroupmate','VolunteerController@rategroupmate');	

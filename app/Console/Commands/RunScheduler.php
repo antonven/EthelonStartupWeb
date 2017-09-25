@@ -97,9 +97,9 @@ class RunScheduler extends Command
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
                                 ->get();*/
 
-        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
-                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
-                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
+        // $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+        //                         ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+        //                         ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
                 
 
                 //)
@@ -110,7 +110,7 @@ class RunScheduler extends Command
                                                         ->whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();*/
 
 
-            $activity = Activity::where('activity_id','6b1d8fe')->first();
+           // $activity = Activity::where('activity_id','6b1d8fe')->first();
                                                         
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -122,15 +122,7 @@ class RunScheduler extends Command
 
                             $dataBuilder = new PayloadDataBuilder();
                             $dataBuilder->addData([
-                                'eventImage'=>$activity->image_url,
-                                'eventHost' =>$activity->foundation_name,
-                                'eventName'=>$activity->name,
-                                'activity_id'=>$activity->activity_id,
-                                 'eventDate'=>$activity->startDate, 
-                                 'eventTimeStart'=>$activity->start_time,
-                                 'eventLocation'=>$activity->location, 
-                                 'contactNo'=>$activity->contact, 
-                                 'contactPerson'=>$activity->contactperson,  
+                                "sds"=>"dsds"
                                 
                                 ]);
 

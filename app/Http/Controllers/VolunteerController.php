@@ -55,6 +55,25 @@ class VolunteerController extends Controller
     
    }
 
+   public function checkIfAlreadyAttended(Request $request){
+    $vol_activity = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
+                                          ->where('activity_id',$request->input('activity_id'))
+                                          ->where('status',true)->get();
+        if($vol_activity->count()){
+
+          $data = array("message"=>"Registered");
+          return response()->json($data);
+
+        }else{
+
+           $data = array("message"=>"Not Registered");
+           return response()->json($data);
+
+        }                                  
+
+
+   }
+
    public function rate($request){
 
         $activity_group_id = $request->input('activitygroups_id');
