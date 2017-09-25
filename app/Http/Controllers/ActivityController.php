@@ -102,7 +102,7 @@ public function webtest($id){
 
 public function test4(){
 
-  $volunteers = Volunteer::all();
+  /*$volunteers = Volunteer::all();
 
   foreach($volunteers as $volunteer){
       Volunteeractivity::create([
@@ -110,8 +110,40 @@ public function test4(){
             'volunteer_id'=> $volunteer->volunteer_id,
             'status' => false
             ]);
-    }
+    }*/
     
+     $activity = Activity::where('activity_id','6b1d8fe')->first();
+                                                        
+                            $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+ 
+                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder->setBody('Your groupmates has been revealed')
+                                              ->setSound('default'); 
+
+                            $dataBuilder = new PayloadDataBuilder();
+                            $dataBuilder->addData([
+                                'eventImage'=>$activity->image_url,
+                                'eventHost' =>$activity->foundation_name,
+                                'eventName'=>$activity->name,
+                                'activity_id'=>$activity->activity_id,
+                                 'eventDate'=>$activity->startDate, 
+                                 'eventTimeStart'=>$activity->start_time,
+                                 'eventLocation'=>$activity->location, 
+                                 'contactNo'=>$activity->contact, 
+                                 'contactPerson'=>$activity->contactperson,  
+                                
+                                ]);
+
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+                             
+                        
+                                 $downstreamResponse = FCM::sendTo('eWjZf7fAixc:APA91bHv_1I6R_usWAeQz-Kf2cymLFLsionrbKdagjmZPoorJEgz7eO6p_GoiONi_-LTMj1VFUjFJFYSV19K4nMddk0Vq0hdrarW4Wd4riZWrn0mDzNoQLa6kGYhGuKL_441vVtF61GC', $option, $notification, $data);
+
+                                 return response()->json($downstreamResponse);
 
 }
 
