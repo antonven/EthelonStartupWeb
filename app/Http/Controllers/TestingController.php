@@ -1,34 +1,12 @@
 <?php
 
-/**
 
 
-This Scheduler will run once every minute unlike the Heroku scheduler which only runs every 10 mintues.
 
-To use this scheduler with Laravel 5.4+ add this file to /app/Console/Commands/RunScheduler.php
-Register this file in app/Console/Kernel.php
+namespace App\Http\Controllers;
 
-protected $commands = [
-...
-Commands\RunScheduler::class
-...
-]
-
-Add this line to your Procfile:
-
-scheduler: php -d memory_limit=512M artisan schedule:cron
-
-Push to Heroku and you will see you have a new dyno option called Scheduler, start ONE only.
-
-I highly recommend using Artisan::queue to run your cron jobs so that your scheduler does not over run.
-
-*/
-
-namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
-use Illuminate\Support\Facades\Artisan;
 use App\Volunteerbeforeactivity;
 use App\Volunteerafteractivity;
 use App\Activity;
@@ -51,122 +29,73 @@ use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
 use App\Groupnotification;
 
-/**
- *
- * Runs the scheduler every 60 seconds as expected to be done by cron.
- * This will break if jobs exceed 60 seconds so you should make sure all scheduled jobs are queued
- *
- * Class RunScheduler
- * @package App\Console\Commands
- */
-class RunScheduler extends Command
+use Davibennun\LaravelPushNotification\Facades\PushNotification;
+
+use Symfony\Component\HttpFoundation\Response;
+
+use Illuminate\Support\Facades\App;
+
+use Illuminate\Http\Request;
+
+class TestingController extends Controller
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'schedule:cron {--queue}';
- 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Run the scheduler without cron (For use with Heroku etc)';
-    
-    /**
-     * Create a new command instance.
-     *
-     * @    return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
+    //
+
+
+    public function test3(){
+
+    	$volunteers = Volunteer::all();
+
+      foreach($volunteers as $volunteer){
+
+       Volunteeractivity::create([
+                 'volunteer_id'=>$volunteer->volunteer_id,
+                 'activity_id'=>'3f6fd4d',
+                 'status'=> false  
+                ]);
+            
+      }
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
-    {
+    public function runScheduler(){
 
-/*
-        $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
-                                ->get();*/
-
-        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+        /*$activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
-                                ->where('activities.status',false)
-                                ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
-                
-
-                //)
-
-        //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
-/*
-                                $activities = Activity::where('status',false)
-                                                        ->whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();*/
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();*/
 
 
-           // $activity = Activity::where('activity_id','6b1d8fe')->first();
 
-                        /*                                
-                            $optionBuilder = new OptionsBuilder();
-                            $optionBuilder->setTimeToLive(60*20);
-                            $optionBuilder->setPriority('high');
- 
-                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates has been revealed')
-                                              ->setSound('default'); 
 
-                            $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
-                                "sds"=>"dsds"
-                                
-                                ]);
+                              //  $activities = Activity::where('activity_id','3f6fd4d')->get();
 
-                            $option = $optionBuilder->build();
-                            $notification = $notificationBuilder->build();
-                            $data = $dataBuilder->build();
-                             
-                        
-                                 $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
-*/
-                                                        
-      if($activities->count()){
+			$activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+                                ->where('activities.activity_id','3f6fd4d')->get();
+
+                                //return response()->json($activities);
+
+
+       if($activities->count()){
         
         $this->randomAllocation($activities);  
         
 
-      }                             
-        
-
-        $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
-        sleep($this->nextMinute());
-        $this->runScheduler();
+      }                  
     }
 
-    /**
-     * Main recurring loop function.
-     * Runs the scheduler every minute.
-     * If the --queue flag is provided it will run the scheduler as a queue job.
-     * Prevents overruns of cron jobs but does mean you need to have capacity to run the scheduler
-     * in your queue within 60 seconds.
-     *
-     */
     public function sendNotifications($activities){
 
        
         foreach($activities as $activity){
 
-          $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
-                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
-                                                               ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
+          $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
+                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
+                                                               ->where('volunteeractivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
+
 
           $volunteersKeeper = array();
+
+          $tokens = array();
 
             foreach($volunteers as $volunteer){
 
@@ -193,10 +122,26 @@ class RunScheduler extends Command
                                             "num_of_vol"=>$activity_group_id->numOfVolunteers);
 
                              array_push($volunteersKeeper,$data);
-                     }                           
+                     }          
 
 
+ 					$token = $volunteer->fcm_token;
+					if($token != null){
 
+                                  array_push($tokens,$token);  
+
+                             }else{
+
+                                Groupnotification::create([
+                                    'volunteer_id'=>$volunteer->volunteer_id,
+                                    'activity_id'=>$activity->activity_id,
+                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d')
+                                    ]);
+
+                             }
+
+                                  
+/*
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -206,17 +151,8 @@ class RunScheduler extends Command
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
-                             $dataBuilder->addData([
-                                'eventImage'=>$activity->image_url,
-                                'eventHost' =>$activity->foundation_name,
-                                'eventName'=>$activity->name,
-                                'activity_id'=>$activity->activity_id,
-                                 'eventDate'=>$activity->startDate, 
-                                 'eventTimeStart'=>$activity->start_time,
-                                 'eventLocation'=>$activity->location, 
-                                 'contactNo'=>$activity->contact, 
-                                 'contactPerson'=>$activity->contactperson,  
-                                
+                            $dataBuilder->addData([
+                                'activity'=>$activity,
                                 ]);
 
                             $option = $optionBuilder->build();
@@ -238,17 +174,46 @@ class RunScheduler extends Command
                                     'date'=>\Carbon\Carbon::now()->format('Y-m-d')
                                     ]);
 
-                             }
+                             }*/
                            
 
             }
+
+               				$optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+ 
+                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder->setBody('Your groupmates has been revealed')
+                                              ->setSound('default'); 
+
+                            $dataBuilder = new PayloadDataBuilder();
+
+                            $dataBuilder->addData([
+                                'eventImage'=>$activity->image_url,
+                                'eventHost' =>$activity->foundation_name,
+                                'eventName'=>$activity->name,
+                                'activity_id'=>$activity->activity_id,
+                                 'eventDate'=>$activity->startDate, 
+                                 'eventTimeStart'=>$activity->start_time,
+                                 'eventLocation'=>$activity->location, 
+                                 'contactNo'=>$activity->contact, 
+                                 'contactPerson'=>$activity->contactperson,  
+                                
+                                ]);
+
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+
+                            $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
 
             Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
         }
 
     }
 
-    public function randomAllocation($activities){
+public function randomAllocation($activities){
         
       
       foreach($activities as $activity){
@@ -350,31 +315,6 @@ class RunScheduler extends Command
       }
     }
 
-
-    protected function runScheduler()
-    {
-        $fn = $this->option('queue') ? 'queue' : 'call';
-
-        $this->info('Running scheduler');
-        Artisan::$fn('schedule:run');
-        $this->info('completed, sleeping..');
-        sleep($this->nextMinute());
-        $this->runScheduler();
-    }
-
-    /**
-     * Works out seconds until the next minute starts;
-     *
-     * @return int
-     */
-
-    protected function nextMinute()
-    {
-        $current = Carbon::now();
-        return 60 -$current->second;
-    }
-
-    public function createGroups(){
-
-    }
 }
+
+

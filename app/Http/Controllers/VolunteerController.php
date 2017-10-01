@@ -153,12 +153,13 @@ class VolunteerController extends Controller
                 ->where('activity_id',$request->input('activity_id'))
                 ->update(['status' => true]);
 
-             $activity = Activity::where('activity_id',$request->input('activity_ids'))->first();
+             $activity = Activity::where('activity_id',$request->input('activity_id'))->first();
              
              $start_time = \Carbon\Carbon::parse($activity->start_time);   
              $end_time =   \Carbon\Carbon::parse($activity->end_time); 
 
              $numOfHours = $start_time->diffInHours($end_time);
+             //$numOfHours = 2;
                 
                    $sumOfPoints = 0;
 
@@ -182,14 +183,13 @@ class VolunteerController extends Controller
 
             $volunteer_points = Volunteer::where('volunteer_id',$request->input('volunteer_id'))->select('points')->first();
 
-            $new_points = $volunteer_poinst->points + $sumOfPoints;
+            $new_points = $volunteer_points->points + $sumOfPoints;
 
             Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
             \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
 
 
-
-            $data = array("result"=>"Good");
+            $data = array("result"=>$sumOfPoints);
             return response()->json($data);            
             
         
@@ -288,6 +288,7 @@ class VolunteerController extends Controller
                                       break;
                          case 'Arts': $sumOfPoints = $sumOfPoints + 40;
                                       break;
+                         case 'All': $sumOfPoints = $sumOfPoints + 100;            
 
                     }        
 

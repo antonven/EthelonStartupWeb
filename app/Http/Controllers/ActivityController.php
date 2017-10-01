@@ -112,7 +112,8 @@ public function test4(){
             ]);
     }*/
     
-     $activity = Activity::where('activity_id','6b1d8fe')->first();
+    // $activity = Activity::where('activity_id','6b1d8fe')->first();
+    // $volunteer = Volunteer::all();
                                                         
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -123,7 +124,8 @@ public function test4(){
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
+
+                          /*  $dataBuilder->addData([
                                 'eventImage'=>$activity->image_url,
                                 'eventHost' =>$activity->foundation_name,
                                 'eventName'=>$activity->name,
@@ -134,6 +136,11 @@ public function test4(){
                                  'contactNo'=>$activity->contact, 
                                  'contactPerson'=>$activity->contactperson,  
                                 
+                                ]);*/
+
+                              $dataBuilder->addData([
+                                "asds"=>"dsd"  
+                                
                                 ]);
 
                             $option = $optionBuilder->build();
@@ -141,15 +148,38 @@ public function test4(){
                             $data = $dataBuilder->build();
                              
                         
-                                 $downstreamResponse = FCM::sendTo('eWjZf7fAixc:APA91bHv_1I6R_usWAeQz-Kf2cymLFLsionrbKdagjmZPoorJEgz7eO6p_GoiONi_-LTMj1VFUjFJFYSV19K4nMddk0Vq0hdrarW4Wd4riZWrn0mDzNoQLa6kGYhGuKL_441vVtF61GC', $option, $notification, $data);
+                                 $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
 
                                  return response()->json($downstreamResponse);
+
+                   /*               $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+ 
+                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder->setBody('Your groupmates has been revealed')
+                                              ->setSound('default'); 
+
+                            $dataBuilder = new PayloadDataBuilder();
+                            $dataBuilder->addData([
+                                "sds"=>"dsds"
+                                
+                                ]);
+
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+                             
+                        
+                                 $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
+
+                                 dd($downstreamResponse);*/
 
 }
 
 public function test3(){
 
-      $activities = Activity::where('status',false)->get();
+     /* $activities = Activity::where('status',false)->get();
 
       if($activities->count()){
 
@@ -157,8 +187,32 @@ public function test3(){
         
       }else{
         return 'atay';
-      }
+      }*/
 
+      $volunteers = Volunteer::all();
+
+      foreach($volunteers as $volunteer){
+
+       Volunteeractivity::create([
+        
+                 'volunteer_id'=>$volunteer->volunteer_id,
+                 'activity_id'=>'a277327',
+                 'status'=> false  
+                ]);
+            
+      }
+      
+/*
+      Activityskill::create([
+          'activity_id'=> '6b1d8fe',
+          'name'=> 'Sports'
+        ]);
+
+        Activityskill::create([
+          'activity_id'=> '6b1d8fe',
+          'name'=> 'Culinary'
+        ]);
+*/
 }
 
 
@@ -688,8 +742,8 @@ public function test3(){
 
         $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.image_url as image_url')
                                            ->join('volunteers','volunteers.user_id','=','users.user_id')
-                                           ->join('volunteerbeforeactivities','volunteerbeforeactivities.volunteer_id','=','volunteers.volunteer_id') 
-                                           ->where('volunteerbeforeactivities.activity_id',$activity_id)
+                                           ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id') 
+                                           ->where('volunteeractivities.activity_id',$activity_id)
                                            ->get();
                                             
 
@@ -822,12 +876,47 @@ public function test3(){
     public function portfolio(Request $request){
 
 
+       $activityList = array();
+
         $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.created_at','DESC')
                 ->get();
 
+                foreach($activities as $activity){
 
 
-        return response()->json($activities);
+                  $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
+
+
+                    $activityTempo = array("activity_id"=>$activity->activity_id,
+                                            "foundation_id"=>$activity->foundation_id,
+                                            "name"=>$activity->name,
+                                            "image_url"=>$activity->image_url,
+                                            "imageQr_url"=>$activity->imageQr_url,
+                                            "description"=>$activity->description,
+                                            "location"=>$activity->location,
+                                            "start_time"=>$activity->start_time,
+                                            "end_time"=>$activity->end_time,
+                                            "group"=>$activity->group,
+                                            "long"=>$activity->long,
+                                            "lat"=>$activity->lat,
+                                            "points_equivalent"=>$activity->points_equivalent,
+                                            "status"=>$activity->status,
+                                            "created_at"=>$activity->created_at,
+                                            "updated_at"=>$activity->updated_at,
+                                            "contactperson"=>$activity->contactperson,
+                                            "contact"=>$activity->contact,
+                                            "startDate"=>$activity->startDate,
+                                            "foundtion_name"=>$activity->foundation_name,
+                                            "status"=>$activity->status,
+                                            "volunteer_count"=>$volunteerCount->count());
+
+                         array_push($activityList,$activityTempo);                          
+
+                }
+
+
+
+        return response()->json($activityList);
 
     }
 

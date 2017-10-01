@@ -37,18 +37,18 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/joinactivity','VolunteerController@joinActivity');
 		
 		Route::post('/activitycriteria','ActivityController@criteria');
-		Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
+	
 		
-		Route::post('/portfolio','ActivityController@portfolio');
 		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 
 		Route::post('/groupmatestorate','ActivityController@volunteersToRate');
 		
-
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
 
+Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
+Route::post('/portfolio','ActivityController@portfolio');
 Route::post('/checkIfAlreadyAttended','VolunteerController@checkIfAlreadyAttended');
 Route::get('/leaderboard','VolunteerController@leaderboard');
 Route::post('/sendNotif','ActivityController@sendNotifications');	
@@ -60,12 +60,12 @@ Route::post('/loginwithfb','LoginController@loginwithFb');
 Route::get('/deleteall','ActivityController@deleteall');
 Route::post('/attendanceactivity','VolunteerController@successAttendance');
 Route::post('/test2','ActivityController@test2');
-Route::post('/test3','ActivityController@test3');
 
+Route::post('/test3','TestingController@test3');
 Route::post('/register','RegistrationController@register');
 Route::post('/login','LoginController@login');
 
-Route::post('/test4','ActivityController@test4');
+Route::post('/test4','TestingController@runScheduler');
 Route::post('/volunteerstorate','ActivityController@volunteersToRate');
 
 Route::group(['middleware'=>'foundation'],function(){
