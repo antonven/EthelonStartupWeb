@@ -47,6 +47,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		
 });
 
+Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
 Route::post('/portfolio','ActivityController@portfolio');
 Route::post('/checkIfAlreadyAttended','VolunteerController@checkIfAlreadyAttended');
