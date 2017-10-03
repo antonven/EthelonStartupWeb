@@ -746,9 +746,6 @@ public function test3(){
                                            ->where('volunteeractivities.activity_id',$activity_id)
                                            ->get();
 
-                                         
-                                            
-
     	return response()->json($volunteersBefore);
         
     }

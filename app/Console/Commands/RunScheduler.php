@@ -140,8 +140,7 @@ class RunScheduler extends Command
         
         $this->randomAllocation($activities);  
         
-
-      }                             
+       }                             
         
 
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
@@ -205,7 +204,7 @@ class RunScheduler extends Command
                           $notificationBuilder->setBody('Your groupmates has been revealed')
                                               ->setSound('default'); 
 
-                            $dataBuilder = new PayloadDataBuilder();
+                             $dataBuilder = new PayloadDataBuilder();
                              $dataBuilder->addData([
                                 'eventImage'=>$activity->image_url,
                                 'eventHost' =>$activity->foundation_name,
