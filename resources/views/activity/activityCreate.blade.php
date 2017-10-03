@@ -227,6 +227,7 @@
         var $criteria = "";
         $(window).load(function(){
             
+            //display inputs before creating the activity
             $('#commentForm2').on('keyup keypress click mousemove', function(e){
                $('#displayActivityName').text($('#activityName').val());
                $('#displayActivityDescription').text($('#activityDescription').val());
@@ -245,6 +246,7 @@
                $('#displayNumberGroups').text($('#group').val());
             });
             
+            //disables submit form
             $('#commentForm2').on('keyup keypress', function(e){
                 var keyCode = e.keyCode || e.which;
                 if (keyCode === 13) { 
@@ -257,13 +259,14 @@
                window.location = "{{ url('/') }}";
             });
             
+            // adding criteria
             $('#addCriterion').on('click', function (){
                 //condition to check if input is not null/empty
                 if($("#criteria").val())
                 {
                     $criteria = $criteria +' '+ $("#criteria").val();
                     //var $card = '<div class="panel panel-color panel-inverse" style="margin-bottom=0!important;"><div class="panel-heading"><h3 class="panel-title">'+$('#criteria').val()+'</h3></div></div><input type="text" name="activityCriteria[]" hidden>';
-                    var $card = '<pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$criteria+'">';
+                    var $card = '<div class="row"><div class="col-md-10"><pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$criteria+'"></div><div class="pull-right col-md-2"><pre><center>X</center></pre></div></div>';
                     //add criteria to the list
                     $('#criteriaList').append($card);
                     $('#criteria').val("");

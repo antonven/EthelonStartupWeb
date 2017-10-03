@@ -93,10 +93,10 @@
                     <!-- User -->
                     <div class="user-box">
                         <div class="user-img">
-                            <img src="{{ asset('profilepics/pranz.jpg') }}" alt="user-img" title="Mat Helme" class="img-circle img-thumbnail img-responsive">
+                            <img src="{{ \Auth::user()->foundation->image_url }}" alt="user-img" title="Mat Helme" class="img-circle img-thumbnail img-responsive">
                             <div class="user-status offline"><i class="zmdi zmdi-dot-circle"></i></div>
                         </div>
-                        <h5><a href="#">Pranz Narap</a> </h5>
+                        <h5><a href="#">{{ \Auth::user()->name }}</a> </h5>
                         <ul class="list-inline">
                             <li>
                                 <a href="#" >
@@ -105,9 +105,13 @@
                             </li>
 
                             <li>
-                                <a href="#" class="text-custom">
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();" class="text-custom">
                                     <i class="zmdi zmdi-power"></i>
                                 </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
                             </li>
 
                         </ul>

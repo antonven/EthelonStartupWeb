@@ -11,7 +11,7 @@
 |
 */
 Auth::routes();
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
     Route::get('/', 'DashboardController@index');
     Route::get('/activity', 'ActivityController@index');
     Route::get('/activity/create', 'ActivityController@create');

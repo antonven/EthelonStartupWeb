@@ -41,5 +41,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Foundation', 'user_id', 'user_id');
     }
+    public function verified()
+    {
+        return $this->hasOne('App\Foundation', 'user_id', 'user_id')->name;
+    }
 
 }

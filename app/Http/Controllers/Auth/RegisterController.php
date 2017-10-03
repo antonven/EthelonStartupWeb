@@ -52,6 +52,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255|min:5',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'description' => 'required|string|min:10|max:255'
         ]);
     }
 
@@ -63,7 +64,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        
         $user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         $time = microtime(true);
         $api_token = $user_id.$time;
@@ -73,11 +73,15 @@ class RegisterController extends Controller
         Foundation::create([
            'foundation_id'=> $foundation_id,
             'name' => $time.'wala pa',
-            'user_id'=>$user_id,
+            'user_id'=> $user_id,
             'image_url'=>'',
-            'description'=>'',
-            'location'=>'',
-            'email'=> $data['email']                                                
+            'description' => $data['description'],
+            'location' => $data['location'],
+            'email' => $data['email'],
+            'lat' => $data['lat'],
+            'long' => $data['long'],
+            'facebook_url' => $data['facebookUrl'],
+            'website_url' => $data['websiteUrl']                                            
             ]);
 
         return User::create([

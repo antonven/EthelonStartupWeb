@@ -8,7 +8,15 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard.dashboardIndex');
+        if(\Auth::user()->foundation)
+        {
+            $activities = \Auth::user()->foundation->activities;
+        }
+        else
+        {
+            $activities = null;
+        }
+        return view('dashboard.dashboardIndex', compact('activities'));
     }
     public function test()
     {

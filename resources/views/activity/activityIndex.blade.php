@@ -12,15 +12,16 @@
             <button type="button" id="createActivity" class="btn btn-danger btn-block btn-bordred waves-effect w-md waves-light">Add Activity</button>
         </div>
     </div>
+    <br>
     <div class="row">
         @foreach($activities as $activity)
         <div class="col-lg-4">
             <div class="panel panel-border panel-danger">
                 <div class="panel-heading">
-                    <img src="{{ $activity->image_url }}" class="thumb-img">
+                    <img src="{{ $activity->image_url }}" class="thumb-img" style="object-fit: cover; height: 200px; width: 500px;">
                 </div>
                 <div class="panel-body">
-                    <h3 class="panel-title" style="color:#ff5b5b;"> <a href="{{url('/webtest/'.$activity->activity_id)}}">{{ $activity->name }}</a></h3>
+                    <h3 class="panel-title" style="color:#ff5b5b;">{{ $activity->name }}</h3>
                     <p>
                         {{ $activity->description }}
                     </p>
@@ -39,4 +40,4 @@
             });
         });
     </script>
-@endsection
+@endsection 
