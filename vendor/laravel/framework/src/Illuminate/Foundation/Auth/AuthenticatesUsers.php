@@ -85,7 +85,11 @@ trait AuthenticatesUsers
      */
     protected function credentials(Request $request)
     {
-        return $request->only($this->username(), 'password');
+        $credentials = $request->only($this->username(), 'password');
+        $credentials['verified'] = 1;
+        //return $request->only($this->username(), 'password');
+        
+        return $credentials;
     }
 
     /**
@@ -125,7 +129,15 @@ trait AuthenticatesUsers
     protected function sendFailedLoginResponse(Request $request)
     {
         $errors = [$this->username() => trans('auth.failed')];
-
+        
+        //get user object
+        $user = \App\User::where($this->username(), $request->{$this->username()})->first();
+        
+        //check if user is correct and verified is = 0
+        if ($user && \Hash::check($request->password, $user->password) && $user->verified != 1) {
+            $errors = [$this->username() => 'Your account is not active.'];
+        }
+        
         if ($request->expectsJson()) {
             return response()->json($errors, 422);
         }
