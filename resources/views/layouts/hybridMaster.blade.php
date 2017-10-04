@@ -12,11 +12,13 @@
         <!-- App title -->
         <title>@yield('title')</title>
 
+        @yield('additional_styles')
+
         <!--venobox lightbox-->
         <link rel="stylesheet" href="{{ asset('adminitoAssets/assets/plugins/magnific-popup/dist/magnific-popup.css') }}"/>    
         
         <!-- Plugins css-->
-        <link href="{{ asset('adminitoAssets/assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }} rel="stylesheet" />
+        <link href="{{ asset('adminitoAssets/assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}" rel="stylesheet" />
         <link href="{{ asset('adminitoAssets/assets/plugins/multiselect/css/multi-select.css') }}"  rel="stylesheet" type="text/css" />
         <link href="{{ asset('adminitoAssets/assets/plugins/select2/dist/css/select2.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('adminitoAssets/assets/plugins/select2/dist/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css">
@@ -45,7 +47,6 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-        @yield('additional_styles')
         <script src="{{ asset('adminitoAssets/assets/js/modernizr.min.js') }}"></script>
 
     </head>
@@ -93,7 +94,11 @@
                     <!-- User -->
                     <div class="user-box">
                         <div class="user-img">
-                            <img src="{{ \Auth::user()->foundation->image_url }}" alt="user-img" title="Mat Helme" class="img-circle img-thumbnail img-responsive">
+                            @if(\Auth::user()->role == "admin")
+                            <img src="{{ asset('assets/images/ethelon.png') }}" style="object-fit: cover;height: 90px;" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
+                            @elseif(\Auth::user()->role == "foundation")
+                            <img src="{{ \Auth::user()->foundation->image_url }}" style="object-fit: cover;height: 90px;" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
+                            @endif
                             <div class="user-status offline"><i class="zmdi zmdi-dot-circle"></i></div>
                         </div>
                         <h5><a href="#">{{ \Auth::user()->name }}</a> </h5>
@@ -121,6 +126,7 @@
                     <!--- Sidebar -->
                     <div id="sidebar-menu">
                         <ul>
+                            @if(\Auth::user()->role == "foundation")
                             <li class="text-muted menu-title">Navigation</li>
 
                             <li>
@@ -158,7 +164,22 @@
                                 <a href="{{url('/')}}" class="waves-effect"><i class="zmdi zmdi-format-underlined"></i> <span> SETTINGS </span> </a>
                             </li>
 
+                            @elseif(\Auth::user()->role == "admin")
+                            <li class="text-muted menu-title">Navigation</li>
 
+                            <li>
+                                <a href="{{url('/')}}" class="waves-effect"><i class="zmdi zmdi-view-dashboard"></i> <span> HOME </span> </a>
+                            </li>
+
+                            <li>
+                                <a href="{{url('/admin/foundationlist')}}" class="waves-effect"><i class="zmdi zmdi-format-underlined"></i> <span> FOUNDATIONS </span> </a>
+                            </li>
+
+                            <li>
+                                <a href="{{url('/admin/activitylist')}}" class="waves-effect"><i class="zmdi zmdi-format-underlined"></i> <span> ACTIVITIES </span> </a>
+                            </li>
+                            @else
+                            @endif
                         </ul>
                         <div class="clearfix"></div>
                     </div>
@@ -214,9 +235,6 @@
         <script src="{{ asset('adminitoAssets/assets/js/jquery.nicescroll.js') }}"></script>
         <script src="{{ asset('adminitoAssets/assets/js/jquery.scrollTo.min.js') }}"></script>
         
-        <!-- App js -->
-        <script src="{{ asset('adminitoAssets/assets/js/jquery.core.js') }}"></script>
-        <script src="{{ asset('adminitoAssets/assets/js/jquery.app.js') }}"></script>
         <!-- isotope filter plugin -->
         <script type="text/javascript" src="{{ asset('adminitoAssets/assets/plugins/isotope/dist/isotope.pkgd.min.js') }}"></script>
 
@@ -242,10 +260,15 @@
      	<script src="{{ asset('adminitoAssets/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
      	<script src="{{ asset('adminitoAssets/assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
         <script src="{{ asset('adminitoAssets/assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}" type="text/javascript"></script>
+
         <script>
                     var resizefunc = [];
             </script>
             
         @yield('additional_scripts')
+
+                <!-- App js -->
+        <script src="{{ asset('adminitoAssets/assets/js/jquery.core.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/jquery.app.js') }}"></script>
     </body>
 </html>

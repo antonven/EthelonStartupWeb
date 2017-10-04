@@ -628,6 +628,7 @@ public function test3(){
             "location" => $request->input('activityLocation'),
             "start_time" => $request->input('startTime'),
             "end_time" => $ed,
+            "endDate" => $ed,
             "group" => $request->input('group'),
             "long" => $request->input('long'),
             "lat" => $request->input('lat'),
@@ -694,21 +695,22 @@ public function test3(){
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
 
             $file->move($destinationPath, $filename);
-
-            $file_decoded = json_decode($file);
+            
+            return url('/file_attachments')."/".$filename;
+            //$file_decoded = json_decode($file);
             //return dd($file);
 
 
-            \Cloudder::upload(url('/file_attachments').'/'.$filename);
+            //\Cloudder::upload(url('/file_attachments').'/'.$filename);
 
-            $url = \Cloudder::getResult();
+            //$url = \Cloudder::getResult();
             //return dd($url);
 
-            if($url){
+            //if($url){
 
-                return $url['url'];
+            //    return $url['url'];
 
-            }
+            //}
             
         }
         else
@@ -730,6 +732,13 @@ public function test3(){
                         'activity_id' => $volunteer_id
                         ]);
         }
+    }
+
+    public function activityList()
+    {
+      $activities = Activity::all();
+
+      return view('activity.adminActivityList', compact('activities'));
     }
 
     //

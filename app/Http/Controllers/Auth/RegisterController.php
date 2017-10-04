@@ -90,8 +90,9 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'role' => 'admin',
-            'api_token' => $api_token
+            'role' => 'foundation',
+            'api_token' => $api_token,
+            'verified' => 0
             
         ]);
     }

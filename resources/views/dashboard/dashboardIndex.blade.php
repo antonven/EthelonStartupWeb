@@ -9,6 +9,7 @@
 
 @section('content')
     <div class="row">
+    @if($activities)
     @foreach($activities as $activity)
         <div class="col-lg-4">
             <div class="card-box project-box">
@@ -61,6 +62,7 @@
             </div>
         </div>
     @endforeach
+    @endif
     </div>
 @endsection
 
