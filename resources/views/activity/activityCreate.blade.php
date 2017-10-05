@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="form-group col-lg-8 col-lg-offset-2">
-                                <label class="control-label " for="activitySkills">Skills</label>
+                                <label class="control-label " for="activitySkills">Skills and Interests</label>
                                 <select class="select2 select2-multiple required" name="activitySkills[]" id="activitySkills" multiple="multiple" multiple data-placeholder="">
                                     <option value="Environment">Environment</option>
                                     <option value="Livelihood">Livelihood</option>
@@ -64,6 +64,7 @@
                                     <option value="Culinary">Culinary</option>
                                     <option value="Medicine">Medicine</option>
                                     <option value="Arts">Arts</option>
+                                    <option value="Free for all">Free for all</option>
                                 </select>
                             </div>
                             

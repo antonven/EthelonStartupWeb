@@ -102,45 +102,7 @@ class RunScheduler extends Command
                                 ->where('activities.status',false)
                                 ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
                 
-
-
-                                           
-
-
-
-                //)
-
-        //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
-/*
-                                $activities = Activity::where('status',false)
-                                                        ->whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();*/
-
-
-           // $activity = Activity::where('activity_id','6b1d8fe')->first();
-
-                        /*                                
-                            $optionBuilder = new OptionsBuilder();
-                            $optionBuilder->setTimeToLive(60*20);
-                            $optionBuilder->setPriority('high');
- 
-                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates has been revealed')
-                                              ->setSound('default'); 
-
-                            $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
-                                "sds"=>"dsds"
-                                
-                                ]);
-
-                            $option = $optionBuilder->build();
-                            $notification = $notificationBuilder->build();
-                            $data = $dataBuilder->build();
-                             
-                        
-                                 $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
-*/
-                                                        
+                                                       
       if($activities->count()){
         
         $this->randomAllocation($activities);  
@@ -161,20 +123,22 @@ class RunScheduler extends Command
      * in your queue within 60 seconds.
      *
      */
-    public function sendNotifications($activities){
+   
+     public function sendNotifications($activities){
 
-       
+        $tokens = array();
+
         foreach($activities as $activity){
 
-          $volunteers = \DB::table('volunteerbeforeactivities')->select('volunteers.*')
-                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteerbeforeactivities.volunteer_id')
-                                                               ->where('volunteerbeforeactivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
+          $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
+                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
+                                                               ->where('volunteeractivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
 
           $volunteersKeeper = array();
 
             foreach($volunteers as $volunteer){
 
-                $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
+               /* $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
                                                         ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
                                                         ->where('volunteergroups.volunteer_id',$volunteer->volunteer_id)
                                                         ->where('activitygroups.activity_id',$activity->activity_id)
@@ -185,10 +149,10 @@ class RunScheduler extends Command
                                                 ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')
                                                 ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
                                                 ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
-                                                ->get();   
+                                                ->get();   */
 
 
-                     foreach($volunteersToRate as $volunteerToRate){
+                /*     foreach($volunteersToRate as $volunteerToRate){
 
                              $data = array("name"=>$volunteerToRate->name,
                                             "volunteer_id"=>$volunteerToRate->volunteer_id,
@@ -197,8 +161,29 @@ class RunScheduler extends Command
                                             "num_of_vol"=>$activity_group_id->numOfVolunteers);
 
                              array_push($volunteersKeeper,$data);
-                     }                           
+                     } */                          
 
+                       $token = $volunteer->fcm_token;
+
+
+                            if($token != null){
+
+                                 //$downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+                                 //array_push($downstreamResponseArray,$downstreamResponse);
+                                array_push($tokens,$token);
+
+
+                             }else{
+
+                                Groupnotification::create([
+                                    'volunteer_id'=>$volunteer->volunteer_id,
+                                    'activity_id'=>$activity->activity_id,
+                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d')
+                                    ]);
+
+                            }
+                           
+            }
 
 
                             $optionBuilder = new OptionsBuilder();
@@ -226,28 +211,12 @@ class RunScheduler extends Command
                             $option = $optionBuilder->build();
                             $notification = $notificationBuilder->build();
                             $data = $dataBuilder->build();
+
+                            $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
                              
-                            $token = $volunteer->fcm_token;
-                            
-
-                            if($token != null){
-
-                                 $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-
-                             }else{
-
-                                Groupnotification::create([
-                                    'volunteer_id'=>$volunteer->volunteer_id,
-                                    'activity_id'=>$activity->activity_id,
-                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d')
-                                    ]);
-
-                             }
-                           
-
-            }
-
+      
             Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
+           // return $downstreamResponse;
         }
 
     }
