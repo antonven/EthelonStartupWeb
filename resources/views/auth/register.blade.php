@@ -153,13 +153,13 @@
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <input class="form-control" type="text" required="" name="websiteUrl" placeholder="Website Url">
+                            <input class="form-control" type="text" name="websiteUrl" placeholder="Website Url">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <input class="form-control" type="text" required="" name="facebookUrl" placeholder="Facebook Url">
+                            <input class="form-control" type="text" name="facebookUrl" placeholder="Facebook Url">
                         </div>
                     </div>
                     
