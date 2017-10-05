@@ -78,6 +78,8 @@
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        $('#datatable').dataTable();
+
+	        //inig click niyag verify
 	        $('#datatable').on('click','.verify', function(){
 	       		window.location = "{{ url('/admin/verify') }}"+"/"+$(this).val();
 	        });

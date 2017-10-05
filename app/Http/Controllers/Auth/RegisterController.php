@@ -23,6 +23,18 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        //$this->guard()->login($user);
+
+        //return $this->registered($request, $user) ?: redirect($this->redirectPath());
+        return redirect(url('/login'))->with('message','E verify pa imong account!');
+    }
+
     /**
      * Where to redirect users after registration.
      *

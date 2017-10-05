@@ -9,7 +9,7 @@
         <!-- App Favicon -->
         <link rel="shortcut icon" href="{{ asset('adminitoAssets/assets/images/favicon.ico') }}">
 
-        <!-- App title -->
+        <!-- App titlee -->
         <title>Ethelon</title>
 
         <!-- App CSS -->
