@@ -12,6 +12,9 @@
         <!-- App title -->
         <title>Ethelon</title>
 
+        <!-- Notification css (Toastr) -->
+        <link href="{{ asset('adminitoAssets/assets/plugins/toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
+
         <!-- App CSS -->
         <link href="{{ asset('adminitoAssets/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('adminitoAssets/assets/css/core.css') }}" rel="stylesheet" type="text/css" />
@@ -45,6 +48,9 @@
                 <div class="text-center">
                     <h4 class="text-uppercase font-bold m-b-0">Login</h4>
                 </div>
+                @if (session('message'))
+                    {{ session('message') }}
+                @endif
                 <div class="panel-body">
 
 					<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -87,13 +93,51 @@
 
 			<div class="row">
 				<div class="col-sm-12 text-center">
-					<p class="text-muted" style="color:black !important;">Already have account?<a href="page-login.html" class="text-primary m-l-5"><b style="color:red !important;">Sign In</b></a></p>
+					<p class="text-muted" style="color:black !important;">Don't have an account yet?<a href="{{ route('register') }}" class="text-primary m-l-5"><b style="color:red !important;">Register here</b></a></p>
 				</div>
 			</div>
 
         </div>
         <!-- end wrapper page -->
         </form>
+        <input id="title" type="text" class="input-large form-control" placeholder="Enter a title ..." value="Registration Successful!" hidden />
+        <textarea class="input-large form-control" id="message" rows="3" placeholder="Enter a message ..." hidden>It will take some time to check your credentials. If there are no problems your account will be verified in no time!</textarea>
+        <div class="control-group" id="toastTypeGroup">
+            <input type="radio" name="radio" id="radio1" value="success" checked hidden>
+        </div>
+        <div class="control-group" id="positionGroup">
+            <input type="radio" name="positions" id="radio9" value="toast-top-full-width" checked hidden />
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                
+                <input id="showEasing" type="text" placeholder="swing, linear" class="input-mini form-control" value="swing" hidden />
+
+                <
+                <input id="hideEasing" type="text" placeholder="swing, linear" class="input-mini form-control" value="linear" hidden />
+
+                
+                <input id="showMethod" type="text" placeholder="show, fadeIn, slideDown" class="input-mini form-control" value="fadeIn" hidden />
+
+                
+                <input id="hideMethod" type="text" placeholder="hide, fadeOut, slideUp" class="input-mini form-control" value="fadeOut" hidden />
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                
+                <input id="showDuration" type="text" placeholder="ms" class="input-mini form-control" value="300" hidden />
+
+                
+                <input id="hideDuration" type="text" placeholder="ms" class="input-mini form-control" value="1000" hidden />
+
+                
+                <input id="timeOut" type="text" placeholder="ms" class="input-mini form-control" value="5000" hidden />
+
+                
+                <input id="extendedTimeOut" type="text" placeholder="ms" class="input-mini form-control" value="1000" hidden />
+            </div>
+        </div>
 
 
 
@@ -113,9 +157,159 @@
         <script src="{{ asset('adminitoAssets/assets/js/jquery.nicescroll.js') }}"></script>
         <script src="{{ asset('adminitoAssets/assets/js/jquery.scrollTo.min.js') }}"></script>
 
+        <!-- Toastr js -->
+        <script src="{{ asset('adminitoAssets/assets/plugins/toastr/toastr.min.js') }}"></script>
+
         <!-- App js -->
         <script src="{{ asset('adminitoAssets/assets/js/jquery.core.js') }}"></script>
         <script src="{{ asset('adminitoAssets/assets/js/jquery.app.js') }}"></script>
+
+        @if(session('message'))
+        <script type="text/javascript">
+            $(function () {
+                var i = -1;
+                var toastCount = 0;
+                var $toastlast;
+
+                var getMessage = function () {
+                    var msgs = ['My name is Inigo Montoya. You killed my father. Prepare to die!',
+                        'Are you the six fingered man?',
+                        'Inconceivable!',
+                        'I do not think that means what you think it means.',
+                        'Have fun storming the castle!'
+                    ];
+                    i++;
+                    if (i === msgs.length) {
+                        i = 0;
+                    }
+
+                    return msgs[i];
+                };
+
+                var getMessageWithClearButton = function (msg) {
+                    msg = msg ? msg : 'Clear itself?';
+                    msg += '<br /><br /><button type="button" class="btn btn-default clear">Yes</button>';
+                    return msg;
+                };
+
+                
+                    var shortCutFunction = $("#toastTypeGroup input:radio:checked").val();
+                    var msg = $('#message').val();
+                    var title = $('#title').val() || '';
+                    var $showDuration = $('#showDuration');
+                    var $hideDuration = $('#hideDuration');
+                    var $timeOut = $('#timeOut');
+                    var $extendedTimeOut = $('#extendedTimeOut');
+                    var $showEasing = $('#showEasing');
+                    var $hideEasing = $('#hideEasing');
+                    var $showMethod = $('#showMethod');
+                    var $hideMethod = $('#hideMethod');
+                    var toastIndex = toastCount++;
+                    var addClear = $('#addClear').prop('checked');
+
+                    toastr.options = {
+                        closeButton: false,
+                        debug: false,
+                        newestOnTop: false,
+                        progressBar: false,
+                        positionClass: "toast-top-full-width",
+                        preventDuplicates: false,
+                        onclick: null
+                    };
+
+                    if ($('#addBehaviorOnToastClick').prop('checked')) {
+                        toastr.options.onclick = function () {
+                            alert('You can perform some custom action after a toast goes away');
+                        };
+                    }
+
+                    if ($showDuration.val().length) {
+                        toastr.options.showDuration = $showDuration.val();
+                    }
+
+                    if ($hideDuration.val().length) {
+                        toastr.options.hideDuration = $hideDuration.val();
+                    }
+
+                    if ($timeOut.val().length) {
+                        toastr.options.timeOut = addClear ? 0 : $timeOut.val();
+                    }
+
+                    if ($extendedTimeOut.val().length) {
+                        toastr.options.extendedTimeOut = addClear ? 0 : $extendedTimeOut.val();
+                    }
+
+                    if ($showEasing.val().length) {
+                        toastr.options.showEasing = $showEasing.val();
+                    }
+
+                    if ($hideEasing.val().length) {
+                        toastr.options.hideEasing = $hideEasing.val();
+                    }
+
+                    if ($showMethod.val().length) {
+                        toastr.options.showMethod = $showMethod.val();
+                    }
+
+                    if ($hideMethod.val().length) {
+                        toastr.options.hideMethod = $hideMethod.val();
+                    }
+
+                    if (addClear) {
+                        msg = getMessageWithClearButton(msg);
+                        toastr.options.tapToDismiss = false;
+                    }
+                    if (!msg) {
+                        msg = getMessage();
+                    }
+
+                    $('#toastrOptions').text('Command: toastr["'
+                            + shortCutFunction
+                            + '"]("'
+                            + msg
+                            + (title ? '", "' + title : '')
+                            + '")\n\ntoastr.options = '
+                            + JSON.stringify(toastr.options, null, 2)
+                    );
+
+                    var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
+                    $toastlast = $toast;
+
+                    if (typeof $toast === 'undefined') {
+                        return;
+                    }
+
+                    if ($toast.find('#okBtn').length) {
+                        $toast.delegate('#okBtn', 'click', function () {
+                            alert('you clicked me. i was toast #' + toastIndex + '. goodbye!');
+                            $toast.remove();
+                        });
+                    }
+                    if ($toast.find('#surpriseBtn').length) {
+                        $toast.delegate('#surpriseBtn', 'click', function () {
+                            alert('Surprise! you clicked me. i was toast #' + toastIndex + '. You could perform an action here.');
+                        });
+                    }
+                    if ($toast.find('.clear').length) {
+                        $toast.delegate('.clear', 'click', function () {
+                            toastr.clear($toast, {force: true});
+                        });
+                    }
+
+
+                function getLastToast() {
+                    return $toastlast;
+                }
+
+                $('#clearlasttoast').click(function () {
+                    toastr.clear(getLastToast());
+                });
+                $('#cleartoasts').click(function () {
+                    toastr.clear();
+                });
+            })
+        </script>
+        @endif
 
 	</body>
 </html>

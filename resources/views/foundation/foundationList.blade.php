@@ -43,7 +43,7 @@
 		            		<td style="white-space: nowrap;">{{ $foundation->website_url }}</td>
 		            		<td style="white-space: nowrap;">{{ $foundation->created_at }}</td>
 		            		<td style="white-space: nowrap;">
-		            		<button id="verify" style="background-color: green;" value="{{ $foundation->user->user_id }}" class="btn btn-icon waves-effect waves-light btn-success m-b-5"> <i class="fa fa-check"></i> </button>
+		            		<button style="background-color: green;" value="{{ $foundation->user->user_id }}" class="btn btn-icon waves-effect waves-light btn-success m-b-5 verify"> <i class="fa fa-check"></i> </button>
 		            		</td>
 		            	</tr>
 		            	@endif
@@ -78,9 +78,8 @@
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        $('#datatable').dataTable();
-
-	        $('#verify').on('click', function(){
-	       		window.location = "{{ url('/admin/verify') }}"+"/"+$('#verify').val();
+	        $('#datatable').on('click','.verify', function(){
+	       		window.location = "{{ url('/admin/verify') }}"+"/"+$(this).val();
 	        });
 	    } );
 	    TableManageButtons.init();

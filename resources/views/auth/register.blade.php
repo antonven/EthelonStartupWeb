@@ -178,7 +178,7 @@
 
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <p class="text-muted" style="color:black !important;">Already have account?<a href="page-login.html" class="text-primary m-l-5"><b style="color:red !important;">Sign In</b></a></p>
+                    <p class="text-muted" style="color:black !important;">Already have account?<a href="{{ route('login') }}" class="text-primary m-l-5"><b style="color:red !important;">Sign In</b></a></p>
                 </div>
             </div>
 
