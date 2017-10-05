@@ -103,6 +103,11 @@ class RunScheduler extends Command
                                 ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
                 
 
+
+                                           
+
+
+
                 //)
 
         //Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))->update(['status'=> true]);
