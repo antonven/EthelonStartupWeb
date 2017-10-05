@@ -6,7 +6,7 @@
         <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
         <meta name="author" content="Coderthemes">
 
-        <!-- App Favicon -->
+        <!-- App Faviconn -->
         <link rel="shortcut icon" href="{{ asset('adminitoAssets/assets/images/favicon.ico') }}">
 
         <!-- App title -->
