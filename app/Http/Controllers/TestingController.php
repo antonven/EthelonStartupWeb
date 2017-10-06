@@ -85,12 +85,12 @@ class TestingController extends Controller
 
        Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'a77c9b4',
+                 'activity_id'=>'1a1d497',
                  'status'=> false  
                 ]);
             
       }
-
+      
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
      /* Activitygroup::where('activity_id','a77c9b4')->delete();
       Volunteercriteriapoint::where('activity_id','a77c9b4')->delete();*/
