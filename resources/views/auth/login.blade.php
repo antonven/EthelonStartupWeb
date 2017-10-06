@@ -91,7 +91,7 @@
 
 			<div class="row">
 				<div class="col-sm-12 text-center">
-					<p class="text-muted" style="color:black !important;">Don't have an account yet?<a href="{{ route('register') }}" class="text-primary m-l-5"><b style="color:red !important;">Register here</b></a></p>
+					<p class="text-muted" style="color:black !important;">Don't have an account?<a href="{{ route('register') }}" class="text-primary m-l-5"><b style="color:red !important;">Register here</b></a></p>
 				</div>
 			</div>
 
