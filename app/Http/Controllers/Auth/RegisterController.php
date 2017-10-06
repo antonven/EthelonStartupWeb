@@ -150,7 +150,7 @@ class RegisterController extends Controller
             \Cloudder::upload(url('/file_attachments').'/'.$filename);
 
             $url = \Cloudder::getResult();
-            return dd($url);
+            //return dd($url);
 
             if($url){
 

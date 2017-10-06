@@ -9,8 +9,9 @@ use App\Volunteer;
 
 class RegistrationController extends Controller
 {
+    
     //
-
+    
     public function register(Request $request){	
 
         $watch = User::where('email',$request->input('email'))->get();
