@@ -44,7 +44,7 @@ class TestingController extends Controller
 
     public function deleteall(){
      
-   /* \DB::table('users')->delete();
+    /* \DB::table('users')->delete();
     \DB::table('foundations')->delete();
     \DB::table('volunteers')->delete();
     \DB::table('activityskills')->delete();
@@ -113,14 +113,11 @@ class TestingController extends Controller
       
 
       }
-
     }
 
   
+    public function randomAllocation($activities){
 
- public function randomAllocation($activities){
-
-    
       foreach($activities as $activity){
 
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();

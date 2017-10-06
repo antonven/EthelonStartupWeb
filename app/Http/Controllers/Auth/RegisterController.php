@@ -10,6 +10,8 @@ use App\Foundation;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 
+use Input;
+
 class RegisterController extends Controller
 {
     /*
@@ -82,6 +84,24 @@ class RegisterController extends Controller
         $time = microtime(true);
         $api_token = $user_id.$time;
         $foundation_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+         $url = null; 
+
+     /*   $fileName = 'null';
+
+        if (Request::file('image')->isValid()) {
+            
+        $destinationPath = public_path('uploads/files');
+        $extension = Request::file('image')->getClientOriginalExtension();
+        $fileName = uniqid().'.'.$extension;
+
+        Request::file('image')->move($destinationPath, $fileName);
+
+        \Cloudder::upload(url('/uploads/files').'/'.$filename);
+
+        $url = \Cloudder::getResult();
+
+         }*/
 
         //Dapat inig register sa foundation naa iyang mga description, foundation name, website url, facebook url. 
         Foundation::create([

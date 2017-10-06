@@ -62,9 +62,7 @@ class LoginController extends Controller
 
                 $watch = Volunteer::where('user_id',$request->input('facebook_id'))->first();                    
                 $watcher = User::where('user_id',$request->input('facebook_id'))->first();
-
-
-
+                    
                   $data = array("message"=>"Not First Time","volunteer_id"=>$watch->volunteer_id,"api_token"=>$watcher->api_token);      
                      
                   return response()->json($data);

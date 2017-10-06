@@ -794,7 +794,7 @@ public function test3(){
                
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
 
-                    $watch = Volunteerbeforeactivity::where('volunteer_id',$request->input('volunteer_id'))
+                    $watch = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
                                        ->where('activity_id',$activity->activity_id)->get();
 
                     $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();                   

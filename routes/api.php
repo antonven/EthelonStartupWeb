@@ -27,22 +27,14 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
 		Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
 		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
-		
-					
-		
-	    
 	    Route::get('/getallfoundations','FoundationController@getallfoundations');
-		Route::post('/activitypoints','VolunteerController@points');
-				
+		Route::post('/activitypoints','VolunteerController@points');				
 		Route::post('/joinactivity','VolunteerController@joinActivity');
-		
 		Route::post('/activitycriteria','ActivityController@criteria');
 	
 		
 		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
-
 		Route::post('/groupmatestorate','ActivityController@volunteersToRate');
-		
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
