@@ -775,7 +775,7 @@ public function test3(){
         $newActivities = array();
         
 
-        $activities = \DB::table('activities')->select('activities.*','users.name as foundtion_name','foundations.image_url') 
+        $activities = \DB::table('activities')->select('activities.*','users.name as foundtion_name','foundations.image_url as      foundation_imageurl') 
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
                                               ->join('users','users.user_id','=','foundations.user_id') 
                                               ->where('activities.status',false)->get();  
@@ -824,6 +824,7 @@ public function test3(){
                                             "startDate"=>$activity->startDate,
                                             "foundtion_name"=>$activity->foundtion_name,
                                             "volunteerstatus"=>$data,
+                                            "foundation_img"$activity->foundation_imageurl,
                                             "volunteer_count"=>$volunteerCount->count());                     
 
                     foreach($activityskills as $activityskill){
