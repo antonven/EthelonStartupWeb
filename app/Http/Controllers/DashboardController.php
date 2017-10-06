@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Foundation;
 use App\User;
+use App\Volunteer;
 
 class DashboardController extends Controller
 {
@@ -20,12 +21,14 @@ class DashboardController extends Controller
             if(\Auth::user()->foundation)
             {
                 $activities = \Auth::user()->foundation->activities;
+                $volunteers =   Volunteer::all();
             }
             else
             {
                 $activities = null;
+                $volunteers = null;
             }
-            return view('dashboard.dashboardIndex', compact('activities'));
+            return view('dashboard.dashboardIndex', compact('activities', 'volunteers'));
         }
         else
         {

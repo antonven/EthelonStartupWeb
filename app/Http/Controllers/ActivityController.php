@@ -243,7 +243,7 @@ public function test3(){
                                 'activity'=>'wew',
                                 'volunteersToRate'=>'yawa'
                                 ]);
-
+                              
                              $option = $optionBuilder->build();
                              $notification = $notificationBuilder->build();
                              $data = $dataBuilder->build();
@@ -695,22 +695,16 @@ public function test3(){
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
 
             $file->move($destinationPath, $filename);
+         
+            \Cloudder::upload(url('/file_attachments').'/'.$filename);
+
+            $url = \Cloudder::getResult();
             
-            return url('/file_attachments')."/".$filename;
-            //$file_decoded = json_decode($file);
-            //return dd($file);
+            if($url){
 
+               return $url['url'];
 
-            //\Cloudder::upload(url('/file_attachments').'/'.$filename);
-
-            //$url = \Cloudder::getResult();
-            //return dd($url);
-
-            //if($url){
-
-            //    return $url['url'];
-
-            //}
+            }
             
         }
         else
@@ -781,9 +775,12 @@ public function test3(){
         $newActivities = array();
         
 
-        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundtion_name') 
+        $activities = \DB::table('activities')->select('activities.*','users.name as foundtion_name','foundations.image_url') 
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
-                                               ->where('activities.status',false)->get();    
+                                              ->join('users','users.user_id','=','foundations.user_id') 
+                                              ->where('activities.status',false)->get();  
+                                                  
+                                              return response()->json($activities);  
 
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
@@ -970,9 +967,7 @@ public function test3(){
    }
 
    public function volunteersToRate(Request $request){
-
-       /* $volunteersToRate = \DB::table('activitygroups')->select('users.name','activitygroups.id','volunteegroups.volunteer_id','activitygroups.numOfVolunteers')->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')->join('volunteers','volunteers.volunteer_id','=','volunteergroups.volunteer_id')->join('users','users.user_id','=','volunteers.user_id')->where('activitygroups.activity_id',$request->input('activity_id'))get();*/
-       
+ 
        $volunteersKeeper = array();
 
        $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')

@@ -320,10 +320,11 @@ class VolunteerController extends Controller
 
     public function leaderboard(){
 
-         $volunteerLeaderboard = \DB::table('volunteers')->select('users.name as name', 'volunteers.*')
+        $volunteerLeaders = \DB::table('volunteers')->select('users.name as name', 'volunteers.*')
                                                         ->join('users','users.user_id','=','volunteers.user_id')->orderBy('volunteers.points','desc')->get();
 
-        return response()->json($volunteerLeaderboard);
+                                                        
+        return response()->json($volunteerLeaders);
 
     }  
 

@@ -67,14 +67,12 @@ class TestingController extends Controller
     User::where('user_id','1877377522288783')->delete();
     Volunteerskill::where('volunteer_id','08ab5fe')->delete();
 
-
     }
     public function kobedelete(){
-
-     
+      
       Activitygroup::where('activity_id','a77c9b4')->delete();
       Volunteercriteriapoint::where('activity_id','a77c9b4')->delete();
-
+      
     }
 
     public function test3(){
@@ -83,14 +81,41 @@ class TestingController extends Controller
 
       foreach($volunteers as $volunteer){
 
-       Volunteeractivity::create([
+       /*Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'1a1d497',
+                 'activity_id'=>'13a2288',
                  'status'=> false  
-                ]);
+                ]);*/
+
+        }
+
+        $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
+
+                            $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+ 
+                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder->setBody('Testing rani hehe. If nakadawat ka i pm kos fb please kobe ni ')
+                                              ->setSound('default'); 
+
+                            $dataBuilder = new PayloadDataBuilder();
+                             $dataBuilder->addData([
+                               'FuckShit'    => "Fuck?" 
+                                ]);
+
+
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+
+                            $downstreamResponse = FCM::sendTo($volunteerTokens, $option, $notification, $data);
+
+                            dd($downstreamResponse);
+
             
-      }
       
+
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
      /* Activitygroup::where('activity_id','a77c9b4')->delete();
       Volunteercriteriapoint::where('activity_id','a77c9b4')->delete();*/
@@ -102,7 +127,7 @@ class TestingController extends Controller
       $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
 
 
                                 //  return response()->json($activities);
@@ -291,7 +316,7 @@ class TestingController extends Controller
                              
       
             Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
-            return $downstreamResponse;
+            
         }
 
     }

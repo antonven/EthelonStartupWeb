@@ -12,10 +12,15 @@
 */
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
+
+	//foundation
     Route::get('/', 'DashboardController@index');
     Route::get('/activity', 'ActivityController@index');
     Route::get('/activity/create', 'ActivityController@create');
     Route::post('/activity/store', 'ActivityController@store');
+    Route::get('/activity/{id}', 'ActivityController@view');
+
+    //admin
     Route::get('/admin/foundationlist', 'FoundationController@foundationList');
     Route::get('/admin/activitylist', 'ActivityController@activityList');
     Route::get('/admin/verify/{id}', 'FoundationController@verifyFoundation');

@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Foundation;
+
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 
-use Input;
+
 
 class RegisterController extends Controller
 {
@@ -80,6 +83,8 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        //dd($data['image']);
+        $image = $this->uploadFile($data['image']);
         $user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
         $time = microtime(true);
         $api_token = $user_id.$time;
@@ -108,7 +113,7 @@ class RegisterController extends Controller
            'foundation_id'=> $foundation_id,
             'name' => $time.'wala pa',
             'user_id'=> $user_id,
-            'image_url'=>'',
+            'image_url'=> $image,
             'description' => $data['description'],
             'location' => $data['location'],
             'email' => $data['email'],
@@ -129,5 +134,36 @@ class RegisterController extends Controller
             'verified' => 0
             
         ]);
+    }
+
+    public function uploadFile($file)
+    {
+        $extension = $file->clientExtension();
+        if($extension != "bin")
+        {
+
+            $destinationPath = public_path('file_attachments');
+            $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
+
+            $file->move($destinationPath, $filename);
+            
+            \Cloudder::upload(url('/file_attachments').'/'.$filename);
+
+            $url = \Cloudder::getResult();
+            return dd($url);
+
+            if($url){
+
+               return $url['url'];
+
+            }
+            
+        }
+        else
+        {
+            $files = "";
+            return $file;
+        }
+        
     }
 }

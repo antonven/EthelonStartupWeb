@@ -13,7 +13,7 @@ class Volunteer extends Model
     protected $fillable = ['volunteer_id','user_id','location','image_url','points'];
 
     public function activitiesJoined(){
-    	return $this->hasMany(Volunteerafteractivity::class);
+    	return $this->hasMany('App\Volunteer', 'volunteer_id', 'activity_id');
     }
 
     public function volunteerSkills(){

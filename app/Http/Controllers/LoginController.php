@@ -62,7 +62,7 @@ class LoginController extends Controller
 
                 $watch = Volunteer::where('user_id',$request->input('facebook_id'))->first();                    
                 $watcher = User::where('user_id',$request->input('facebook_id'))->first();
-                    
+
                   $data = array("message"=>"Not First Time","volunteer_id"=>$watch->volunteer_id,"api_token"=>$watcher->api_token);      
                      
                   return response()->json($data);
@@ -102,7 +102,8 @@ class LoginController extends Controller
                              'user_id'=>$user_id,
                              'location'=>$request->input('location'),
                              'image_url'=>$request->input('image_url'),
-                             'fcm_token'=>$request->input('fcm_token')
+                             'fcm_token'=>$request->input('fcm_token'),
+                             'points'=> 0
                      ]);
                                         
                     
