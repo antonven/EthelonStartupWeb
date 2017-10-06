@@ -12,7 +12,7 @@
 
 @section('content')
     <!-- PROGRESSBAR WIZARD -->
-    <div class="col-lg-7 col-md-offset-2">
+    <div class="col-lg-10 col-md-offset-1">
         <div class="card-box p-b-0">
             
 

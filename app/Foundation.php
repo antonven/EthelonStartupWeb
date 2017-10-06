@@ -10,7 +10,7 @@ class Foundation extends Model
     protected $primaryKey = 'foundation_id';
     public $incrementing = false;
 
-    protected $fillable=['foundation_id','user_id','description','location','email','long','lat','facebook_url','website_url','verified'];
+    protected $fillable=['foundation_id','user_id','description','location','email','long','lat','facebook_url','website_url','verified','image_url'];
 
     public function user()
     {

@@ -48,9 +48,7 @@
                 <div class="text-center">
                     <h4 class="text-uppercase font-bold m-b-0">Login</h4>
                 </div>
-                @if (session('message'))
-                    {{ session('message') }}
-                @endif
+                
                 <div class="panel-body">
 
 					<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">

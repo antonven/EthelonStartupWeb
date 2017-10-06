@@ -13,23 +13,36 @@
         </div>
     </div>
     <br>
+    
     <div class="row">
         @foreach($activities as $activity)
-        <div class="col-lg-4">
-            <div class="panel panel-border panel-danger">
-                <div class="panel-heading">
-                    <img src="{{ $activity->image_url }}" class="thumb-img" style="object-fit: cover; height: 200px; width: 500px;">
+        <div class="col-md-4">
+            <div class="card-box">
+                <div class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="zmdi zmdi-more-vert"></i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
                 </div>
-                <div class="panel-body">
-                    <h3 class="panel-title" style="color:#ff5b5b;"><a href="webtest/{{$activity->activity_id}}">{{ $activity->name }}</a></h3>
-                    <p>
-                        {{ $activity->description }}
-                    </p>
-                </div>
-            </div>
+                <img src="{{ $activity->image_url }}" class="thumb-img" style="object-fit: cover; margin-top: -45px;margin-left: -20px;border: none;height: 200px;width: calc(100% + 40px)">
+                <p></p>
+                <h4 class="header-title m-t-0 m-b-30">{{ $activity->name }}</h4>
+
+                <p>
+                    {{ $activity->description }}
+                </p>
         </div>
+    </div>
         @endforeach
     </div>
+
 @endsection
 
 @section('additional_scripts')

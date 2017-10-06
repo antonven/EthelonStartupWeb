@@ -37,7 +37,7 @@
         </style>
     </head>
     <body>
-        <form class="form-horizontal" method="POST" action="{{ route('register') }}">
+        <form class="form-horizontal" method="POST" action="{{ route('register') }}" enctype="multipart/form-data"s>
         {{ csrf_field() }}
         <div class="account-pages"></div>
         <div class="clearfix"></div>
