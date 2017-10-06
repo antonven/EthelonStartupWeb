@@ -69,10 +69,10 @@ class TestingController extends Controller
 
     }
     public function kobedelete(){
-      
+
       Activitygroup::where('activity_id','a77c9b4')->delete();
       Volunteercriteriapoint::where('activity_id','a77c9b4')->delete();
-      
+
     }
 
     public function test3(){
@@ -86,6 +86,8 @@ class TestingController extends Controller
                  'activity_id'=>'13a2288',
                  'status'=> false  
                 ]);*/
+
+                
 
         }
 

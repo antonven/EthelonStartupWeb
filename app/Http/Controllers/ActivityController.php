@@ -779,8 +779,8 @@ public function test3(){
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
                                               ->join('users','users.user_id','=','foundations.user_id') 
                                               ->where('activities.status',false)->get();  
-                                                  
-                                              return response()->json($activities);  
+
+                                            
 
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
