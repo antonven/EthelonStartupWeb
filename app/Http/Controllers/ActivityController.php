@@ -824,7 +824,7 @@ public function test3(){
                                             "startDate"=>$activity->startDate,
                                             "foundtion_name"=>$activity->foundtion_name,
                                             "volunteerstatus"=>$data,
-                                            "foundation_img"$activity->foundation_imageurl,
+                                            "foundation_img" =>$activity->foundation_imageurl,
                                             "volunteer_count"=>$volunteerCount->count());                     
 
                     foreach($activityskills as $activityskill){
