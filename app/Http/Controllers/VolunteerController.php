@@ -288,7 +288,8 @@ class VolunteerController extends Controller
                                       break;
                          case 'Arts': $sumOfPoints = $sumOfPoints + 40;
                                       break;
-                         case 'All': $sumOfPoints = $sumOfPoints + 100;            
+                         case 'Free for all': $sumOfPoints = $sumOfPoints + 100;
+                                      break;            
 
                     }        
 
@@ -323,7 +324,7 @@ class VolunteerController extends Controller
         $volunteerLeaders = \DB::table('volunteers')->select('users.name as name', 'volunteers.*')
                                                         ->join('users','users.user_id','=','volunteers.user_id')->orderBy('volunteers.points','desc')->get();
 
-                                                        
+
         return response()->json($volunteerLeaders);
 
     }  

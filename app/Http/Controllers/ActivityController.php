@@ -892,7 +892,14 @@ public function test3(){
 
                   $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
 
- $activityTempo = array("activity_id"=>$activity->activity_id,
+                  $foundation = \DB::table('activities')->select('users.name as foundtion_name','foundations.image_url as  foundation_imageurl') 
+                                              ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
+                                              ->join('users','users.user_id','=','foundations.user_id') 
+                                              ->where('activities.activity_id',$activity->activity_id)->first();  
+
+
+
+                  $activityTempo = array("activity_id"=>$activity->activity_id,
                                             "foundation_id"=>$activity->foundation_id,
                                             "name"=>$activity->name,
                                             "image_url"=>$activity->image_url,
@@ -915,6 +922,8 @@ public function test3(){
                                             "status"=>$activity->status,
                                             "joined"=>$activity->joined,
                                             "points"=>$activity->points,
+                                            "foundation_img" =>$foundation->foundation_imageurl,
+                                            "foundtion_name" =>$foundation->foundtion_name,
                                             "volunteer_count"=>$volunteerCount->count());
 
 
