@@ -894,8 +894,7 @@ public function test3(){
 
                   $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
 
-
-                    $activityTempo = array("activity_id"=>$activity->activity_id,
+ $activityTempo = array("activity_id"=>$activity->activity_id,
                                             "foundation_id"=>$activity->foundation_id,
                                             "name"=>$activity->name,
                                             "image_url"=>$activity->image_url,
@@ -914,9 +913,12 @@ public function test3(){
                                             "contactperson"=>$activity->contactperson,
                                             "contact"=>$activity->contact,
                                             "startDate"=>$activity->startDate,
-                                            "foundtion_name"=>$activity->foundation_name,
+                                            "foundation_name"=>$activity->foundation_name,
                                             "status"=>$activity->status,
+                                            "joined"=>$activity->joined,
+                                            "points"=>$activity->points,
                                             "volunteer_count"=>$volunteerCount->count());
+
 
                          array_push($activityList,$activityTempo);                          
 
