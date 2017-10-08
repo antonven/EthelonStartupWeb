@@ -39,6 +39,10 @@ class VolunteerController extends Controller
 
         Volunteer::where('volunteer_id',$request->input('volunteer_id'))
                   ->update(['fcm_token'=>$request->input('fcm_token')]);
+
+                  $data = array("data"=>"success");
+
+                  return response()->json($data);
       }
 
       
