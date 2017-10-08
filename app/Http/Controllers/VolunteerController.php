@@ -31,6 +31,19 @@ class VolunteerController extends Controller
 
     //
 
+    public function fcm_token(Request $request){
+
+      if($request->input('fcm_token') == null){
+
+      }else{
+
+        Volunteer::where('volunteer_id',$request->input('volunteer_id'))
+                  ->update(['fcm_token'=>$request->input('fcm_token')]);
+      }
+
+      
+    }
+
     public function rategroupmate(Request $request){
 
     $vol_activity = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
@@ -115,10 +128,22 @@ class VolunteerController extends Controller
                                                          ->update(['total_points'=>$total_points,
                                                                    'no_of_raters'=>$num_of_raters,
                                                                    'average_points'=>$average_points]);
+
+                                     $group = Activitygroup::where('id',$activity_group_id)->first();
+
+                                      if($num_of_raters == $group->numOfVolunteers){
+
+                                          $volunteer = Volunteer::where('volunteer_id',$volunteer_id_to_rate)->first();
+                                          $points = $average_points + $volunteer->points;
+
+                                          Volunteer::where('volunteer_id',$volunteer_id_to_rate)
+                                                    ->update(['points'=>$points]);
+
+                                      }                    
+
                                     if($volunteercriteriapoints){
                                           
                                        
-
 
                                     }else{
                                          $data = array("message"=>"Something's wrong");
@@ -272,23 +297,23 @@ class VolunteerController extends Controller
 
                     switch($skill){
 
-                         case 'Environmental': $sumOfPoints = $sumOfPoints + 30;
+                         case 'Environmental': $sumOfPoints = $sumOfPoints + 10;
                                       break;          
-                         case 'Sports': $sumOfPoints = $sumOfPoints + 20;                       
+                         case 'Sports': $sumOfPoints = $sumOfPoints + 8;                       
                                       break;
-                         case 'Culinary': $sumOfPoints = $sumOfPoints + 40;
+                         case 'Culinary': $sumOfPoints = $sumOfPoints + 8;
                                       break;
-                         case 'Medical': $sumOfPoints = $sumOfPoints + 40;
+                         case 'Medical': $sumOfPoints = $sumOfPoints + 10;
                                       break;
-                         case 'Charity': $sumOfPoints = $sumOfPoints + 50;
+                         case 'Charity': $sumOfPoints = $sumOfPoints + 10;
                                       break;
-                         case 'Livelihood': $sumOfPoints = $sumOfPoints + 50;
+                         case 'Livelihood': $sumOfPoints = $sumOfPoints + 10;
                                       break;
-                         case 'Education': $sumOfPoints = $sumOfPoints + 40;
+                         case 'Education': $sumOfPoints = $sumOfPoints + 10;
                                       break;
-                         case 'Arts': $sumOfPoints = $sumOfPoints + 40;
+                         case 'Arts': $sumOfPoints = $sumOfPoints + 8;
                                       break;
-                         case 'Free for all': $sumOfPoints = $sumOfPoints + 100;
+                         case 'Free for all': $sumOfPoints = $sumOfPoints + 15;
                                       break;            
 
                     }        

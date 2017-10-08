@@ -66,8 +66,6 @@ public function webtest($id){
     //\DB::table('volunteers')->delete();
     //\DB::table('activityskills')->delete();
     \DB::table('volunteergroups')->delete();
-
-
     //\DB::table('volunteerbeforeactivities')->delete();
     //\DB::table('volunteerafteractivities')->delete();
     //\DB::table('activitycriterias')->delete();
@@ -873,7 +871,7 @@ public function test3(){
                 
             } 
 
-            return response()->json($activityKeeper);
+            return response()->json(array_reverse($activityKeeper));
 
     	   //return response()->json($activities);
         

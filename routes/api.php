@@ -39,6 +39,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		
 });
 
+Route::post('/fcm_token','VolunteerController@fcm_token');
 Route::post('/delete','TestingController@deleteall');
 Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	

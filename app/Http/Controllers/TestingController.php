@@ -77,19 +77,17 @@ class TestingController extends Controller
 
     public function test3(){
 
-      $volunteers = Volunteer::all();
+      /*$volunteers = Volunteer::all();
 
       foreach($volunteers as $volunteer){
 
-       /*Volunteeractivity::create([
+       Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'13a2288',
+                 'activity_id'=>'b83fd92',
                  'status'=> false  
-                ]);*/
+                ]);
 
-                
-
-        }
+        }*/
 
         $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
 
@@ -115,8 +113,6 @@ class TestingController extends Controller
 
                             dd($downstreamResponse);
 
-            
-      
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
      /* Activitygroup::where('activity_id','a77c9b4')->delete();
@@ -316,7 +312,7 @@ class TestingController extends Controller
 
                             $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
                              
-      
+                
             Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
             
         }
