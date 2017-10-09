@@ -97,10 +97,12 @@ class RunScheduler extends Command
         $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
                                 ->get();*/
 
+                             
+                               
         $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->addMinute(5))->get();
                 
                                                        
       if($activities->count()){
@@ -189,9 +191,11 @@ class RunScheduler extends Command
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
+
+                            $body = 'Your groupmates have been revealed for '.$activity->name.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates has been revealed')
+                          $notificationBuilder->setBody($body)
                                               ->setSound('default'); 
 
                              $dataBuilder = new PayloadDataBuilder();

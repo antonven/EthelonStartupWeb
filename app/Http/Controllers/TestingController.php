@@ -77,7 +77,7 @@ class TestingController extends Controller
 
     public function test3(){
 
-      /*$volunteers = Volunteer::all();
+      $volunteers = Volunteer::all();
 
       foreach($volunteers as $volunteer){
 
@@ -87,16 +87,20 @@ class TestingController extends Controller
                  'status'=> false  
                 ]);
 
-        }*/
+        }
 
-        $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
+        /*$volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
+
+                            $kobe = 'kobe';
+
+                             $body = 'Your groupmates have been revealed for '.$kobe.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Testing rani hehe. If nakadawat ka i pm kos fb please kobe ni ')
+                          $notificationBuilder->setBody($body)
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -111,7 +115,7 @@ class TestingController extends Controller
 
                             $downstreamResponse = FCM::sendTo($volunteerTokens, $option, $notification, $data);
 
-                            dd($downstreamResponse);
+                            dd($downstreamResponse);*/
 
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
