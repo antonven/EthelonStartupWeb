@@ -39,7 +39,6 @@
     <body>
         <form class="form-horizontal" method="POST" action="{{ route('register') }}" enctype="multipart/form-data"s>
         {{ csrf_field() }}
-        <div class="account-pages"></div>
         <div class="clearfix"></div>
         <div class="wrapper-page">
             <div class="text-center">

@@ -590,15 +590,17 @@ public function test3(){
     
     public function index()
     {
-        if(\Auth::user()->foundation)
-        {
-            $activities = \Auth::user()->foundation->activities;
-        }
-        else{
-            $activities = null;
-        }
-
-        return view('activity.activityIndex', compact('activities'));
+      if(\Auth::user()->foundation)
+      {
+          $activities = \Auth::user()->foundation->activities;
+          $volunteers =   Volunteer::all();
+      }
+      else
+      {
+          $activities = null;
+          $volunteers = null;
+      }
+      return view('activity.activityIndex', compact('activities', 'volunteers'));
     }
     
     public function create()

@@ -37,7 +37,7 @@
     <body>
     	<form class="form-horizontal" method="POST" action="{{ route('login') }}">
         {{ csrf_field() }}
-        <div class="account-pages"></div>
+        
         <div class="clearfix"></div>
         <div class="wrapper-page">
             <div class="text-center">
@@ -98,44 +98,36 @@
         </div>
         <!-- end wrapper page -->
         </form>
-        <input id="title" type="text" class="input-large form-control" placeholder="Enter a title ..." value="Registration Successful!" hidden />
-        <textarea class="input-large form-control" id="message" rows="3" placeholder="Enter a message ..." hidden>It will take some time to check your credentials. If there are no problems your account will be verified in no time!</textarea>
+        <input id="title" type="text" placeholder="Enter a title ..." value="Registration Successful!" hidden />
+        <textarea  id="message" rows="3" placeholder="Enter a message ..." hidden>It will take some time to check your credentials. If there are no problems your account will be verified in no time!</textarea>
         <div class="control-group" id="toastTypeGroup">
             <input type="radio" name="radio" id="radio1" value="success" checked hidden>
         </div>
         <div class="control-group" id="positionGroup">
             <input type="radio" name="positions" id="radio9" value="toast-top-full-width" checked hidden />
         </div>
-        <div class="control-group">
-            <div class="controls">
                 
-                <input id="showEasing" type="text" placeholder="swing, linear" class="input-mini form-control" value="swing" hidden />
-
-                <
-                <input id="hideEasing" type="text" placeholder="swing, linear" class="input-mini form-control" value="linear" hidden />
+                <input id="showEasing" type="text" placeholder="swing, linear"  value="swing" hidden />
 
                 
-                <input id="showMethod" type="text" placeholder="show, fadeIn, slideDown" class="input-mini form-control" value="fadeIn" hidden />
+                <input id="hideEasing" type="text" placeholder="swing, linear" value="linear" hidden />
 
                 
-                <input id="hideMethod" type="text" placeholder="hide, fadeOut, slideUp" class="input-mini form-control" value="fadeOut" hidden />
-            </div>
-        </div>
-        <div class="control-group">
-            <div class="controls">
-                
-                <input id="showDuration" type="text" placeholder="ms" class="input-mini form-control" value="300" hidden />
+                <input id="showMethod" type="text" placeholder="show, fadeIn, slideDown" value="fadeIn" hidden />
 
                 
-                <input id="hideDuration" type="text" placeholder="ms" class="input-mini form-control" value="1000" hidden />
+                <input id="hideMethod" type="text" placeholder="hide, fadeOut, slideUp" value="fadeOut" hidden />
+                
+                <input id="showDuration" type="text" placeholder="ms" value="300" hidden />
 
                 
-                <input id="timeOut" type="text" placeholder="ms" class="input-mini form-control" value="5000" hidden />
+                <input id="hideDuration" type="text" placeholder="ms" value="1000" hidden />
 
                 
-                <input id="extendedTimeOut" type="text" placeholder="ms" class="input-mini form-control" value="1000" hidden />
-            </div>
-        </div>
+                <input id="timeOut" type="text" placeholder="ms" value="5000" hidden />
+
+                
+                <input id="extendedTimeOut" type="text" placeholder="ms" value="1000" hidden />
 
 
 
