@@ -33,7 +33,7 @@
                 </div>
                 <img src="{{ $activity->image_url }}" class="thumb-img" style="object-fit: cover; margin-top: -45px;margin-left: -20px;border: none;height: 200px;width: calc(100% + 40px)">
                 <p></p>
-                <h4 class="header-title m-t-0 m-b-30">{{ $activity->name }}</h4>
+                <h4 class="header-title m-t-0 m-b-30"><a href="webtest/{{$activity->activity_id}}">{{ $activity->name }}</a></h4>
 
                 <p>
                     {{ $activity->description }}
