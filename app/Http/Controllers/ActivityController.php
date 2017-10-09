@@ -593,14 +593,32 @@ public function test3(){
       if(\Auth::user()->foundation)
       {
           $activities = \Auth::user()->foundation->activities;
-          $volunteers =   Volunteer::all();
+          $volunteersArray = array();
+          $eachActivityArray = array();
+
+          foreach($activities as $activity){
+
+                $volunteersQuery = \DB::table('users')->select('volunteers.image_url as image_url')
+                                           ->join('volunteers','volunteers.user_id','=','users.user_id')
+                                           ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id')
+                                           ->where('volunteeractivities.activity_id',$activity->activity_id)
+                                           ->get();
+
+                                           $Volunteers = array($activity->activity_id=>$volunteersQuery);
+
+                                           array_push($volunteersArray,$Volunteers);
+          }
+
+         /* $volunteersArray = json_encode($volunteersArray);
+          return response($volunteersArray);*/
+
       }
       else
       {
           $activities = null;
           $volunteers = null;
       }
-      return view('activity.activityIndex', compact('activities', 'volunteers'));
+      return view('activity.activityIndex', compact('activities', 'volunteersArray'));
     }
     
     public function create()

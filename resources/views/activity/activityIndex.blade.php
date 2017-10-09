@@ -40,27 +40,36 @@
 
                 <div class="project-members m-b-20">
                     <span class="m-r-5 font-600">Volunteers :</span>
-                    @if($volunteers)
-                    @foreach($volunteers as $volunteer)
-                        @foreach($volunteer->activitiesJoined as $activityJoined)
-                            @if($activityJoined->activity->activity_id == $activity->activity_id)
-                            <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="">
-                                    <img src="{{ $volunteer->image_url }}" class="img-circle thumb-sm" alt="friend" />
-                            </a>
-                            @endif
-                        @endforeach
+                    @if($volunteersArray)
+                    @foreach($volunteersArray as $volunteerArray)
+                      @if(isset($volunteerArray[$activity->activity_id]))
+                        @foreach($volunteerArray[$activity->activity_id]->slice(0,10) as $volunteer)
+
+                                  @if($volunteer->image_url != null)  
+                                 <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="">
+                                    <img src="{{ $volunteer->image_url }}" class="img-circle thumb-sm" />
+                                 </a>
+                                  @endif  
+                            @endforeach
+                       
+                      @endif
                     @endforeach
                     @endif
+
                 </div>
-
-                <p class="font-600 m-b-5">Needed Volunteers {{ count($volunteers) }}/100 <span class="text-danger pull-right">{{ (count($volunteers)/100)*100 }}%</span></p>
-                <div class="progress progress-bar-danger-alt progress-sm m-b-5">
+                        @foreach($volunteersArray as $volunteerArray)
+                             @if(isset($volunteerArray[$activity->activity_id]))    
+                                     <p class="font-600 m-b-5">Needed Volunteers {{ count($volunteerArray[$activity->activity_id]) }}/100 <span class="text-danger pull-right">{{ (count($volunteerArray[$activity->activity_id])/100)*100 }}%</span></p>
+                    <div class="progress progress-bar-danger-alt progress-sm m-b-5">
                     <div class="progress-bar progress-bar-danger progress-animated wow animated animated"
-                         role="progressbar" aria-valuenow="{{ (count($volunteers)/100)*100 }}" aria-valuemin="0" aria-valuemax="100"
-                         style="width: {{ (count($volunteers)/100)*100 }}%;">
+                         role="progressbar" aria-valuenow="{{ (count($volunteerArray[$activity->activity_id])/100)*100 }}" aria-valuemin="0" aria-valuemax="100"
+                         style="width: {{ (count($volunteerArray[$activity->activity_id])/100)*100 }}%;">
                     </div><!-- /.progress-bar .progress-bar-danger -->
-                </div><!-- /.progress .no-rounded -->
+                    </div><!-- /.progress .no-rounded -->
 
+                             @endif
+                       @endforeach
+               
             </div>
         </div>
     @endforeach
