@@ -857,10 +857,8 @@ public function test3(){
                                 }
                             }//innermost foreach
 
-                   
                     }//2nd foreach
                 
-                    
                     array_push($activityKeeper,$activityTempo);
                     array_push($activityScores,$matches);
                     $count++;    
@@ -884,7 +882,6 @@ public function test3(){
                         $temp2 = $activityKeeper[$i+1];
                         $activityKeeper[$i+1]=$activityKeeper[$i];
                         $activityKeeper[$i]=$temp2;
-                             
     
                         }    
                 }
@@ -915,8 +912,6 @@ public function test3(){
                                               ->join('users','users.user_id','=','foundations.user_id') 
                                               ->where('activities.activity_id',$activity->activity_id)->first();  
 
-
-
                   $activityTempo = array("activity_id"=>$activity->activity_id,
                                             "foundation_id"=>$activity->foundation_id,
                                             "name"=>$activity->name,
@@ -944,12 +939,9 @@ public function test3(){
                                             "foundtion_name" =>$foundation->foundtion_name,
                                             "volunteer_count"=>$volunteerCount->count());
 
-
                          array_push($activityList,$activityTempo);                          
 
                 }
-
-
 
         return response()->json($activityList);
 

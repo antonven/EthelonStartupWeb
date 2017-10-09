@@ -93,12 +93,19 @@ class RunScheduler extends Command
     public function handle()
     {
 
-/*
-        $activities = Activity::whereDate('startDate',\Carbon\Carbon::now()->format('Y-m-d'))
-                                ->get();*/
 
-                             
-                               
+        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+                                ->where('activities.status',false)
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))->first();
+
+               $date = $activities->startDate . ' '. $activities->start_time;
+
+                 if($date == \Carbon\Carbon::now()->addMinute(5) ){
+                        $this->randomAllocation($activities);  
+                 }                 
+
+     /*              
         $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
@@ -109,7 +116,7 @@ class RunScheduler extends Command
         
         $this->randomAllocation($activities);  
         
-       }                             
+       }                          */   
         
 
         $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
