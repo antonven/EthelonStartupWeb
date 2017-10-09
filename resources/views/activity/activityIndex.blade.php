@@ -23,13 +23,9 @@
                 <div class="label label-danger">Open</div>
                 <!-- <p class="text-danger text-uppercase m-b-20 font-13">Web Design</p> -->
                 <img src="{{ $activity->image_url }}" class="thumb-img" style="object-fit:cover;height:200px;width:calc(100% + 40px);margin-top: -20px !important;margin-left: -20px !important;border-radius: 0px !important;">
-                <p></p>
-
-                <h4 class="header-title m-t-0 m-b-30"><a href="webtest/{{$activity->activity_id}}">{{ $activity->name }}</a></h4>
-
+               
                 <p>
-                    {{ $activity->description }}
-
+                   
                 <h4 class="m-t-0 m-b-5"><a href="webtest/{{$activity->activity_id}}" class="text-inverse" style="color:#ff5b5b !important;">{{ $activity->name }}</a></h4>
                 <p class="text-muted font-13" style="color:black !important">{{ $activity->description }}...<a href="#" class="font-600 text-muted">view more</a>
 
@@ -47,7 +43,7 @@
                     @if($volunteers)
                     @foreach($volunteers as $volunteer)
                         @foreach($volunteer->activitiesJoined as $activityJoined)
-                            @if($activityJoined->activity_id == $activity->activity_id)
+                            @if($activityJoined->activity->activity_id == $activity->activity_id)
                             <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="">
                                     <img src="{{ $volunteer->image_url }}" class="img-circle thumb-sm" alt="friend" />
                             </a>
