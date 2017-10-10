@@ -318,7 +318,7 @@ class RunScheduler extends Command
 
                     if($date5minutes == \Carbon\Carbon::now()->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
                         
-                        //$this->randomAllocation($activity);
+                        $this->randomAllocation($activity);
 
                         /*$this->info(' '.$date5minutes. ' '.$activity->activity_id);
                         $this->info('sud sa if');*/
