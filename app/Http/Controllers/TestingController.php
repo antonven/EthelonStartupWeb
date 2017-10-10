@@ -72,10 +72,12 @@ class TestingController extends Controller
 
      /* Activitygroup::where('activity_id','a77c9b4')->delete();
       Volunteercriteriapoint::where('activity_id','a77c9b4')->delete();*/
-      Volunteeractivity::where('activity_id','f9fd3cc')
+      /*Volunteeractivity::where('activity_id','f9fd3cc')
                          ->where('volunteer_id','a0e716a')->delete(); 
       Volunteeractivity::where('volunteer_id','a0e716a')
-                          ->where('activity_id','fdeaa34');                   
+                          ->where('activity_id','fdeaa34');      */
+
+                          Activity::all()->delete();             
 
     }
 
