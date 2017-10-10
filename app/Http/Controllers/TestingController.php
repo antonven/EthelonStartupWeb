@@ -83,13 +83,13 @@ class TestingController extends Controller
 
        Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'5b25b8e',
+                 'activity_id'=>'5ee7800',
                  'status'=> false  
                 ]);
 
         }
-/*
-        $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
+
+        /*$volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -100,7 +100,7 @@ class TestingController extends Controller
                              $body = 'Your groupmates have been revealed for '.$kobe.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody($body)
+                          $notificationBuilder->setBody('croix ayaw sigeg binogo')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -113,10 +113,10 @@ class TestingController extends Controller
                             $notification = $notificationBuilder->build();
                             $data = $dataBuilder->build();
 
-                            $downstreamResponse = FCM::sendTo($volunteerTokens, $option, $notification, $data);
+                            $downstreamResponse = FCM::sendTo('cnTfc_UpHhk:APA91bEjXRF1KPACGd6s1n9iLhKaUZOEHds3mBdpqqbeD9KnngjPSQA2rWqEeENL0Q1H9ZaYmH2KTkyPdPsBesVwGRITqddTkJQNKWNSbbonFKfJjFw6PqB3dmxmT6sqLzqOC5FoX3Jm', $option, $notification, $data);
 
-                            dd($downstreamResponse);*/
-
+                            dd($downstreamResponse);
+*/
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
      /* Activitygroup::where('activity_id','a77c9b4')->delete();
@@ -134,7 +134,7 @@ class TestingController extends Controller
 
 
             foreach($activities as $activity){
-              
+
                  $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
                   $datesaved = $date. ' '.$activity->start_time;
                    $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
