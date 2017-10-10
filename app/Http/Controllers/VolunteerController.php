@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+ini_set("memory_limit","1000M");
 
 use Illuminate\Http\Request;
 use App\Volunteerbeforeactivity;

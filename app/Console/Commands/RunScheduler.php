@@ -95,8 +95,7 @@ class RunScheduler extends Command
 
 
        
-     
-
+        
      /*              
         $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
@@ -202,6 +201,9 @@ class RunScheduler extends Command
 
     public function randomAllocation($activity){
         
+      
+     
+
 
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
@@ -304,21 +306,27 @@ class RunScheduler extends Command
     {
         $fn = $this->option('queue') ? 'queue' : 'call';
 
-           $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+
+
+
+        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('y-m-d'))->get();
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))->get();
 
 
             foreach($activities as $activity){
               
+                
                         
-                $this->randomAllocation($activity);
+                        $this->randomAllocation($activity);
 
-                                           
-             }
                  
                   }                                   
+
+
+
+
 
         $this->info('Running scheduler');
         Artisan::$fn('schedule:run');
