@@ -202,9 +202,6 @@ class RunScheduler extends Command
 
     public function randomAllocation($activity){
         
-      
-     
-
 
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
@@ -306,7 +303,7 @@ class RunScheduler extends Command
     protected function runScheduler()
     {
         $fn = $this->option('queue') ? 'queue' : 'call';
-        
+
            $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
@@ -321,13 +318,13 @@ class RunScheduler extends Command
 
                     if($date5minutes == \Carbon\Carbon::now()->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
                         
-                        //$this->randomAllocation($activity);
-                        $this->info(' '.$date5minutes. ' '.$activity->activity_id);
-                        $this->info('sud sa if');
+                        $this->randomAllocation($activity);
+                        /*$this->info(' '.$date5minutes. ' '.$activity->activity_id);
+                        $this->info('sud sa if');*/
 
                     }else{
-                            $this->info('else');
-                            $this->info(' '.$date5minutes.' '.$activity->activity_id);
+                            /*$this->info('else');
+                            $this->info(' '.$date5minutes.' '.$activity->activity_id);*/
                       }
                  
                   }                                   
