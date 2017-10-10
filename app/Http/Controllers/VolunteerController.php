@@ -203,7 +203,7 @@ class VolunteerController extends Controller
                }    
 
     
-            $sumOfPoints = $sumOfPoints * $activity->points_equivalent;
+            $sumOfPoints = $sumOfPoints + $activity->points_equivalent;
 
              \DB::table('volunteeractivities')
                 ->where('volunteer_id',$request->input('volunteer_id'))
