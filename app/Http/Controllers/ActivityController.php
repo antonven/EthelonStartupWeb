@@ -628,10 +628,10 @@ public function test3(){
 
     public function store(Request $request)
     {
-        $dt = new \DateTime($request->input('startDate'));
+        $dt = new \DateTime($request->input('startDate').' '.$request->input('startTime'));
         $sd = Carbon::instance($dt);
         $dtt = new \DateTime($request->input('endDate').' '.$request->input('endTime'));
-        $ed = Carbon::instance($dt);
+        $ed = Carbon::instance($dtt);
         $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
        
@@ -645,7 +645,7 @@ public function test3(){
             "description" => $request->input('activityDescription'),
             "location" => $request->input('activityLocation'),
             "start_time" => $request->input('startTime'),
-            "end_time" => $ed,
+            "end_time" => $ed->toTimeString(),
             "endDate" => $ed,
             "group" => $request->input('group'),
             "long" => $request->input('long'),
@@ -706,6 +706,7 @@ public function test3(){
     public function uploadFile($file)
     {
         $extension = $file->clientExtension();
+        //dd($extension);
         if($extension != "bin")
         {
 
@@ -727,7 +728,7 @@ public function test3(){
         }
         else
         {
-            $files = "";
+            $files = public_path('assets/images/ethelon.png');
             return $file;
         }
         
@@ -751,6 +752,28 @@ public function test3(){
       $activities = Activity::all();
 
       return view('activity.adminActivityList', compact('activities'));
+    }
+
+    //to view a specific activity
+    public function view($id)
+    {
+      $activity = Activity::find($id);
+      //dd($activity->skills[0]->name);
+      return view('activity.activityView', compact('activity'));
+    }
+
+    public function edit($id)
+    {
+      $activity = Activity::find($id);
+
+      return view('activity.activityEdit', compact('activity'));
+    }
+
+    public function delete($id)
+    {
+      Activity::destroy($id);
+      
+      return redirect(url('/activity'));
     }
 
     //
