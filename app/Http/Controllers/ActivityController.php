@@ -634,6 +634,14 @@ public function test3(){
         $ed = Carbon::instance($dtt);
         $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+        $start_time = \Carbon\Carbon::parse($request->input('startTime'));   
+        $end_time =   \Carbon\Carbon::parse($request->input('endTime')); 
+
+        $numOfHours = $start_time->diffInHours($end_time);
+
+        $preSetPoints = 5*$numOfHours;
+
        
 
         $activityId = Activity::create([
@@ -650,7 +658,7 @@ public function test3(){
             "group" => $request->input('group'),
             "long" => $request->input('long'),
             "lat" => $request->input('lat'),
-            "points_equivalent" => 1,
+            "points_equivalent" => $preSetPoints,
             "status" => 0,
             "startDate" => $sd->toDateTimeString(),
             "contactperson" => $request->input('contactPerson'),
@@ -829,11 +837,14 @@ public function test3(){
             foreach($activities as $activity){
                 $count = 0; 
 
+
                
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
 
                     $watch = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
                                        ->where('activity_id',$activity->activity_id)->get();
+
+                    $activityCriteria = Activitycriteria::where('activity_id',$activity->activity_id)->get();                   
 
                     $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();                   
 
@@ -866,7 +877,10 @@ public function test3(){
                                             "foundtion_name"=>$activity->foundtion_name,
                                             "volunteerstatus"=>$data,
                                             "foundation_img" =>$activity->foundation_imageurl,
-                                            "volunteer_count"=>$volunteerCount->count());                     
+                                            "volunteer_count"=>$volunteerCount->count(),
+                                            "activity_skills"=>$activityskills,
+                                            "activity_criteria"=>$activityCriteria
+                                            );                     
 
                     foreach($activityskills as $activityskill){
 
