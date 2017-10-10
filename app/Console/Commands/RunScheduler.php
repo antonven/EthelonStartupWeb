@@ -94,16 +94,26 @@ class RunScheduler extends Command
     {
 
 
+       
         $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))->first();
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))->get();
 
-               $date = $activities->startDate . ' '. $activities->start_time;
 
-                 if($date == \Carbon\Carbon::now()->addMinute(5) ){
-                        $this->randomAllocation($activities);  
-                 }                 
+            foreach($activities as $activity){
+              
+                 $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
+                  $datesaved = $date. ' '.$activity->start_time;
+                   $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
+
+                    if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i')){
+                        $this->randomAllocation($activity);  
+                      }else{
+                        return 'wala';
+                      }
+                 
+                  }                                   
 
      /*              
         $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
@@ -133,11 +143,11 @@ class RunScheduler extends Command
      *
      */
    
-     public function sendNotifications($activities){
+     public function sendNotifications($activity){
 
         $tokens = array();
 
-        foreach($activities as $activity){
+       // foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
                                                                ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
@@ -192,7 +202,7 @@ class RunScheduler extends Command
 
                             }
                            
-            }
+          }
 
 
                             $optionBuilder = new OptionsBuilder();
@@ -228,14 +238,14 @@ class RunScheduler extends Command
       
             Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
            // return $downstreamResponse;
-        }
+       // }
 
     }
 
-    public function randomAllocation($activities){
+    public function randomAllocation($activity){
         
       
-      foreach($activities as $activity){
+     
 
 
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
@@ -310,8 +320,8 @@ class RunScheduler extends Command
                       }     
                       $volunteerCount++;
                       }      
-                    }              
-                    $this->sendNotifications($activities);
+                                  
+                    $this->sendNotifications($activity);
             
     }
 

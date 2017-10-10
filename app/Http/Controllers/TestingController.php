@@ -83,13 +83,13 @@ class TestingController extends Controller
 
        Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'0e45c',
+                 'activity_id'=>'a4697f2',
                  'status'=> false  
                 ]);
 
         }
-
-        /*$volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
+/*
+        $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -121,31 +121,46 @@ class TestingController extends Controller
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
      /* Activitygroup::where('activity_id','a77c9b4')->delete();
       Volunteercriteriapoint::where('activity_id','a77c9b4')->delete();*/
+
     }
 
     public function runScheduler(){
 
   
-      $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('Y-m-d'))->get();
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))->get();
 
 
-                                //  return response()->json($activities);
+            foreach($activities as $activity){
+              
+                 $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
+                  $datesaved = $date. ' '.$activity->start_time;
+                   $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
 
-       if($activities->count()){
-      
-       return $this->randomAllocation($activities);  
-      
+                    if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i')){
+                        $this->randomAllocation($activity);  
+                      }else{
+                        return 'wala';
+                      }
+                 
+            }                    
+                              
 
-      }
+               // dd($activities->start_time);
+              
+               // return $datesaved;
+
+               // return $date5minutes.(string)\Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i');
+
+
     }
 
   
-    public function randomAllocation($activities){
+    public function randomAllocation($activity){
 
-      foreach($activities as $activity){
+     /* foreach($activity as $activity){*/
 
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
@@ -219,18 +234,18 @@ class TestingController extends Controller
                       }     
                       $volunteerCount++;
                       }      
-                    }
+                    //}
 
-                  return $this->sendNotifications($activities);
+                  return $this->sendNotifications($activity);
             
     }
 
 
-     public function sendNotifications($activities){
+     public function sendNotifications($activity){
 
         $tokens = array();
 
-        foreach($activities as $activity){
+       /* foreach($activities as $activity){*/
 
           $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
                                                                ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
@@ -239,34 +254,8 @@ class TestingController extends Controller
           $volunteersKeeper = array();
 
             foreach($volunteers as $volunteer){
-
-               /* $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
-                                                        ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
-                                                        ->where('volunteergroups.volunteer_id',$volunteer->volunteer_id)
-                                                        ->where('activitygroups.activity_id',$activity->activity_id)
-                                                        ->first();
-
-                $volunteersToRate = \DB::table('users')->select('users.name','volunteers.volunteer_id','volunteers.image_url')
-                                                ->join('volunteers','volunteers.user_id','=','users.user_id')
-                                                ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')
-                                                ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
-                                                ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
-                                                ->get();   */
-
-
-                /*     foreach($volunteersToRate as $volunteerToRate){
-
-                             $data = array("name"=>$volunteerToRate->name,
-                                            "volunteer_id"=>$volunteerToRate->volunteer_id,
-                                            "image_url"=>$volunteerToRate->image_url,
-                                            "activity_group_id"=>$activity_group_id->id,
-                                            "num_of_vol"=>$activity_group_id->numOfVolunteers);
-
-                             array_push($volunteersKeeper,$data);
-                     } */                          
-
+ 
                        $token = $volunteer->fcm_token;
-
 
                             if($token != null){
 
@@ -321,7 +310,7 @@ class TestingController extends Controller
             
         }
 
-    }
+  
 
 
   public function create_volunteer_criteria_points($activity, $volunteer_id){
@@ -341,10 +330,11 @@ class TestingController extends Controller
                  
                 ]);
       }
-    }
+    //}
 
 
 
+}
 }
 
 
