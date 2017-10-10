@@ -20,14 +20,18 @@
     @foreach($activities as $activity)
         <div class="col-lg-3">
             <div class="card-box project-box">
+                @if($activity->status == 0)
                 <div class="label label-danger">Open</div>
+                @else
+                <div class="label label-danger">Open</div>
+                @endif
                 <!-- <p class="text-danger text-uppercase m-b-20 font-13">Web Design</p> -->
-                <img src="{{ $activity->image_url }}" class="thumb-img" style="object-fit:cover;height:200px;width:calc(100% + 40px);margin-top: -20px !important;margin-left: -20px !important;border-radius: 0px !important;">
+                <img src="{{ $activity->image_url }}" class="thumb-img" style="border-radius:0px !important;object-fit:cover;height:200px;width:calc(100% + 40px);margin-top: -20px !important;margin-left: -20px !important;border-top-left-radius: 5px !important;border-top-right-radius: 5px !important;">
                
                 <p>
                    
                 <h4 class="m-t-0 m-b-5"><a href="webtest/{{$activity->activity_id}}" class="text-inverse" style="color:#ff5b5b !important;">{{ $activity->name }}</a></h4>
-                <p class="text-muted font-13" style="color:black !important">{{ $activity->description }}...<a href="#" class="font-600 text-muted">view more</a>
+                <p class="text-muted font-13" style="color:black !important">{{ substr($activity->description,0,200) }}...<a href="{{ url('/activity/'.$activity->activity_id ) }}" class="font-600 text-muted">view more</a>
 
                 </p>
 

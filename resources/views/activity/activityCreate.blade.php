@@ -267,17 +267,17 @@
                 {
                     $criteria = $criteria +' '+ $("#criteria").val();
                     //var $card = '<div class="panel panel-color panel-inverse" style="margin-bottom=0!important;"><div class="panel-heading"><h3 class="panel-title">'+$('#criteria').val()+'</h3></div></div><input type="text" name="activityCriteria[]" hidden>';
-                    var $card = '<div class="row"><div class="col-md-10"><pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$criteria+'"></div><div class="pull-right col-md-2"><pre><center>X</center></pre></div></div>';
-                    //add criteria to the list
-                    $('#criteriaList').append($card);
-                    $('#criteria').val("");
-                }
-            });
-            
-            //initialize the multiple select
-            $(".select2").select2();
-            
-            //initialize the spinner
+                    var $card = '<div class="row"><div class="col-md-8 col-md-offset-1"><pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$criteria+'"></div><div class="pull-right col-md-2"><button class="btn btn-icon waves-effect waves-light btn-danger m-b-5"> <i class="fa fa-remove"></i> </button></div></div>';
+                                        //add criteria to the list
+                                        $('#criteriaList').append($card);
+                                        $('#criteria').val("");
+                                    }
+                                });
+                                
+                                //initialize the multiple select
+                                $(".select2").select2();
+                                
+                                //initialize the spinner"
             $("input[name='demo3']").TouchSpin({
                 buttondown_class: "btn btn-primary",
                 buttonup_class: "btn btn-primary"

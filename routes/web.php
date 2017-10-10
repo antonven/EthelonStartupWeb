@@ -19,6 +19,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/activity/create', 'ActivityController@create');
     Route::post('/activity/store', 'ActivityController@store');
     Route::get('/activity/{id}', 'ActivityController@view');
+    Route::get('/activity/edit/{id}', 'ActivityController@edit');
+    Route::post('/activity/edit/{id}', 'ActivityController@update');
+    Route::get('/activity/delete/{id}', 'ActivityController@delete');
 
     //admin
     Route::get('/admin/foundationlist', 'FoundationController@foundationList');
