@@ -83,7 +83,7 @@ class TestingController extends Controller
 
        Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'5ee7800',
+                 'activity_id'=>'805ab99',
                  'status'=> false  
                 ]);
 
@@ -127,25 +127,30 @@ class TestingController extends Controller
     public function runScheduler(){
 
   
-        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+       $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
                                 ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))->get();
 
 
             foreach($activities as $activity){
-
+              
                  $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
                   $datesaved = $date. ' '.$activity->start_time;
                    $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
 
-                    if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i')){
-                        $this->randomAllocation($activity);  
-                      }else{
+                    if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
+                         
+                         return 'sulod sa if';
+                       // $this->randomAllocation($activity);
+                        
+                    }else{
+
+                        
                         return 'wala';
                       }
                  
-            }                    
+                  }                                   
                               
 
                // dd($activities->start_time);
