@@ -108,9 +108,9 @@ class RunScheduler extends Command
                    $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
 
                     if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
-
+                        
                         $this->randomAllocation($activity);
-
+                        
                     }else{
 
                         
