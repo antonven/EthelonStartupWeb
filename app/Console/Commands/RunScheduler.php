@@ -107,9 +107,13 @@ class RunScheduler extends Command
                   $datesaved = $date. ' '.$activity->start_time;
                    $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
 
-                    if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i')){
-                        $this->randomAllocation($activity);  
-                      }else{
+                    if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i')){
+
+                        $this->randomAllocation($activity);
+
+                    }else{
+
+                        
                         return 'wala';
                       }
                  
@@ -157,31 +161,7 @@ class RunScheduler extends Command
 
             foreach($volunteers as $volunteer){
 
-               /* $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
-                                                        ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
-                                                        ->where('volunteergroups.volunteer_id',$volunteer->volunteer_id)
-                                                        ->where('activitygroups.activity_id',$activity->activity_id)
-                                                        ->first();
-
-                $volunteersToRate = \DB::table('users')->select('users.name','volunteers.volunteer_id','volunteers.image_url')
-                                                ->join('volunteers','volunteers.user_id','=','users.user_id')
-                                                ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')
-                                                ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
-                                                ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
-                                                ->get();   */
-
-
-                /*     foreach($volunteersToRate as $volunteerToRate){
-
-                             $data = array("name"=>$volunteerToRate->name,
-                                            "volunteer_id"=>$volunteerToRate->volunteer_id,
-                                            "image_url"=>$volunteerToRate->image_url,
-                                            "activity_group_id"=>$activity_group_id->id,
-                                            "num_of_vol"=>$activity_group_id->numOfVolunteers);
-
-                             array_push($volunteersKeeper,$data);
-                     } */                          
-
+                
                        $token = $volunteer->fcm_token;
 
 
@@ -202,7 +182,7 @@ class RunScheduler extends Command
 
                             }
                            
-          }
+             }
 
 
                             $optionBuilder = new OptionsBuilder();
@@ -371,4 +351,29 @@ class RunScheduler extends Command
     public function createGroups(){
 
     }
+
+    /* $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
+                                                        ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
+                                                        ->where('volunteergroups.volunteer_id',$volunteer->volunteer_id)
+                                                        ->where('activitygroups.activity_id',$activity->activity_id)
+                                                        ->first();
+
+                $volunteersToRate = \DB::table('users')->select('users.name','volunteers.volunteer_id','volunteers.image_url')
+                                                ->join('volunteers','volunteers.user_id','=','users.user_id')
+                                                ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')
+                                                ->where('volunteergroups.activity_groups_id',$activity_group_id->id)
+                                                ->where('volunteergroups.volunteer_id','!=',$volunteer->volunteer_id)
+                                                ->get();   */
+
+
+                /*     foreach($volunteersToRate as $volunteerToRate){
+
+                             $data = array("name"=>$volunteerToRate->name,
+                                            "volunteer_id"=>$volunteerToRate->volunteer_id,
+                                            "image_url"=>$volunteerToRate->image_url,
+                                            "activity_group_id"=>$activity_group_id->id,
+                                            "num_of_vol"=>$activity_group_id->numOfVolunteers);
+
+                             array_push($volunteersKeeper,$data);
+                     } */                        
 }
