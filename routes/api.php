@@ -60,6 +60,9 @@ Route::post('/test3','TestingController@test3');
 Route::post('/register','RegistrationController@register');
 Route::post('/login','LoginController@login');
 
+
+Route::post('/kobedelete','TestingController@kobedelete');
+
 Route::post('/test4','TestingController@runScheduler');
 Route::post('/volunteerstorate','ActivityController@volunteersToRate');
 

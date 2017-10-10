@@ -936,7 +936,7 @@ public function test3(){
 
        $activityList = array();
 
-        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.created_at','DESC')         
+        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.created_at','DESC')->limit(5)         
                 ->get();
 
                 foreach($activities as $activity){
@@ -944,9 +944,7 @@ public function test3(){
 
                   $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
 
-
                     $activitySkills = Activityskill::where('activity_id',$activity->activity_id)->get();
-
 
                     $activityCriteria = Activitycriteria::where('activity_id',$activity->activity_id)->get();                   
 

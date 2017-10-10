@@ -70,8 +70,12 @@ class TestingController extends Controller
     }
     public function kobedelete(){
 
-      Activitygroup::where('activity_id','a77c9b4')->delete();
-      Volunteercriteriapoint::where('activity_id','a77c9b4')->delete();
+     /* Activitygroup::where('activity_id','a77c9b4')->delete();
+      Volunteercriteriapoint::where('activity_id','a77c9b4')->delete();*/
+      Volunteeractivity::where('activity_id','f9fd3cc')
+                         ->where('volunteer_id','a0e716a')->delete(); 
+      Volunteeractivity::where('volunteer_id','a0e716a')
+                          ->where('activity_id','fdeaa34');                   
 
     }
 
@@ -83,13 +87,13 @@ class TestingController extends Controller
 
        Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'0e3ed8c',
+                 'activity_id'=>'6a3bb6f',
                  'status'=> false  
                 ]);
 
         }
 
-        /*$volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
+     /*   $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -100,7 +104,7 @@ class TestingController extends Controller
                              $body = 'Your groupmates have been revealed for '.$kobe.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('croix ayaw sigeg binogo')
+                          $notificationBuilder->setBody($body)
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -113,10 +117,10 @@ class TestingController extends Controller
                             $notification = $notificationBuilder->build();
                             $data = $dataBuilder->build();
 
-                            $downstreamResponse = FCM::sendTo('cnTfc_UpHhk:APA91bEjXRF1KPACGd6s1n9iLhKaUZOEHds3mBdpqqbeD9KnngjPSQA2rWqEeENL0Q1H9ZaYmH2KTkyPdPsBesVwGRITqddTkJQNKWNSbbonFKfJjFw6PqB3dmxmT6sqLzqOC5FoX3Jm', $option, $notification, $data);
+                            $downstreamResponse = FCM::sendTo($volunteerTokens, $option, $notification, $data);
 
-                            dd($downstreamResponse);
-*/
+                            dd($downstreamResponse);*/
+
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
      /* Activitygroup::where('activity_id','a77c9b4')->delete();
@@ -130,11 +134,20 @@ class TestingController extends Controller
        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))->get();
+                                ->where('activity_id','fd95d06')->get();
+
+
 
 
             foreach($activities as $activity){
-              
+
+
+
+              $this->randomAllocation($activity);
+
+            }
+
+              /*
                  $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
                   $datesaved = $date. ' '.$activity->start_time;
                    $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
@@ -142,7 +155,7 @@ class TestingController extends Controller
                     if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
                          
                          return 'sulod sa if';
-                       // $this->randomAllocation($activity);
+                       // 
                         
                     }else{
 
@@ -150,7 +163,7 @@ class TestingController extends Controller
                         return 'wala';
                       }
                  
-                  }                                   
+                  }                                   */
                               
 
                // dd($activities->start_time);
@@ -168,6 +181,7 @@ class TestingController extends Controller
      /* foreach($activity as $activity){*/
 
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
@@ -245,12 +259,11 @@ class TestingController extends Controller
             
     }
 
-
-     public function sendNotifications($activity){
+ public function sendNotifications($activity){
 
         $tokens = array();
 
-       /* foreach($activities as $activity){*/
+       // foreach($activities as $activity){
 
           $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
                                                                ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
@@ -259,8 +272,10 @@ class TestingController extends Controller
           $volunteersKeeper = array();
 
             foreach($volunteers as $volunteer){
- 
+
+                
                        $token = $volunteer->fcm_token;
+
 
                             if($token != null){
 
@@ -279,15 +294,17 @@ class TestingController extends Controller
 
                             }
                            
-            }
+             }
 
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
+
+                            $body = 'Your groupmates have been revealed for '.$activity->name.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates has been revealed')
+                          $notificationBuilder->setBody($body)
                                               ->setSound('default'); 
 
                              $dataBuilder = new PayloadDataBuilder();
@@ -310,10 +327,12 @@ class TestingController extends Controller
 
                             $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
                              
-                
+      
             Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
-            
-        }
+           // return $downstreamResponse;
+       // }
+
+    }
 
   
 
