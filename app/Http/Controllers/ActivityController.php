@@ -944,6 +944,12 @@ public function test3(){
 
                   $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
 
+
+                    $activitySkills = Activityskill::where('activity_id',$activity->activity_id)->get();
+
+
+                    $activityCriteria = Activitycriteria::where('activity_id',$activity->activity_id)->get();                   
+
                   $foundation = \DB::table('activities')->select('users.name as foundtion_name','foundations.image_url as  foundation_imageurl') 
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
                                               ->join('users','users.user_id','=','foundations.user_id') 
@@ -974,7 +980,9 @@ public function test3(){
                                             "points"=>$activity->points,
                                             "foundation_img" =>$foundation->foundation_imageurl,
                                             "foundtion_name" =>$foundation->foundtion_name,
-                                            "volunteer_count"=>$volunteerCount->count());
+                                            "volunteer_count"=>$volunteerCount->count(),
+                                            "activity_skills"=>$activitySkills,
+                                            "activity_criteria"=>$activityCriteria);
 
                          array_push($activityList,$activityTempo);                          
 

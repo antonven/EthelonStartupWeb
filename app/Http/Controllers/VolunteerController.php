@@ -187,7 +187,7 @@ class VolunteerController extends Controller
              $start_time = \Carbon\Carbon::parse($activity->start_time);   
              $end_time =   \Carbon\Carbon::parse($activity->end_time); 
 
-             $numOfHours = $start_time->diffInHours($end_time);
+            // $numOfHours = $start_time->diffInHours($end_time);
              //$numOfHours = 2;
                 
                    $sumOfPoints = 0;
@@ -202,8 +202,8 @@ class VolunteerController extends Controller
 
                }    
 
-                         
-            $sumOfPoints = $sumOfPoints * $numOfHours;
+    
+            $sumOfPoints = $sumOfPoints * $activity->points_equivalent;
 
              \DB::table('volunteeractivities')
                 ->where('volunteer_id',$request->input('volunteer_id'))
