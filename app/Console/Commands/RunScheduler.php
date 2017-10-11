@@ -312,11 +312,19 @@ class RunScheduler extends Command
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)->get();
 
-     /*   
-        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+
+
+        
+    /*    $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))->get();*/
+                                ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('y-m-d'))->get();
+
+                            if($activities->count()){
+                                
+                                $this->randomAllocation($activities);
+
+                            }    */
 
 
         //09210296430

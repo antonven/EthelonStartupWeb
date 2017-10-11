@@ -1040,6 +1040,8 @@ public function test3(){
                                                         ->where('activitygroups.activity_id',$request->input('activity_id'))
                                                             ->first();
 
+                                                           
+
         $volunteersToRate = \DB::table('users')->select('users.name','volunteers.volunteer_id','volunteers.image_url')
                                                 ->join('volunteers','volunteers.user_id','=','users.user_id')
                                                 ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')

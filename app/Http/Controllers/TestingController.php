@@ -97,14 +97,14 @@ class TestingController extends Controller
 
        Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'0f086e6',
+                 'activity_id'=>'a5b309b',
                  'status'=> false  
                 ]);
 
         }
 
-     /*   $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
-
+       // $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
+/*
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -114,7 +114,7 @@ class TestingController extends Controller
                              $body = 'Your groupmates have been revealed for '.$kobe.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody($body)
+                          $notificationBuilder->setBody('Gwapa ka daphny?')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -127,7 +127,7 @@ class TestingController extends Controller
                             $notification = $notificationBuilder->build();
                             $data = $dataBuilder->build();
 
-                            $downstreamResponse = FCM::sendTo($volunteerTokens, $option, $notification, $data);
+                            $downstreamResponse = FCM::sendTo('ezc8XQ2dFUg:APA91bED29NmzLvx2Vc3DOA-dEMZ5SAagEfm93_CTBBgHbXvxd7ePe9NriZTkyED7HIQ55vCzjJYKxHCFrEKD1i5ZiJzdo2n_ScBuP72L_jAQ293ON5MrQG9KGm7djFiAhpMNLDHNTW5', $option, $notification, $data);
 
                             dd($downstreamResponse);*/
 
@@ -138,7 +138,35 @@ class TestingController extends Controller
 
     }
 
-    public function runScheduler(){
+   /*  protected function runScheduler()
+    {
+        $fn = $this->option('queue') ? 'queue' : 'call';
+
+        
+        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+                                ->where('activities.status',false)
+                                ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('y-m-d'))->get();
+
+                            if($activities->count()){
+                                
+                                $this->randomAllocation($activities);
+
+                            }    
+
+
+
+                  }                                   
+
+
+        $this->info('Running scheduler');
+        Artisan::$fn('schedule:run');
+        $this->info('completed, sleeping..');
+        sleep($this->nextMinute());
+        $this->runScheduler();
+    }*/
+
+    public function runSchedulerz(){
 
   
        $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
