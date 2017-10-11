@@ -78,6 +78,7 @@ class TestingController extends Controller
                           ->where();  
 
                           \DB:      */           
+                          
                           \DB::table('activities')->delete();
                           \DB::table('activityskills')->delete();
                           \DB::table('activitygroups')->delete();
