@@ -327,18 +327,20 @@ class RunScheduler extends Command
                        // $this->randomAllocation($activity);
 
                   $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
- -                  $datesaved = $date. ' '.$activity->start_time;
- -                   $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
- -
- -                    if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
- -                        
+                 $datesaved = $date. ' '.$activity->start_time;
+                 $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
+ 
+
+                     if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
 
                             $this->info('sud sa if '.$activity->start_time);
- -                       // $this->randomAllocation($activity);
- -
- -                    }else{
- -                              $this->info('sud sa else'.$activity->start_time);
- -                      }
+
+                        // $this->randomAllocation($activity);
+ 
+                     }else{
+
+                               $this->info('sud sa else'.$activity->start_time);
+                       }
                         
                   }                                   
 
