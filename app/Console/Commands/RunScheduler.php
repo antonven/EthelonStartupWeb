@@ -333,13 +333,13 @@ class RunScheduler extends Command
 
                      if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
 
-                            $this->info('sud sa if '.$activity->start_time);
+                            $this->info('sud sa if '.$date5minutes.' =now='.\Carbon\Carbon::now()->format('y-m-d h:i'));
 
-                        // $this->randomAllocation($activity);
+                         $this->randomAllocation($activity);
  
                      }else{
 
-                               $this->info('sud sa else'.$activity->start_time);
+                               $this->info('sud sa else'.$date5minutes. ' =now='.\Carbon\Carbon::now()->format('y-m-d h:i'));
                        }
                         
                   }                                   
