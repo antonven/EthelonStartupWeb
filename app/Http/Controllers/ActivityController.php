@@ -630,7 +630,7 @@ public function test3(){
     public function store(Request $request)
     {
 
-          return response()->json($request);
+        
         $dt = new \DateTime($request->input('startDate').' '.$request->input('startTime'));
         $sd = Carbon::instance($dt);
         $dtt = new \DateTime($request->input('endDate').' '.$request->input('endTime'));
