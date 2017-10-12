@@ -630,7 +630,7 @@ public function test3(){
     public function store(Request $request)
     {
 
-        
+
         $dt = new \DateTime($request->input('startDate').' '.$request->input('startTime'));
         $sd = Carbon::instance($dt);
         $dtt = new \DateTime($request->input('endDate').' '.$request->input('endTime'));
@@ -644,11 +644,7 @@ public function test3(){
         $numOfHours = $start_time->diffInHours($end_time);
 
         $preSetPoints = 5*$numOfHours;
-
-
-
-       
-
+        
         $activityId = Activity::create([
             "activity_id" => $activity_id_store, 
             "foundation_id" => \Auth::user()->foundation->foundation_id,
