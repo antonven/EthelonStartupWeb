@@ -338,10 +338,10 @@ class RunScheduler extends Command
                  $datesaved = $date. ' '.$activity->start_time;
                  $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
 
-              /*  7:20+5s
-
+                /*  7:20+5s
+                
                 7:15 starttime 
-
+                
                 7:15 now*/
 
                      if($date5minutes == \Carbon\Carbon::now()->format('y-m-d h:i') || $date5minutes < \Carbon\Carbon::now()->format('y-m-d h:i')){

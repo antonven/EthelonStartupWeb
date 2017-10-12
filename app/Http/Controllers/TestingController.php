@@ -78,7 +78,9 @@ class TestingController extends Controller
                           ->where();  
 
                           \DB:      */           
-                          
+
+
+                            //return response()->json(Volunteer::all());
                           \DB::table('activities')->delete();
                           \DB::table('activityskills')->delete();
                           \DB::table('activitygroups')->delete();

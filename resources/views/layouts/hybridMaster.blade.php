@@ -95,9 +95,9 @@
                     <div class="user-box">
                         <div class="user-img">
                             @if(\Auth::user()->role == "admin")
-                            <img src="{{ asset('assets/images/ethelon.png') }}" style="object-fit: cover;height: 90px;" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
+                            <img src="{{ asset('assets/images/ethelon.png') }}" style="object-fit: cover;height: 65px;" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
                             @elseif(\Auth::user()->role == "foundation")
-                            <img src="{{ \Auth::user()->foundation->image_url }}" style="object-fit: cover;height: 90px;" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
+                            <img src="{{ \Auth::user()->foundation->image_url }}" style="object-fit: cover;height: 65px;" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
                             @endif
                             <div class="user-status offline"><i class="zmdi zmdi-dot-circle"></i></div>
                         </div>

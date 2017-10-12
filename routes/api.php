@@ -38,7 +38,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
-
+Route::post('/activitycriteria','ActivityController@criteria');
 Route::post('/fcm_token','VolunteerController@fcm_token');
 Route::post('/delete','TestingController@deleteall');
 Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
