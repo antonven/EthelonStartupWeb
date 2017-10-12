@@ -178,10 +178,11 @@ class VolunteerController extends Controller
    public function successAttendance(Request $request){
   
   
-             /*\DB::table('volunteeractivities')
+             \DB::table('volunteeractivities')
                 ->where('volunteer_id',$request->input('volunteer_id'))
                 ->where('activity_id',$request->input('activity_id'))
-                ->update(['status' => true]);*/
+                ->update(['status' => true]);
+                
 
              $activity = Activity::where('activity_id',$request->input('activity_id'))->first();
              
