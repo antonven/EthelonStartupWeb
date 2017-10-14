@@ -48,32 +48,7 @@ class VolunteerController extends Controller
 
       
     }
-
-    public function rategroupmate(Request $request){
-
-    $vol_activity = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
-                                          ->where('activity_id',$request->input('activity_id'))
-                                          ->where('status',true)->get();
-
-                                
-
-  if($vol_activity->count()){
-
-            $data = array("message"=>"Registered");
-            return 'naka register naman ka bai';
-
-     }else{
-
-        $rate_result = $this->rate($request);
-
-
-        return $rate_result;
-     }
-
-    
-   }
-
-   public function checkIfAlreadyAttended(Request $request){
+     public function checkIfAlreadyAttended(Request $request){
     $vol_activity = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
                                           ->where('activity_id',$request->input('activity_id'))
                                           ->where('status',true)->get();
@@ -92,6 +67,32 @@ class VolunteerController extends Controller
 
    }
 
+
+    public function rategroupmate(Request $request){
+
+    $vol_activity = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
+                                          ->where('activity_id',$request->input('activity_id'))
+                                          ->where('status',true)->get();
+
+                                
+
+  if($vol_activity->count()){
+
+            $data = array("message"=>"Registered");
+            return response()->json($data);
+
+     }else{
+
+        $rate_result = $this->rate($request);
+
+        $data = array("message"=>"Success");
+        return response()->json($data);;
+     }
+
+    
+   }
+
+  
    public function rate($request){
 
         $activity_group_id = $request->input('activitygroups_id');
@@ -99,8 +100,8 @@ class VolunteerController extends Controller
         $volunteer_id_to_rate = $request->input('volunteer_id_to_rate');
         $activity_id = $request->input('activity_id');
         $count = $request->input('count');
-
         $errors = 0;
+        $data = array("message"=>"Something's wrong");
 
      for($i = 0; $i < $count; $i++){
 
@@ -108,14 +109,12 @@ class VolunteerController extends Controller
         $rating = $request->input('ratingParams'.$i);
 
           $mate = Volunteercriteria::create([
-
                     'volunteer_id' => $volunteer_id_to_rate,
                     'actvity_id'=>$activity_id,
                     'activitygroups_id'=>$activity_group_id,
                     'sum_of_rating' => $rating,          
                     'criteria_name' => $criteria     
             ]);
-
 
             if($mate){
 
@@ -147,31 +146,23 @@ class VolunteerController extends Controller
                                       }                    
 
                                     if($volunteercriteriapoints){
-                                          
-                                       
-
+                                          $data = array("message"=>"Success");
                                     }else{
                                          $data = array("message"=>"Something's wrong");
-
                                          $errors++;
                                     }                     
 
                       }else{
-
                                 $data = array("message"=>"Something's wrong");
-
                                 $errors++;
                          }                             
                             
              }else{
-
               $data = array("message"=>"Something's wrong");
-
               $errors++;
              }
       }
-
-      return "success";
+      return response()->json($data);
    }
 
    

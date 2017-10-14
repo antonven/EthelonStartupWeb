@@ -29,7 +29,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
 	    Route::get('/getallfoundations','FoundationController@getallfoundations');
 		Route::post('/activitypoints','VolunteerController@points');				
-		Route::post('/joinactivity','VolunteerController@joinActivity');
+		
 		Route::post('/activitycriteria','ActivityController@criteria');
 	
 		
@@ -38,6 +38,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
+Route::post('/joinactivity','VolunteerController@joinActivity');
 Route::post('/activitycriteria','ActivityController@criteria');
 Route::post('/fcm_token','VolunteerController@fcm_token');
 Route::post('/delete','TestingController@deleteall');

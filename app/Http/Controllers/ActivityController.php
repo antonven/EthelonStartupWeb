@@ -831,15 +831,12 @@ public function test3(){
                                               ->where('activities.status',false)->get();  
 
                                             
-
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
 
             foreach($activities as $activity){
                 $count = 0; 
 
-
-               
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
 
                     $watch = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
@@ -933,11 +930,21 @@ public function test3(){
     }
 
     public function portfolio(Request $request){
+//rwquest = 5 if(5 == ) lahos ra
+      //request == 10 - 5(mao niy i minus para limit)
 
+     $offset = 0;
+      
+      if($request->input('offset')==5){
+         $offset = 0;
+      }else{
+         $offset = $request->input('offset') - 5;
+      }
 
        $activityList = array();
 
-        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')         
+        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')->skip($offset)
+                ->take(5)      
                 ->get();
 
                 foreach($activities as $activity){

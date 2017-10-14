@@ -123,6 +123,7 @@ class RunScheduler extends Command
      * in your queue within 60 seconds.
      *
      */
+    //b2b66de
    
      public function sendNotifications($activity){
 
@@ -141,13 +142,9 @@ class RunScheduler extends Command
                 
                        $token = $volunteer->fcm_token;
 
-
                             if($token != null){
-
-                                 //$downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-                                 //array_push($downstreamResponseArray,$downstreamResponse);
+                                
                                 array_push($tokens,$token);
-
 
                              }else{
 
@@ -193,7 +190,7 @@ class RunScheduler extends Command
                             $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
                              
       
-            Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
+            
            // return $downstreamResponse;
        // }
 
@@ -201,10 +198,6 @@ class RunScheduler extends Command
 
     public function randomAllocation($activity){
         
-      
-     
-
-
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
                 $vol_per_group = $activity->group; 
@@ -254,7 +247,6 @@ class RunScheduler extends Command
                       else{
 
                         $count = 0;
-
                            $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
                                     
                                 Activitygroup::create([
@@ -277,9 +269,8 @@ class RunScheduler extends Command
                       }     
                       $volunteerCount++;
                       }      
-                                  
-                    $this->sendNotifications($activity);
-            
+                      Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);              
+                      $this->sendNotifications($activity);
     }
 
   public function create_volunteer_criteria_points($activity, $volunteer_id){
@@ -308,26 +299,27 @@ class RunScheduler extends Command
 
 
 
+       /* 
         $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
-                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
-                                ->where('activities.status',false)->get();
-
-
-
-        
-    /*    $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
                                 ->whereDate('activities.startDate',\Carbon\Carbon::tomorrow()->format('y-m-d'))->get();
 
                             if($activities->count()){
+
+                              foreach($activities as $activity){
+                                $this->randomAllocation($activity);
+                              }  
                                 
-                                $this->randomAllocation($activities);
-
-                            }    */
-
+                            }    
+*/
 
         //09210296430
+
+                            $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+                                ->where('activities.status',false)->get();
+
 
 
             foreach($activities as $activity){

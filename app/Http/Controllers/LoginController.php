@@ -14,7 +14,6 @@ class LoginController extends Controller
     public function login(Request $request){
 
     
-
     	if(!\Auth::attempt(request(['email','password']))){
             
             $message = array("message"=>"Invalid credentials");

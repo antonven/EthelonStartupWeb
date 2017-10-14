@@ -93,17 +93,20 @@ class TestingController extends Controller
 
     public function test3(){
 
-      $volunteers = Volunteer::all();
+
+
+      $volunteers = \DB::table('volunteers')->limit(5)->get();
+      
 
       foreach($volunteers as $volunteer){
-
-       Volunteeractivity::create([
+        Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'93178c6',
+                 'activity_id'=>'eea5125',
                  'status'=> false  
                 ]);
+      }
 
-        }
+       
 
        // $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
 /*

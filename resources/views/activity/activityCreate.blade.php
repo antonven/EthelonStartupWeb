@@ -74,7 +74,7 @@
                                     <input  name="contactPerson" id="contactPerson" type="text" class="required form-control" placeholder="">
                                 </div>
                                 <div class="col-lg-6" style="padding: 0;">
-                                    <label class="control-label " for="contactInfo">Contact Info</label>
+                                    <label class="control-label " for="contactInfo">Contact Number</label>
                                     <input  name="contactInfo" id="contactInfo" type="text" class="required form-control" placeholder="">
                                 </div>
                             </div>
