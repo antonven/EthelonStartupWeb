@@ -93,23 +93,30 @@ class TestingController extends Controller
 
     public function test3(){
 
+/*
+  Volunteeractivity::create([
+                 'volunteer_id'=>'b2b66de',
+                 'activity_id'=>'a2011e6',
+                 'status'=> false  
+                ]);*/
 
-
+/*
       $volunteers = \DB::table('volunteers')->limit(5)->get();
       
+
 
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'eea5125',
+                 'activity_id'=>'a2011e6',
                  'status'=> false  
                 ]);
-      }
+      }*/
 
        
 
        // $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
-/*
+
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -119,7 +126,7 @@ class TestingController extends Controller
                              $body = 'Your groupmates have been revealed for '.$kobe.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Gwapa ka daphny?')
+                          $notificationBuilder->setBody('wewwww?')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -132,9 +139,9 @@ class TestingController extends Controller
                             $notification = $notificationBuilder->build();
                             $data = $dataBuilder->build();
 
-                            $downstreamResponse = FCM::sendTo('ezc8XQ2dFUg:APA91bED29NmzLvx2Vc3DOA-dEMZ5SAagEfm93_CTBBgHbXvxd7ePe9NriZTkyED7HIQ55vCzjJYKxHCFrEKD1i5ZiJzdo2n_ScBuP72L_jAQ293ON5MrQG9KGm7djFiAhpMNLDHNTW5', $option, $notification, $data);
+                            $downstreamResponse = FCM::sendTo('ffQ_FPL2P24:APA91bFvQbvj1IcdPRlOiC-BEtAYGH2crG-dcU-qMHgxpAq-2N7y26e9YUDnDOxd8uPQbcKLd1xxOylTw1PPZuYEE4zUepevfh4pXyF4iauOs_fDZjGjp48_Epa_er_H1vpiB0RsCAmO', $option, $notification, $data);
 
-                            dd($downstreamResponse);*/
+                            dd($downstreamResponse);
 
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/

@@ -934,26 +934,30 @@ public function test3(){
       //request == 10 - 5(mao niy i minus para limit)
 
      $offset = 0;
+
+     $requestedOffsetString = $request->input('offset');
+     $offsetInt = (int)$requestedOffsetString;
       
-      if($request->input('offset')==5){
+      if($offsetInt==5){
          $offset = 0;
       }else{
-         $offset = $request->input('offset') - 5;
+         $offset = $offsetInt - 5;
       }
 
        $activityList = array();
 
-        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')      
+        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')
+                ->skip($offset)
+                ->limit(5)      
                 ->get();
 
                 foreach($activities as $activity){
 
-
                   $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
 
-                    $activitySkills = Activityskill::where('activity_id',$activity->activity_id)->get();
+                  $activitySkills = Activityskill::where('activity_id',$activity->activity_id)->get();
 
-                    $activityCriteria = Activitycriteria::where('activity_id',$activity->activity_id)->get();                   
+                  $activityCriteria = Activitycriteria::where('activity_id',$activity->activity_id)->get();                   
 
                   $foundation = \DB::table('activities')->select('users.name as foundtion_name','foundations.image_url as  foundation_imageurl') 
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
