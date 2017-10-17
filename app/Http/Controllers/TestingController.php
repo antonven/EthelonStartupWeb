@@ -94,8 +94,8 @@ class TestingController extends Controller
     public function test3(){
       
       //$volunteers = Volunteer::all();
-      $skills = Volunteerskill::where('volunteer_id','b5feb04')->get();
-      return response()->json($skills);
+     /* $skills = Volunteerskill::where('volunteer_id','b5feb04')->get();
+      return response()->json($skills);*/
 
 
 
@@ -122,7 +122,7 @@ class TestingController extends Controller
        
 
        // $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
-/*
+
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -147,7 +147,7 @@ class TestingController extends Controller
 
                             $downstreamResponse = FCM::sendTo('ffQ_FPL2P24:APA91bFvQbvj1IcdPRlOiC-BEtAYGH2crG-dcU-qMHgxpAq-2N7y26e9YUDnDOxd8uPQbcKLd1xxOylTw1PPZuYEE4zUepevfh4pXyF4iauOs_fDZjGjp48_Epa_er_H1vpiB0RsCAmO', $option, $notification, null);
 
-                            dd($downstreamResponse);*/
+                            dd($downstreamResponse);
 
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
