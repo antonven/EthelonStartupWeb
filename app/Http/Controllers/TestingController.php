@@ -106,7 +106,7 @@ class TestingController extends Controller
 
 
       
-      
+    /*  
 
 
       foreach($volunteers as $volunteer){
@@ -115,12 +115,12 @@ class TestingController extends Controller
                  'activity_id'=>'f5d6a71',
                  'status'=> false  
                 ]);
-      }
+      }*/
 
        
 
        // $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
-/*
+
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -143,9 +143,9 @@ class TestingController extends Controller
                             $notification = $notificationBuilder->build();
                            // $data = $dataBuilder->build();
 
-                            $downstreamResponse = FCM::sendTo('dluhUrhYbes:APA91bF20bfCdIki9oz_TEex5xlKZKrUhL5js-RaBoIMV2iV5e6rbiQa-4zGS8BC3biWzG3VQ7W4I7m5qkuG1zZxupvXVP_zTFkSKD5qMIAD1Tu6yZvWRzK6aeanrssWi4i3lSd-nmQi', $option, $notification, null);
+                            $downstreamResponse = FCM::sendTo('ffQ_FPL2P24:APA91bFvQbvj1IcdPRlOiC-BEtAYGH2crG-dcU-qMHgxpAq-2N7y26e9YUDnDOxd8uPQbcKLd1xxOylTw1PPZuYEE4zUepevfh4pXyF4iauOs_fDZjGjp48_Epa_er_H1vpiB0RsCAmO', $option, $notification, null);
 
-                            dd($downstreamResponse);*/
+                            dd($downstreamResponse);
 
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/

@@ -319,8 +319,9 @@ class RunScheduler extends Command
 
                             $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
-                                ->where('activities.status',false)->get();
-
+                                ->where('activities.status',false)
+                                ->whereDate('activities.startDate',\Carbon\Carbon::now()->format('y-m-d'))
+                                ->get();
 
 
             foreach($activities as $activity){
