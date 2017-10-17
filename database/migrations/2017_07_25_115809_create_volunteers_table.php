@@ -23,7 +23,7 @@ class CreateVolunteersTable extends Migration
             
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *

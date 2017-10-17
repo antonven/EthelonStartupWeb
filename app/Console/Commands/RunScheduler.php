@@ -171,6 +171,7 @@ class RunScheduler extends Command
 
                              $dataBuilder = new PayloadDataBuilder();
                              $dataBuilder->addData([
+                                
                                 'eventImage'=>$activity->image_url,
                                 'eventHost' =>$activity->foundation_name,
                                 'eventName'=>$activity->name,
@@ -325,7 +326,7 @@ class RunScheduler extends Command
             foreach($activities as $activity){
                             
 
-                  $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
+                 $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
                  $datesaved = $date. ' '.$activity->start_time;
                  $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
 
@@ -333,7 +334,7 @@ class RunScheduler extends Command
 
                             $this->info('sud sa if '.$date5minutes.' =now='.\Carbon\Carbon::now()->format('y-m-d h:i'));
 
-                             $this->randomAllocation($activity);
+                            $this->randomAllocation($activity);
  
                      }else{
 

@@ -184,8 +184,6 @@ class VolunteerController extends Controller
              //$numOfHours = 2;
                 
                    $sumOfPoints = 0;
-
-
                $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
                
                foreach($activity_skills as $activity_skill){
@@ -195,7 +193,6 @@ class VolunteerController extends Controller
 
                }    
 
-    
             $sumOfPoints = $sumOfPoints + $activity->points_equivalent;
 
              \DB::table('volunteeractivities')
@@ -210,12 +207,9 @@ class VolunteerController extends Controller
             Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
             \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
 
-
             $data = array("result"=>$sumOfPoints);
             return response()->json($data);            
             
-        
-         
     }
 
 

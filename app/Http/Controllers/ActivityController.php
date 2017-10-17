@@ -603,6 +603,7 @@ public function test3(){
                                            ->join('volunteers','volunteers.user_id','=','users.user_id')
                                            ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id')
                                            ->where('volunteeractivities.activity_id',$activity->activity_id)
+                                           ->inRandomOrder()
                                            ->get();
 
                                            $Volunteers = array($activity->activity_id=>$volunteersQuery);
@@ -715,13 +716,14 @@ public function test3(){
     public function uploadFile($file)
     {
         $extension = $file->clientExtension();
-        //dd($extension);
+        $destinationPath = public_path('file_attachments');
+        dd($destinationPath);
         if($extension != "bin")
         {
 
             $destinationPath = public_path('file_attachments');
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
-
+            
             $file->move($destinationPath, $filename);
          
             \Cloudder::upload(url('/file_attachments').'/'.$filename);
@@ -830,7 +832,6 @@ public function test3(){
                                               ->join('users','users.user_id','=','foundations.user_id') 
                                               ->where('activities.status',false)->get();  
 
-                                            
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
 
@@ -946,9 +947,7 @@ public function test3(){
 
        $activityList = array();
 
-        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')
-                ->skip($offset)
-                ->limit(5)      
+        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')     
                 ->get();
 
                 foreach($activities as $activity){
@@ -1051,7 +1050,6 @@ public function test3(){
                                                             ->first();
 
                                                            
-
         $volunteersToRate = \DB::table('users')->select('users.name','volunteers.volunteer_id','volunteers.image_url')
                                                 ->join('volunteers','volunteers.user_id','=','users.user_id')
                                                 ->join('volunteergroups','volunteergroups.volunteer_id','=','volunteers.volunteer_id')

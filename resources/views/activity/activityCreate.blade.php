@@ -137,7 +137,7 @@
                                 
                             </div>
                             <div class="form-group col-lg-8 col-lg-offset-2">
-                                <label class="control-label " for="group">Number of Groups</label>
+                                <label class="control-label " for="group">Number of volunteers in a group</label>
                                 <input  name="group" id="group" type="number" class="required form-control" placeholder="">
                             </div>
                         </div>

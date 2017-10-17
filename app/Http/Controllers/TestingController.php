@@ -92,6 +92,10 @@ class TestingController extends Controller
     }
 
     public function test3(){
+      
+      $volunteers = Volunteer::all();
+
+
 
 /*
   Volunteeractivity::create([
@@ -100,19 +104,19 @@ class TestingController extends Controller
                  'status'=> false  
                 ]);*/
 
-/*
-      $volunteers = \DB::table('volunteers')->limit(5)->get();
+
+      
       
 
-
+/*
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'a2011e6',
+                 'activity_id'=>'3570aa7',
                  'status'=> false  
                 ]);
-      }*/
-
+      }
+*/
        
 
        // $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
@@ -126,7 +130,7 @@ class TestingController extends Controller
                              $body = 'Your groupmates have been revealed for '.$kobe.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('wewwww?')
+                          $notificationBuilder->setBody('Vincent Ramas bayot')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -137,9 +141,9 @@ class TestingController extends Controller
 
                             $option = $optionBuilder->build();
                             $notification = $notificationBuilder->build();
-                            $data = $dataBuilder->build();
+                           // $data = $dataBuilder->build();
 
-                            $downstreamResponse = FCM::sendTo('ffQ_FPL2P24:APA91bFvQbvj1IcdPRlOiC-BEtAYGH2crG-dcU-qMHgxpAq-2N7y26e9YUDnDOxd8uPQbcKLd1xxOylTw1PPZuYEE4zUepevfh4pXyF4iauOs_fDZjGjp48_Epa_er_H1vpiB0RsCAmO', $option, $notification, $data);
+                            $downstreamResponse = FCM::sendTo('dluhUrhYbes:APA91bF20bfCdIki9oz_TEex5xlKZKrUhL5js-RaBoIMV2iV5e6rbiQa-4zGS8BC3biWzG3VQ7W4I7m5qkuG1zZxupvXVP_zTFkSKD5qMIAD1Tu6yZvWRzK6aeanrssWi4i3lSd-nmQi', $option, $notification, null);
 
                             dd($downstreamResponse);
 
