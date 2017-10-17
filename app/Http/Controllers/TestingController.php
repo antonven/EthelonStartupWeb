@@ -94,7 +94,7 @@ class TestingController extends Controller
     public function test3(){
       
       //$volunteers = Volunteer::all();
-      $skills = Volunteerskill::where('volunteer_id','e985114')->get();
+      $skills = Volunteerskill::where('volunteer_id','b5feb04')->get();
       return response()->json($skills);
 
 

@@ -881,12 +881,14 @@ public function test3(){
                                             "activity_criteria"=>$activityCriteria
                                             );                     
 
+
                     foreach($activityskills as $activityskill){
 
                             foreach($skills as $skill){
 
-                                if($skill->name == $activityskill->name){
 
+                                if(strcasecmp($skill->name , $activityskill->name)==0){
+                                    
                                     $matches = $matches + 1;
                                     break;
                                         
@@ -897,10 +899,12 @@ public function test3(){
                 
                     array_push($activityKeeper,$activityTempo);
                     array_push($activityScores,$matches);
+
                     $count++;    
                     $matches = 0;
 
             }
+
 
             //the 2 arrays are parallel to each other
 
@@ -924,7 +928,7 @@ public function test3(){
                 
             } 
 
-            return response()->json($activityKeeper);
+            return response()->json(array_reverse($activityKeeper));
 
     	   //return response()->json($activities);
         
