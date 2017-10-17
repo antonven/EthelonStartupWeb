@@ -108,19 +108,19 @@ class TestingController extends Controller
       
       
 
-/*
+
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'3570aa7',
+                 'activity_id'=>'f5d6a71',
                  'status'=> false  
                 ]);
       }
-*/
+
        
 
        // $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
-
+/*
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -145,7 +145,7 @@ class TestingController extends Controller
 
                             $downstreamResponse = FCM::sendTo('dluhUrhYbes:APA91bF20bfCdIki9oz_TEex5xlKZKrUhL5js-RaBoIMV2iV5e6rbiQa-4zGS8BC3biWzG3VQ7W4I7m5qkuG1zZxupvXVP_zTFkSKD5qMIAD1Tu6yZvWRzK6aeanrssWi4i3lSd-nmQi', $option, $notification, null);
 
-                            dd($downstreamResponse);
+                            dd($downstreamResponse);*/
 
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
