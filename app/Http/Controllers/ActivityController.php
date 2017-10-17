@@ -717,7 +717,7 @@ public function test3(){
     {
         $extension = $file->clientExtension();
         $destinationPath = public_path('file_attachments');
-        dd($destinationPath);
+        
         if($extension != "bin")
         {
 
