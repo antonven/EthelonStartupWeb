@@ -93,7 +93,9 @@ class TestingController extends Controller
 
     public function test3(){
       
-      $volunteers = Volunteer::all();
+      //$volunteers = Volunteer::all();
+      $skills = Volunteerskill::where('volunteer_id','e985114')->get();
+      return response()->json($skills);
 
 
 
@@ -108,14 +110,14 @@ class TestingController extends Controller
       
       
 
-
+/*
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
                  'activity_id'=>'7fcdd46',
                  'status'=> false  
                 ]);
-      }
+      }*/
 
        
 

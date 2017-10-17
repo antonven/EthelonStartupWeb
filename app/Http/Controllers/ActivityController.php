@@ -924,7 +924,7 @@ public function test3(){
                 
             } 
 
-            return response()->json(array_reverse($activityKeeper));
+            return response()->json($activityKeeper);
 
     	   //return response()->json($activities);
         
