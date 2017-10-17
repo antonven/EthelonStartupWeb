@@ -335,7 +335,7 @@ class RunScheduler extends Command
 
                           $this->info('sud sa if '.$date5minutes.' =now='.\Carbon\Carbon::now()->format('y-m-d h:i'));
 
-                           // $this->randomAllocation($activity);
+                            $this->randomAllocation($activity);
  
                      }else{
 
