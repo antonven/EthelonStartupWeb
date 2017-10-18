@@ -1,28 +1,21 @@
+<?php
+  use Carbon\Carbon;
+?>
+
 @extends('layouts.hybridMaster')
 
 @section('title')
     Ethelon | Activity
 @endsection
 @section('additional_styles')
-
+  <!-- Sweet Alert css -->
+  <link href="{{ asset('adminitoAssets/assets/plugins/bootstrap-sweetalert/sweet-alert.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
   <div class="row">
     <div class="col-md-8">
       <div class="card-box task-detail">
-          <div class="dropdown pull-right">
-              <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
-                  <i class="zmdi zmdi-more-vert"></i>
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                  <li><a href="#"></a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
-              </ul>
-          </div>
-          <img src="{{ $activity->image_url }}" class="thumb-img" style="border-radius:0px !important;object-fit:cover;height:300px;width:calc(100% + 40px);margin-top: -43px !important;margin-left: -20px !important;border-top-left-radius: 5px !important;border-top-right-radius: 5px !important;">
+          <img src="{{ $activity->image_url }}" class="thumb-img" style="border-radius:0px !important;object-fit:cover;height:300px;width:calc(100% + 40px);margin-top: -20px !important;margin-left: -20px !important;border-top-left-radius: 5px !important;border-top-right-radius: 5px !important;">
 
           <h4 class="font-600 m-b-20" style="color:red;">{{ $activity->name }}</h4>
           
@@ -30,11 +23,11 @@
           <p class="text-muted" style="color:#797979 !important;">
               {{ $activity->description }}
           </p>
-          <h5 class="font-600 m-b-5">Skills Needed</h5>
+          <h5 class="font-600 m-b-5">Recommended Skills</h5>
           @foreach($activity->skills as $skill)
           <p class="text-muted" style="color:#797979 !important;">
 
-              {{ $skill->name }}
+              {{ '- '.$skill->name }}
           </p>
           @endforeach
           <h5 class="font-600 m-b-5">Location</h5>
@@ -44,12 +37,33 @@
           <ul class="list-inline task-dates">
               <li>
                   <h5 class="font-600 m-b-5">Start Date</h5>
-                  <p> 22 March 2016 <small class="text-muted">1:00 PM</small></p>
+                  <?php
+                    $st = new \DateTime($activity->startDate);  
+                    $stt = Carbon::instance($st);
+                    $stt->setToStringFormat('jS \o\f F, Y g:i:s a');
+                  ?>
+                  <p> {{ $stt }}</p>
               </li>
 
               <li>
                   <h5 class="font-600 m-b-5">End Date</h5>
-                  <p> 17 April 2016 <small class="text-muted">12:00 PM</small></p>
+                  <?php
+                    $dt = new \DateTime($activity->endDate);  
+                    $dtt = Carbon::instance($dt);
+                    $dtt->setToStringFormat('jS \o\f F, Y g:i:s a');
+                  ?>
+                <p>{{ $dtt }}</p>
+              </li>
+          </ul>
+          <ul class="list-inline task-dates">
+              <li>
+                  <h5 class="font-600 m-b-5">Contact Person</h5>
+                  <p> {{ $activity->contactperson }}</p>
+              </li>
+
+              <li>
+                  <h5 class="font-600 m-b-5">Contact Number</h5>
+                <p>{{ $activity->contact }}</p>
               </li>
           </ul>
           <div class="clearfix"></div>
@@ -64,7 +78,6 @@
           </div>
           
           <div class="attached-files m-t-30">
-              <h5 class="font-600">Attached Files </h5>
 
               <div class="row">
                   <div class="col-sm-6">
@@ -79,9 +92,7 @@
                           <button type="submit" id="edit" class="btn btn-success waves-effect waves-light">
                               Edit
                           </button>
-                          <button type="submit" id="delete" class="btn btn-danger waves-effect waves-light">
-                              Delete
-                          </button>
+                          <button class="btn btn-danger waves-effect waves-light" id="delete">Delete</button>
                           <button type="button"
                                   class="btn btn-default waves-effect" id="back">Back
                           </button>
@@ -97,6 +108,9 @@
 @endsection
 
 @section('additional_scripts')
+  <!-- Sweet Alert js -->
+  <script src="{{ asset('adminitoAssets/assets/plugins/bootstrap-sweetalert/sweet-alert.min.js') }}"></script>
+  <script src="{{ asset('adminitoAssets/assets/pages/jquery.sweet-alert.init.js') }}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
 
@@ -108,13 +122,40 @@
         window.location = "{{url('/activity/edit/'.$activity->activity_id)}}";
       });
 
-      $('#delete').on('click', function(){
-        window.location = "{{url('/activity/delete/'.$activity->activity_id)}}";
-      });
+       $('#delete').on('click', function(){
+          deleteee("{{ $activity->activity_id }}");
+       });
 
             $('#qrCode').on('click', function(){
         window.location = "{{url('/webtest/'.$activity->activity_id)}}";
       });
+
+            function deleteee(id) {
+        var aid= id;
+        
+                if(confirm("Are you sure you want to delete this comment?"))
+                {
+                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        method: "get",
+                        url: "{{ url('/activity/delete').'/'.$activity->activity_id }}",
+                        data: {'_token': CSRF_TOKEN,
+                               'id': id
+                               },
+                        success: function(id) {
+
+                            window.location = "{{ url('/activity') }}";
+                        },
+                        error: function(a,b,c) {
+                        console.log(b.responseText);
+                    }
+                    });
+                }
+                else
+                {
+                    
+                }
+        }
 
     });
   </script>

@@ -202,7 +202,7 @@
       var map;
       function initAutocomplete() {
          map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 80.397, lng: 160.644},
+          center: {lat: 40.397, lng: 180.644},
           zoom: 1,
           minZoom: 1,
           mapTypeId: 'roadmap'

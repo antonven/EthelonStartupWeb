@@ -1,3 +1,9 @@
+<?php
+    
+    use Carbon\Carbon;
+
+
+?>
 @extends('layouts.hybridMaster')
 @section('title')
     Ethelon | Create Activity
@@ -17,7 +23,7 @@
             
 
             <h4 class="header-title m-t-0 m-b-30">Create a new activity</h4>
-            <form id="commentForm2" method="POST" action="{{url('/activity/store')}}" enctype="multipart/form-data">
+            <form id="commentForm2" method="POST" action="{{url('/activity/edit').'/'.$activity->activity_id}}" enctype="multipart/form-data">
                 {{ csrf_field() }}
             <input type="text" id="long" name="long" hidden="hidden">
             <input type="text" id="lat" name="lat" hidden="hidden">
@@ -123,16 +129,20 @@
                         </div>
                     </div>
                     <div class="tab-pane p-t-10 fade" id="second">
+                    <?php
+                        $startDate = Carbon::parse($activity->startDate);
+                        $endDate = Carbon::parse($activity->endDate);
+                    ?>
                         <div class="row">
                             <div class="form-group col-lg-8 col-lg-offset-2">
                                 <div class="col-lg-6" style="padding-left: 0;">
                                     <label class="control-label " for="startDate">Start Date</label>
-                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" value="{{ $activity->startDate }}" id="datepicker-autoclose" name="startDate">
+                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" value="{{ $startDate->month.'/'.$startDate->day.'/'.$startDate->year }}" id="datepicker-autoclose" name="startDate">
                                 </div>
                                 <div class="col-lg-6" style="padding: 0;">
                                     <label class="control-label " for="startTime">Start Time</label>
                                     <div class="bootstrap-timepicker">
-                                        <input id="timepicker3" name="startTime" type="text" class="required form-control">
+                                        <input id="timepicker3" name="startTime" type="text" value="{{ $startDate->hour.':'.$startDate->minute }}" class="required form-control">
                                     </div>
                                 </div>
                             </div>
@@ -140,12 +150,12 @@
                             <div class="form-group col-lg-8 col-lg-offset-2">
                                 <div class="col-lg-6" style="padding-left: 0;">
                                     <label class="control-label " for="endDate">End Date</label>
-                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose2" name="endDate">
+                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" value="{{ $endDate->month.'/'.$endDate->day.'/'.$endDate->year }}" id="datepicker-autoclose2" name="endDate">
                                 </div>
                                 <div class="col-lg-6" style="padding: 0;">
                                     <label class="control-label " for="endTime">End Time</label>
                                     <div class="bootstrap-timepicker">
-                                        <input id="timepicker4" name="endTime" type="text" class="required form-control">
+                                        <input id="timepicker4" name="endTime" type="text" value="{{ $endDate->hour.':'.$endDate->minute }}" class="required form-control">
                                     </div>
                                 </div>
                             </div>
@@ -175,11 +185,22 @@
                                 </div>
                             </div>
                             <div class="form-group col-lg-8 col-lg-offset-2" id="criteriaList">
-                                
+
+                                @if($activity->criteria)
+                                <?php 
+                                    $count = 1;
+                                ?>
+                                    @foreach($activity->criteria as $criterion)
+                                        <div class="row"><div class="col-md-10"><pre class="criteria crit{{$count}}">{{ $criterion->criteria }}</pre><input type="text" hidden name="criteria[]" value="{{ $criterion->criteria }}"></div><div class="pull-right col-md-2"><pre><center>X</center></pre></div></div>
+                                        <?php
+                                            $count++;
+                                        ?>
+                                    @endforeach
+                                @endif
                             </div>
                             <div class="form-group col-lg-8 col-lg-offset-2">
                                 <label class="control-label " for="group">Number of Groups</label>
-                                <input  name="group" id="group" type="number" class="required form-control" placeholder="">
+                                <input  name="group" id="group" type="number" class="required form-control" value="{{ $activity->group }}" placeholder="">
                             </div>
                         </div>
                     </div>
@@ -267,8 +288,11 @@
 @section('additional_scripts')
     <script type="text/javascript">
         var $criteria = "";
+        var $critCount = 0;
         $(window).load(function(){
-            
+            $('.remove').on('click', function(){
+                alert('asdasd');
+            });
             //display inputs before creating the activity
             $('#commentForm2').on('keyup keypress click mousemove', function(e){
                $('#displayActivityName').text($('#activityName').val());
@@ -306,14 +330,25 @@
                 //condition to check if input is not null/empty
                 if($("#criteria").val())
                 {
+                    if($critCount == 0)
+                    {
+                    $critCount = {{$count}};
+                    }
+                    else
+                    {
+
+                    }
                     $criteria = $criteria +' '+ $("#criteria").val();
                     //var $card = '<div class="panel panel-color panel-inverse" style="margin-bottom=0!important;"><div class="panel-heading"><h3 class="panel-title">'+$('#criteria').val()+'</h3></div></div><input type="text" name="activityCriteria[]" hidden>';
-                    var $card = '<div class="row"><div class="col-md-10"><pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$criteria+'"></div><div class="pull-right col-md-2"><pre><center>X</center></pre></div></div>';
+                    var $card = '<div class="row"><div class="col-md-10"><pre class="criteria crit'+$critCount+'">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$('#criteria').val()+'"></div><div class="pull-right col-md-2"><pre class="remove"><center>X</center></pre></div></div>';
                     //add criteria to the list
+                    $critCount++;
                     $('#criteriaList').append($card);
                     $('#criteria').val("");
                 }
             });
+
+
             
             //initialize the multiple select
             $(".select2").select2();
@@ -477,12 +512,12 @@
       var map;
       function initAutocomplete() {
          map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 80.397, lng: 160.644},
-          zoom: 1,
+          center: {lat:parseFloat({{ $activity->lat+0.004 }}), lng: parseFloat({{ $activity->long-0.0085 }}) },
+          zoom: 16,
           minZoom: 1,
           mapTypeId: 'roadmap'
         });
-        console.log(map.map);
+
         
         
         // Create the search box and link it to the UI element.
@@ -551,15 +586,13 @@
             });
           }
         }
-
+        var myLatLng = {lat:parseFloat({{$activity->lat}}),lng:parseFloat({{$activity->long}})};
+        placeMarker(myLatLng);
         google.maps.event.addListener(map, 'click', function(event) {
           placeMarker(event.latLng);
           //input x ang long y ang lat
-          console.log(event);
-          console.log(event.ea.x);
-          console.log(event.ea.y);
-          $('#long').val(event.ea.x);
-          $('#lat').val(event.ea.y);
+          $('#long').val(event.latLng.lng());
+          $('#lat').val(event.latLng.lat());
           console.log($('#long').val());
           console.log($('#lat').val());
         });
