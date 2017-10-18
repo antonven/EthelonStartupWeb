@@ -64,7 +64,7 @@
                                     <option value="Culinary">Culinary</option>
                                     <option value="Medicine">Medicine</option>
                                     <option value="Arts">Arts</option>
-                                    <option value="Free for all">Free for all</option>
+                                    <option id="freeforall" value="Free for all">Free for all</option>
                                 </select>
                             </div>
                             
@@ -109,6 +109,19 @@
                                 </div>
                             </div>
                             
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <div class="col-lg-6" style="padding-left: 0;">
+                                    <label class="control-label " for="deadlineDate">Registration Deadline Date</label>
+                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose5" name="deadlineDate">
+                                </div>
+                                <div class="col-lg-6" style="padding: 0;">
+                                    <label class="control-label " for="deadlineTime">Registration Deadline Time</label>
+                                    <div class="bootstrap-timepicker">
+                                        <input id="timepicker5" name="deadlineTime" type="text" class="required form-control">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group col-lg-8 col-lg-offset-2" id="mapWindow">
                                 <label class="control-label " for="activityLocation">Location</label>
                                 <div id="locationField">
@@ -135,6 +148,10 @@
                             </div>
                             <div class="form-group col-lg-8 col-lg-offset-2" id="criteriaList">
                                 
+                            </div>
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <label class="control-label " for="group">Number of volunteers needed</label>
+                                <input  name="volunteersNeeded" id="volunteersNeeded" type="number" class="required form-control" placeholder="">
                             </div>
                             <div class="form-group col-lg-8 col-lg-offset-2">
                                 <label class="control-label " for="group">Number of volunteers in a group</label>
@@ -195,6 +212,11 @@
                                         
                                     </dd>
                                     <dt>
+                                        Number of Volunteers
+                                    </dt>
+                                    <dd id="displayNumberVolunteers">
+                                    </dd>
+                                    <dt>
                                         Number of Groups
                                     </dt>
                                     <dd id="displayNumberGroups">
@@ -227,7 +249,31 @@
     <script type="text/javascript">
         var $criteria = "";
         $(window).load(function(){
-            
+ // <option value="Environment">Environment</option>
+ //                                    <option value="Livelihood">Livelihood</option>
+ //                                    <option value="Education">Education</option>
+ //                                    <option value="Charity">Charity</option>
+ //                                    <option value="Sports">Sports</option>
+ //                                    <option value="Culinary">Culinary</option>
+ //                                    <option value="Medicine">Medicine</option>
+ //                                    <option value="Arts">Arts</option>
+ //                                    <option id="freeforall" value="Free for all">Free for all</option>
+
+            // $('#activitySkills').on('click', function(){
+            //     var bool = $("#activitySkills option[value*='Free for all']").filter(':selected').text();
+            //     if(bool)
+            //     {
+            //         console.log($("#activitySkills").val());
+            //         $('#activitySkills').children('option:not(:first)').remove();
+            //         alert($("#activitySkills").val());
+            //         console.log($("#activitySkills").val());
+            //     }
+            //     else
+            //     {
+            //         alert($("#activitySkills").val());
+            //     }
+            //     bool = null;
+            // });
             //display inputs before creating the activity
             $('#commentForm2').on('keyup keypress click mousemove', function(e){
                $('#displayActivityName').text($('#activityName').val());
@@ -245,6 +291,7 @@
                console.log($criteria);
                $('#displayCriteria').text($criteria);
                $('#displayNumberGroups').text($('#group').val());
+               $('#displayNumberVolunteers').text($('#volunteersNeeded').val());
             });
             
             //disables submit form
@@ -267,7 +314,7 @@
                 {
                     $criteria = $criteria +' '+ $("#criteria").val();
                     //var $card = '<div class="panel panel-color panel-inverse" style="margin-bottom=0!important;"><div class="panel-heading"><h3 class="panel-title">'+$('#criteria').val()+'</h3></div></div><input type="text" name="activityCriteria[]" hidden>';
-                    var $card = '<div class="row"><div class="col-md-8 col-md-offset-1"><pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$('#criteria').val()+'"></div><div class="pull-right col-md-2"><button class="btn btn-icon waves-effect waves-light btn-danger m-b-5"> <i class="fa fa-remove"></i> </button></div></div>';
+                    var $card = '<div class="row"><div class="col-md-8 col-md-offset-1"><pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$('#criteria').val()+'"></div><div class="pull-right col-md-3"><button class="btn btn-icon waves-effect waves-light btn-danger m-b-5 remove"> <i class="fa fa-remove"></i> </button></div></div>';
                                         //add criteria to the list
                                         $('#criteriaList').append($card);
                                         $('#criteria').val("");
@@ -292,6 +339,10 @@
                 autoclose: true,
                 todayHighlight: true
             });
+            jQuery('#datepicker-autoclose5').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
             
             //initialize the time picker
             jQuery('#timepicker3').timepicker({
@@ -299,6 +350,10 @@
                 defaultTIme : true
             });
             jQuery('#timepicker4').timepicker({
+                minuteStep : 1,
+                defaultTIme : true
+            });
+            jQuery('#timepicker5').timepicker({
                 minuteStep : 1,
                 defaultTIme : true
             });
@@ -514,11 +569,8 @@
         google.maps.event.addListener(map, 'click', function(event) {
           placeMarker(event.latLng);
           //input x ang long y ang lat
-          console.log(event);
-          console.log(event.ea.x);
-          console.log(event.ea.y);
-          $('#long').val(event.ea.x);
-          $('#lat').val(event.ea.y);
+          $('#long').val(event.latLng.lng());
+          $('#lat').val(event.latLng.lat());
           console.log($('#long').val());
           console.log($('#lat').val());
         });

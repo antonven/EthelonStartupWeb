@@ -23,7 +23,7 @@
                 @if($activity->status == 0)
                 <div class="label label-danger">Open</div>
                 @else
-                <div class="label label-danger">Open</div>
+                <div class="label label-danger">Close</div>
                 @endif
                 <!-- <p class="text-danger text-uppercase m-b-20 font-13">Web Design</p> -->
                 <img src="{{ $activity->image_url }}" class="thumb-img" style="border-radius:0px !important;object-fit:cover;height:200px;width:calc(100% + 40px);margin-top: -20px !important;margin-left: -20px !important;border-top-left-radius: 5px !important;border-top-right-radius: 5px !important;">
@@ -31,7 +31,7 @@
                 <p>
                    
                 <h4 class="m-t-0 m-b-5"><a href="webtest/{{$activity->activity_id}}" class="text-inverse" style="color:#ff5b5b !important;">{{ $activity->name }}</a></h4>
-                <p class="text-muted font-13" style="color:black !important">{{ substr($activity->description,0,200) }}...<a href="{{ url('/activity/'.$activity->activity_id ) }}" class="font-600 text-muted">view more</a>
+                <p class="text-muted font-13" style="color:black !important;min-height: 80px;height:80px">{{ substr($activity->description,0,200) }}...<a href="{{ url('/activity/'.$activity->activity_id ) }}" class="font-600 text-muted">view more</a>
 
                 </p>
 
@@ -63,11 +63,11 @@
                 </div>
                         @foreach($volunteersArray as $volunteerArray)
                              @if(isset($volunteerArray[$activity->activity_id]))    
-                                     <p class="font-600 m-b-5">Needed Volunteers {{ count($volunteerArray[$activity->activity_id]) }}/100 <span class="text-danger pull-right">{{ (count($volunteerArray[$activity->activity_id])/100)*100 }}%</span></p>
+                                     <p class="font-600 m-b-5">Needed Volunteers {{ count($volunteerArray[$activity->activity_id]) }}/{{ $activity->volunteersNeeded }} <span class="text-danger pull-right">{{ (count($volunteerArray[$activity->activity_id])/ $activity->volunteersNeeded )*100 }}%</span></p>
                     <div class="progress progress-bar-danger-alt progress-sm m-b-5">
                     <div class="progress-bar progress-bar-danger progress-animated wow animated animated"
                          role="progressbar" aria-valuenow="{{ (count($volunteerArray[$activity->activity_id])/100)*100 }}" aria-valuemin="0" aria-valuemax="100"
-                         style="width: {{ (count($volunteerArray[$activity->activity_id])/100)*100 }}%;">
+                         style="width: {{ (count($volunteerArray[$activity->activity_id])/$activity->volunteersNeeded)*100 }}%;">
                     </div><!-- /.progress-bar .progress-bar-danger -->
                     </div><!-- /.progress .no-rounded -->
 

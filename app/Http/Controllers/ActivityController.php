@@ -636,6 +636,8 @@ public function test3(){
         $sd = Carbon::instance($dt);
         $dtt = new \DateTime($request->input('endDate').' '.$request->input('endTime'));
         $ed = Carbon::instance($dtt);
+        $rt = new \DateTime($request->input('deadlineDate').' '.$request->input('deadlineTime'));
+        $rtt = Carbon::instance($rt);
         $url = $this->uploadFile($request->file('file'));
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
@@ -665,7 +667,9 @@ public function test3(){
             "startDate" => $sd->toDateTimeString(),
             "contactperson" => $request->input('contactPerson'),
             "contact" => $request->input('contactInfo'),
-            "startDate" => $sd
+            "startDate" => $sd,
+            "volunteersNeeded" => $request->input('volunteersNeeded'),
+            "registration_deadline" => $rtt
         ])->activity_id;
         
         foreach($request->input('criteria') as $criterion)
@@ -735,6 +739,8 @@ public function test3(){
                return $url['url'];
 
             }
+
+            
             
         }
         else
@@ -778,6 +784,72 @@ public function test3(){
       $activity = Activity::find($id);
 
       return view('activity.activityEdit', compact('activity'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+      $activity = Activity::find($id);
+      foreach($activity->criteria as $criterion)
+      {
+        Activitycriteria::where('activity_id', $id)->where('criteria', $criterion->criteria)->delete();
+      }
+      foreach($activity->skills as $skill)
+      {
+        Activityskill::where('activity_id', $id)->where('name',$skill->name)->delete();
+      }
+      $dt = new \DateTime($request->input('startDate').' '.$request->input('startTime'));
+      $sd = Carbon::instance($dt);
+      $dtt = new \DateTime($request->input('endDate').' '.$request->input('endTime'));
+      $ed = Carbon::instance($dtt);
+      $url = $this->uploadFile($request->file('file'));
+      $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+      $start_time = \Carbon\Carbon::parse($request->input('startTime'));   
+      $end_time =   \Carbon\Carbon::parse($request->input('endTime')); 
+
+      $numOfHours = $start_time->diffInHours($end_time);
+
+      $preSetPoints = 5*$numOfHours;
+      
+      $activityId = Activity::where('activity_id', $id)->update([
+          "name" => $request->input('activityName'),
+          "image_url" => $url,
+          "imageQr_url" =>'',
+          "description" => $request->input('activityDescription'),
+          "location" => $request->input('activityLocation'),
+          "start_time" => $request->input('startTime'),
+          "end_time" => $ed->toTimeString(),
+          "endDate" => $ed,
+          "group" => $request->input('group'),
+          "long" => $request->input('long'),
+          "lat" => $request->input('lat'),
+          "points_equivalent" => $preSetPoints,
+          "status" => 0,
+          "startDate" => $sd->toDateTimeString(),
+          "contactperson" => $request->input('contactPerson'),
+          "contact" => $request->input('contactInfo'),
+          "startDate" => $sd,
+          "volunteersNeeded" => $request->input('volunteersNeeded')
+      ]);
+      
+      foreach($request->input('criteria') as $criterion)
+      {
+          Activitycriteria::create([
+             "activity_id" => $id,
+              "criteria" => $criterion
+          ]);
+      }
+      
+      foreach($request->input('activitySkills') as $skill)
+      {
+          Activityskill::create([
+              "name" => $skill,
+              "activity_id" => $id
+          ]);
+      }
+      
+      return redirect(url('/activity'));
     }
 
     public function delete($id)
