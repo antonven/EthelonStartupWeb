@@ -605,9 +605,9 @@ public function test3(){
                                            ->where('volunteeractivities.activity_id',$activity->activity_id)
                                            ->inRandomOrder()
                                            ->get();
-
+                                           
                                            $Volunteers = array($activity->activity_id=>$volunteersQuery);
-
+                                           
                                            array_push($volunteersArray,$Volunteers);
           }
 
