@@ -323,9 +323,6 @@ class RunScheduler extends Command
                                 ->whereDate('activities.registration_deadline','<=',\Carbon\Carbon::now()->format('y-m-d h:i'))
                                 ->get();
 
-
-
-  
             foreach($activities as $activity){
                             
 /*
@@ -342,11 +339,11 @@ class RunScheduler extends Command
 
                                $this->info('sud sa else'.$date5minutes. ' =now='.\Carbon\Carbon::now()->format('y-m-d h:i'));
                        }*/
-                        $this->info('sulod pa'); 
+                       $this->info('sulod pa'.$activity->name); 
                        $this->randomAllocation($activity);
                         
             }
-            $this->info('gawas pa');                                   
+           // $this->info('gawas pa');                                   
 
 
         $this->info('Running scheduler');

@@ -638,15 +638,17 @@ public function test3(){
         $ed = Carbon::instance($dtt);
         $rt = new \DateTime($request->input('deadlineDate').' '.$request->input('deadlineTime'));
         $rtt = Carbon::instance($rt);
-        $url = $this->uploadFile($request->file('file'));
+        
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
-        $start_time = \Carbon\Carbon::parse($request->input('startTime'));   
-        $end_time =   \Carbon\Carbon::parse($request->input('endTime')); 
+        $start_time = \Carbon\Carbon::parse($sd);   
+        $end_time =   \Carbon\Carbon::parse($ed); 
 
         $numOfHours = $start_time->diffInHours($end_time);
 
         $preSetPoints = 5*$numOfHours;
+
+        $url = $this->uploadFile($request->file('file'));
         
         $activityId = Activity::create([
             "activity_id" => $activity_id_store, 
