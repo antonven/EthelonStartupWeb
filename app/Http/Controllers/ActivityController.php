@@ -646,10 +646,6 @@ public function test3(){
         $start_time = \Carbon\Carbon::parse($sd);   
         $end_time =   \Carbon\Carbon::parse($ed); 
 
-        $temp = array("startTime"=>$request->input('startTime'),"deadlineTime" => $request->input('deadlineTime'));
-
-        return response()->json($temp);
-
         $numOfHours = $start_time->diffInHours($end_time);
 
         $preSetPoints = 5*$numOfHours;
