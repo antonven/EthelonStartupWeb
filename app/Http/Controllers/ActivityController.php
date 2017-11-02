@@ -638,11 +638,17 @@ public function test3(){
         $ed = Carbon::instance($dtt);
         $rt = new \DateTime($request->input('deadlineDate').' '.$request->input('deadlineTime'));
         $rtt = Carbon::instance($rt);
+
+       ;
         
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
         $start_time = \Carbon\Carbon::parse($sd);   
         $end_time =   \Carbon\Carbon::parse($ed); 
+
+        $temp = array("startTime"=>$request->input('startTime'),"deadlineTime" => $request->input('deadlineTime'));
+
+        return response()->json($temp);
 
         $numOfHours = $start_time->diffInHours($end_time);
 

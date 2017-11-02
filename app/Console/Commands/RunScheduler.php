@@ -320,11 +320,18 @@ class RunScheduler extends Command
                             $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->whereDate('activities.registration_deadline','<=',\Carbon\Carbon::now()->format('y-m-d h:i'))
+                                ->where('activities.registration_deadline','<=',\Carbon\Carbon::now()->format('y-m-d'))
                                 ->get();
 
+                                if($activities->count()){
+                                    $this->info('nay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
+                                }else{
+                                    $this->info('walay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
+                                }
+
             foreach($activities as $activity){
-                            
+
+                            $this->info('nay sulod '.$activity->registration_deadline);
 /*
                  $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
                  $datesaved = $date. ' '.$activity->start_time;
@@ -339,8 +346,14 @@ class RunScheduler extends Command
 
                                $this->info('sud sa else'.$date5minutes. ' =now='.\Carbon\Carbon::now()->format('y-m-d h:i'));
                        }*/
-                       $this->info('sulod pa'.$activity->name); 
-                       $this->randomAllocation($activity);
+
+                       if($activity->registration_deadline->format('h:i') <= \Carbon\Carbon::now()->format('h:i')){
+                            $this->info('==sulod pa '.$activity->name.' = '.\Carbon\Carbon::now()->format('h:i')); 
+                            $this->randomAllocation($activity);
+                       }else{
+                            $this->info('==wala pa');
+                       }
+                      
                         
             }
            // $this->info('gawas pa');                                   
