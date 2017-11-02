@@ -114,7 +114,7 @@ class TestingController extends Controller
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'fcae3c6',
+                 'activity_id'=>'3212864',
                  'status'=> false  
                 ]);
       }
