@@ -639,7 +639,6 @@ public function test3(){
         $rt = new \DateTime($request->input('deadlineDate').' '.$request->input('deadlineTime'));
         $rtt = Carbon::instance($rt);
 
-       ;
         
         $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 

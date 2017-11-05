@@ -22,6 +22,8 @@ use App\Activitygroup;
 use App\Volunteergroup;
 use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
+use App\Notification;
+use App\Notification_user;
 
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -114,7 +116,7 @@ class TestingController extends Controller
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'3212864',
+                 'activity_id'=>'b81860e',
                  'status'=> false  
                 ]);
       }
@@ -184,60 +186,67 @@ class TestingController extends Controller
         $this->runScheduler();
     }*/
 
-    public function runSchedulerz(){
+    public function runScheduler(){
 
   
-       $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+                            $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name','foundations.foundation_id as foundation_id')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
-                                ->where('activity_id','fd95d06')->get();
+                                ->get();
 
-
-
+                              /*  if($activities->count()){
+                                    $this->info('nay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
+                                }else{
+                                    $this->info('walay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
+                                }*/
 
             foreach($activities as $activity){
 
-
-
-              $this->randomAllocation($activity);
-
-            }
-
-              /*
+                           // $this->info('nay sulod '.$activity->registration_deadline);
+                             $this->randomAllocation($activity);
+/*
                  $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
-                  $datesaved = $date. ' '.$activity->start_time;
-                   $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');
+                 $datesaved = $date. ' '.$activity->start_time;
+                 $date5minutes = \Carbon\Carbon::parse($datesaved)->addMinute(5)->format('y-m-d h:i');*/
+/*
+                     if($date5minutes == \Carbon\Carbon::now()->format('y-m-d h:i') || $date5minutes < \Carbon\Carbon::now()->format('y-m-d h:i')){
 
-                    if($date5minutes == \Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i') || $date5minutes > \Carbon\Carbon::now()->format('y-m-d h:i')){
-                         
-                         return 'sulod sa if';
-                       // 
-                        
-                    }else{
+                        $this->info('sud sa if '.$date5minutes.' =now='.\Carbon\Carbon::now()->format('y-m-d h:i'));
+                        $this->randomAllocation($activity);
+ 
+                     }else{
 
-                        
-                        return 'wala';
-                      }
-                 
-                  }                                   */
-                              
+                               $this->info('sud sa else'.$date5minutes. ' =now='.\Carbon\Carbon::now()->format('y-m-d h:i'));
+                       }*/
+/*
+                       $activity_deadlineTime = \Carbon\Carbon::parse($activity->registration_deadline)->format('h:i');
+                       $timeNow = \Carbon\Carbon::now()->format('h:i');
+                       $formattedTime =  \Carbon\Carbon::parse($timeNow)->tz('UTC');
+                       $activity_deadline = \Carbon\Carbon::parse($activity->registration_deadline)->format('y-m-d');
 
-               // dd($activities->start_time);
-              
-               // return $datesaved;
+                if($activity_deadline <= \Carbon\Carbon::now()->format('y-m-d')){
+                        $this->info('sud sa date if');
 
-               // return $date5minutes.(string)\Carbon\Carbon::now()->addMinute(5)->format('y-m-d h:i');
+                       if($activity_deadlineTime <= $timeNow){
+                            $this->info('==sulod pa '.$activity->name.' = '.$timeNow.' !! '.$activity_deadlineTime); 
+                            $this->randomAllocation($activity);
+                       }else{
+                            $this->info('==wala pa');
+                       }
 
+                }else{
+
+
+                }   */
+                                              
+            }
 
     }
 
   
-    public function randomAllocation($activity){
-
-     /* foreach($activity as $activity){*/
-
+  public function randomAllocation($activity){
+        
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
-
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
@@ -286,7 +295,6 @@ class TestingController extends Controller
                       else{
 
                         $count = 0;
-
                            $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
                                     
                                 Activitygroup::create([
@@ -309,10 +317,8 @@ class TestingController extends Controller
                       }     
                       $volunteerCount++;
                       }      
-                    //}
-
-                  return $this->sendNotifications($activity);
-            
+                      Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);              
+                      $this->sendNotifications($activity);
     }
 
  public function sendNotifications($activity){
@@ -327,25 +333,31 @@ class TestingController extends Controller
 
           $volunteersKeeper = array();
 
+          $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
             foreach($volunteers as $volunteer){
 
-                
                        $token = $volunteer->fcm_token;
 
-
                             if($token != null){
+                                $notification_user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
-                                 //$downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-                                 //array_push($downstreamResponseArray,$downstreamResponse);
+                                Notification_user::create([
+                                       'id'=>$notification_user_id,
+                                       'notification_id' => $notification_id,
+                                       'sender_id'=> $activity->activity_id,
+                                       'receiver_id'=>$volunteer->volunteer_id,
+                                       'date'=> \Carbon\Carbon::now()->format('Y-m-d h:i')
+                                    ]);
+
                                 array_push($tokens,$token);
-
 
                              }else{
 
                                 Groupnotification::create([
                                     'volunteer_id'=>$volunteer->volunteer_id,
                                     'activity_id'=>$activity->activity_id,
-                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d')
+                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d h:i')
                                     ]);
 
                             }
@@ -359,21 +371,22 @@ class TestingController extends Controller
 
                             $body = 'Your groupmates have been revealed for '.$activity->name.' activity';
  
-                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder = new PayloadNotificationBuilder($activity->name);
                           $notificationBuilder->setBody($body)
                                               ->setSound('default'); 
 
                              $dataBuilder = new PayloadDataBuilder();
                              $dataBuilder->addData([
+                                
                                 'eventImage'=>$activity->image_url,
                                 'eventHost' =>$activity->foundation_name,
                                 'eventName'=>$activity->name,
                                 'activity_id'=>$activity->activity_id,
-                                 'eventDate'=>$activity->startDate, 
-                                 'eventTimeStart'=>$activity->start_time,
-                                 'eventLocation'=>$activity->location, 
-                                 'contactNo'=>$activity->contact, 
-                                 'contactPerson'=>$activity->contactperson,  
+                                'eventDate'=>$activity->startDate, 
+                                'eventTimeStart'=>$activity->start_time,
+                                'eventLocation'=>$activity->location, 
+                                'contactNo'=>$activity->contact, 
+                                'contactPerson'=>$activity->contactperson,  
                                 
                                 ]);
 
@@ -381,10 +394,19 @@ class TestingController extends Controller
                             $notification = $notificationBuilder->build();
                             $data = $dataBuilder->build();
 
+                            Notification::create([
+                                    'id'=>$notification_id,
+                                    'title'=>$activity->name,
+                                    'body' => $body,
+                                    'major_type'=>'activity_group',
+                                    'sub_type'=>'activity_group',
+                                    'data'=>$activity->activity_id
+                                ]);
+
                             $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
                              
       
-            Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
+            
            // return $downstreamResponse;
        // }
 

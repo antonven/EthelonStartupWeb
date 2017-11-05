@@ -44,6 +44,8 @@ use App\Activitygroup;
 use App\Volunteergroup;
 use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
+use App\Notification;
+use App\Notification_user;
 
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -137,13 +139,23 @@ class RunScheduler extends Command
 
           $volunteersKeeper = array();
 
+          $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
             foreach($volunteers as $volunteer){
 
-                
                        $token = $volunteer->fcm_token;
 
                             if($token != null){
-                                
+                                $notification_user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                                Notification_user::create([
+                                       'id'=>$notification_user_id,
+                                       'notification_id' => $notification_id,
+                                       'sender_id'=> $activity->activity_id,
+                                       'receiver_id'=>$volunteer->volunteer_id,
+                                       'date'=> \Carbon\Carbon::now()->format('Y-m-d h:i')
+                                    ]);
+
                                 array_push($tokens,$token);
 
                              }else{
@@ -151,7 +163,7 @@ class RunScheduler extends Command
                                 Groupnotification::create([
                                     'volunteer_id'=>$volunteer->volunteer_id,
                                     'activity_id'=>$activity->activity_id,
-                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d')
+                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d h:i')
                                     ]);
 
                             }
@@ -165,7 +177,7 @@ class RunScheduler extends Command
 
                             $body = 'Your groupmates have been revealed for '.$activity->name.' activity';
  
-                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
+                          $notificationBuilder = new PayloadNotificationBuilder($activity->name);
                           $notificationBuilder->setBody($body)
                                               ->setSound('default'); 
 
@@ -176,17 +188,26 @@ class RunScheduler extends Command
                                 'eventHost' =>$activity->foundation_name,
                                 'eventName'=>$activity->name,
                                 'activity_id'=>$activity->activity_id,
-                                 'eventDate'=>$activity->startDate, 
-                                 'eventTimeStart'=>$activity->start_time,
-                                 'eventLocation'=>$activity->location, 
-                                 'contactNo'=>$activity->contact, 
-                                 'contactPerson'=>$activity->contactperson,  
+                                'eventDate'=>$activity->startDate, 
+                                'eventTimeStart'=>$activity->start_time,
+                                'eventLocation'=>$activity->location, 
+                                'contactNo'=>$activity->contact, 
+                                'contactPerson'=>$activity->contactperson,  
                                 
                                 ]);
 
                             $option = $optionBuilder->build();
                             $notification = $notificationBuilder->build();
                             $data = $dataBuilder->build();
+
+                            Notification::create([
+                                    'id'=>$notification_id,
+                                    'title'=>$activity->name,
+                                    'body' => $body,
+                                    'major_type'=>'activity_group',
+                                    'sub_type'=>'activity_group',
+                                    'data'=>$activity->activity_id
+                                ]);
 
                             $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
                              
@@ -317,7 +338,7 @@ class RunScheduler extends Command
 
         //09210296430
 
-                            $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name')
+                            $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name','foundations.foundation_id as foundation_id')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
                                 ->get();
@@ -347,7 +368,7 @@ class RunScheduler extends Command
                        }*/
 
                        $activity_deadlineTime = \Carbon\Carbon::parse($activity->registration_deadline)->format('h:i');
-                       $timeNow = \Carbon\Carbon::now()->format('H:i');
+                       $timeNow = \Carbon\Carbon::now()->format('h:i');
                        $formattedTime =  \Carbon\Carbon::parse($timeNow)->tz('UTC');
                        $activity_deadline = \Carbon\Carbon::parse($activity->registration_deadline)->format('y-m-d');
 
