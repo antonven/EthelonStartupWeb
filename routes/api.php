@@ -72,6 +72,7 @@ Route::group(['middleware'=>'foundation'],function(){
 });
 
 Route::post('/picture','RegistrationController@addPhoto');
+Route::post('/notif','NotificationController@getNofitications');
 
 
 

@@ -116,7 +116,7 @@ class TestingController extends Controller
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'b81860e',
+                 'activity_id'=>'fc63a6a',
                  'status'=> false  
                 ]);
       }
@@ -194,6 +194,8 @@ class TestingController extends Controller
                                 ->where('activities.status',false)
                                 ->get();
 
+                                
+
                               /*  if($activities->count()){
                                     $this->info('nay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
                                 }else{
@@ -203,7 +205,9 @@ class TestingController extends Controller
             foreach($activities as $activity){
 
                            // $this->info('nay sulod '.$activity->registration_deadline);
-                             $this->randomAllocation($activity);
+
+                            return $this->randomAllocation($activity);
+                             
 /*
                  $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
                  $datesaved = $date. ' '.$activity->start_time;
@@ -245,8 +249,10 @@ class TestingController extends Controller
 
   
   public function randomAllocation($activity){
-        
+
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+
+       
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
@@ -318,7 +324,7 @@ class TestingController extends Controller
                       $volunteerCount++;
                       }      
                       Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);              
-                      $this->sendNotifications($activity);
+                      return $this->sendNotifications($activity);
     }
 
  public function sendNotifications($activity){
@@ -335,6 +341,8 @@ class TestingController extends Controller
 
           $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
+        //  return response()->json($volunteers);
+
             foreach($volunteers as $volunteer){
 
                        $token = $volunteer->fcm_token;
@@ -342,14 +350,14 @@ class TestingController extends Controller
                             if($token != null){
                                 $notification_user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
-                                Notification_user::create([
+                               $notification =  Notification_user::create([
                                        'id'=>$notification_user_id,
                                        'notification_id' => $notification_id,
                                        'sender_id'=> $activity->activity_id,
                                        'receiver_id'=>$volunteer->volunteer_id,
                                        'date'=> \Carbon\Carbon::now()->format('Y-m-d h:i')
                                     ]);
-
+                              
                                 array_push($tokens,$token);
 
                              }else{
@@ -363,6 +371,8 @@ class TestingController extends Controller
                             }
                            
              }
+
+
 
 
                             $optionBuilder = new OptionsBuilder();

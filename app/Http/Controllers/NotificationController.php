@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Notification;
+use App\Notification_user;
+
 use Illuminate\Http\Request;
 use App\Groupnotification;
-
+use App\Activity;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
@@ -98,5 +101,46 @@ class NotificationController extends Controller
 			return response()->json($data);
 		}
 	}
+
+
+  public function getNofitications(Request $request){
+
+    $user = $request->input('volunteer_id');
+
+    $notifications = \DB::table('notifications')->select('notifications.*','notification_users.*','notifications.id as notificationID','notification_users.id as notification_user_id')
+                                                ->join('notification_users','notification_users.notification_id','=','notifications.id')
+                                                ->where('notification_users.receiver_id',$user)->orderBy('notification_users.date','asc')->get();
+
+          $notificationObject = array();                                      
+
+    foreach($notifications as $notification){
+
+     
+
+
+       if($notification->major_type == 'activity_group' ){
+          
+         $image = Activity::select('image_url')->where('activity_id',$notification->sender_id)->first();
+         $timeNowz = \Carbon\Carbon::now()->format('Y-m-d h:i');
+
+         $timeNow = \Carbon\Carbon::parse($timeNowz)->format('Y-m-d H:i');  
+         $timeNow = \Carbon\Carbon::parse($timeNow);
+         $notDate = \Carbon\Carbon::parse($notification->date)->format('Y-m-d H:i');   
+         $notDate = \Carbon\Carbon::parse($notDate);
+
+         $hours = \Carbon\Carbon::parse($notification->created_at)->diffForHumans();
+
+         $data = array("notification_id"=>$notification->notificationID,"notification_user_id"=>$notification->notification_user_id,
+                        "body"=>$notification->body,"isRead"=>$notification->isRead,"major_type"=>$notification->major_type,"data"=>$notification->data,'image_url'=>$image->image_url,'sender_id'=>$notification->sender_id,'hours'=>$hours);
+
+         
+          array_push($notificationObject,$data);
+       }
+
+    }               
+
+    return response()->json($notificationObject);                         
+
+  }
 
 }
