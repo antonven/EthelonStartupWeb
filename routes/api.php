@@ -53,7 +53,7 @@ Route::post('/sendnotif','ActivityController@sendNotifications');
 Route::post('/test','ActivityController@test');
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
-Route::get('/deleteall','ActivityController@deleteall');
+//Route::get('/deleteall','ActivityController@deleteall');
 Route::post('/attendanceactivity','VolunteerController@successAttendance');
 Route::post('/test2','ActivityController@test2');
 
@@ -73,6 +73,7 @@ Route::group(['middleware'=>'foundation'],function(){
 
 Route::post('/picture','RegistrationController@addPhoto');
 Route::post('/notif','NotificationController@getNofitications');
+Route::post('/skillprac','TestingController@skill');
 
 
 

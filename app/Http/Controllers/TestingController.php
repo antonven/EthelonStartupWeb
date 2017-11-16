@@ -44,32 +44,228 @@ class TestingController extends Controller
     //
 
 
-    public function deleteall(){
-     
-    /* \DB::table('users')->delete();
-    \DB::table('foundations')->delete();
-    \DB::table('volunteers')->delete();
-    \DB::table('activityskills')->delete();
-    \DB::table('volunteergroups')->delete();
-    \DB::table('volunteeractivities')->delete();
+  public function groupNoMatches($volunteers,$activity){
+    dd($volunteers);
+            
+                $vol_per_group = $activity->group; 
+                $count = 0;
+                $countforId = 1;
+                $id = '';
+                $volunteerCount = 0;   
+                $activityArrays = array();
 
-    \DB::table('groupnotifications')->delete();
-    \DB::table('volunteerbeforeactivities')->delete();
-    \DB::table('volunteerafteractivities')->delete();
-    \DB::table('activitycriterias')->delete();
-    \DB::table('volunteercriteriapoints');
-    \DB::table('volunteerskills')->delete();
-    \DB::table('volunteeractivities')->delete();
-    \DB::table('activitygroups')->delete();
-    \DB::table('volunteercriterias')->delete();
-    \DB::table('groupnotifications')->delete();
-    \DB::table('activities')->delete();*/
+                    foreach($volunteers as $volunteer){
+                      
+                        $this->create_volunteer_criteria_points($activity, $volunteer->volunteer_id);
 
-    Volunteer::where('volunteer_id','08ab5fe')->delete();
-    User::where('user_id','1877377522288783')->delete();
-    Volunteerskill::where('volunteer_id','08ab5fe')->delete();
+                      if($count < $vol_per_group){
+                            if($count == 0){
+
+                                $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                           /*     Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id  
+                                    ]);   */
+
+                                $activityGroupObject = (object)array('id'=>$id,'activity_id'=>$activity->activity_id,'numOfVolunteers'=>0);  
+                                array_push($activityArrays,$activityGroupObject);  
+/*
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    */
+
+                                $count++;
+                                $countforId++;
+
+                             /*   if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }*/
+
+                                foreach($activityArrays as $activityArray){
+                                    if($activityArray->id == $id){
+                                        $activityArray->numOfVolunteers = $count;
+                                    }
+                                }
+
+                            }else{
+
+                               /* Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]); */
+
+                                $count++;
+                               /* if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }*/
+                               
+                                foreach($activityArrays as $activityArray){
+                                    if($activityArray->id == $id){
+                                        $activityArray->numOfVolunteers = $count;
+                                    }
+                                }
+                            }
+                      }
+                      else{
+
+                        $count = 0;
+                           $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                                    
+                              /*  Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id  
+                                    ]);   
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    */
+
+                                $activityGroupObject = (object)array('id'=>$id,'activity_id'=>$activity->activity_id,'numOfVolunteers'=>0);
+                                //$volunteerGroupObject = (object)array('activity_groups_id'=>$id,'volunteer_id'=>$volunteer->volunteer_id);
+                                array_push($activityArrays,$activityGroupObject);    
+                                $count++;
+                                $countforId++;
+
+                              
+                                foreach($activityArrays as $activityArray){
+                                    if($activityArray->id == $id){
+                                        $activityArray->numOfVolunteers = $count;
+                                    }
+                                }
+                                
+                              /*  if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }*/
+
+                      }     
+                      $volunteerCount++;
+                      }
+
+           // $activitygroups = Activitygroup::where('activity_id','c3b8c9f')->get();
+            //dd($activityArrays);
+
+            //return response()->json($activitygroups);
+                     
+  }  
+
+
+   public function sort($activity,$volunteers){
+
+      $allVolunteers = $volunteers;
+      $noMatches = array();
+      $yesMatches = array();
+      $skills = Activityskill::where('activity_id','c3b8c9f')->get();
+    
+      foreach($allVolunteers as $allVolunteer){
+
+        $volunteerSkills = Volunteerskill::where('volunteer_id',$allVolunteer->volunteer_id)->get();
+        $matches = false;
+        $skwa = null;
+
+          foreach($skills as $skill){
+
+             foreach($volunteerSkills as $volunteerSkill){
+                $skwa = $allVolunteer;
+               if(strcasecmp($skill->name , $volunteerSkill->name)==0){
+                                    
+
+                                    $matches = true;
+                                    
+                                    break;
+                                        
+                  }
+             }
+
+          }
+
+        if($matches == false ){
+           array_push($noMatches,$allVolunteer);
+        }else{
+           array_push($yesMatches,$allVolunteer);
+        }
+
+      }
+
+
+      $this->groupNoMatches($noMatches,$activity);
+      $this->groupMatches($yesMatches,$activity);
+
+      //return $noMatches;
+    }
+    public function groupMatches($volunteers, $activity){
+      $skills = Activityskills::where('activity_id',$activity->activity_id)->get();
+      $numOfSkills = $skills->count();
+      $volunteerSkills = array();
+
+      foreach($skills as $skill){
+        $volunteerSkillsArray = array();
+
+
+        foreach($volunteers as $volunteer){
+
+          $volunteerSkills = Volunteerskill::where('volunteer_id',$allVolunteer->volunteer_id)->get();
+          $matches = false;
+
+           foreach($volunteerSkills as $volunteerSkill){
+
+               if(strcasecmp($skill->name , $volunteerSkill->name)==0){
+                       $matches = true;
+                                                                              
+                  }
+           }
+
+            array_push($volunteerSkillsArray, $volunteer);
+        }
+
+
+      }
+
 
     }
+
+
+    public function skill(){
+
+      $activity = Activity::where('activity_id','c3b8c9f')->first();
+      $volunteers = Volunteer::all();
+      
+      $this->sort($activity,$volunteers);
+     // $asq = $this->groupNoMatches($volunteers_with_no_match,$activity);
+
+      return $asq;
+
+    }
+
+    public function deleteall(){
+     
+    //  \DB::table('users')->delete();
+    // \DB::table('foundations')->delete();
+    // \DB::table('volunteers')->delete();
+    // \DB::table('activityskills')->delete();
+     \DB::table('volunteergroups')->delete();
+    // \DB::table('volunteeractivities')->delete();
+
+    // \DB::table('groupnotifications')->delete();
+    // \DB::table('volunteerbeforeactivities')->delete();
+    // \DB::table('volunteerafteractivities')->delete();
+    // \DB::table('activitycriterias')->delete();
+    // \DB::table('volunteercriteriapoints');
+    // \DB::table('volunteerskills')->delete();
+    // \DB::table('volunteeractivities')->delete();
+     \DB::table('activitygroups')->delete();
+    // \DB::table('volunteercriterias')->delete();
+    // \DB::table('groupnotifications')->delete();
+    // \DB::table('activities')->delete();
+
+    /*Volunteer::where('volunteer_id','08ab5fe')->delete();
+    User::where('user_id','1877377522288783')->delete();
+    Volunteerskill::where('volunteer_id','08ab5fe')->delete()*/;
+
+    }
+
     public function kobedelete(){
 
      /* Activitygroup::where('activity_id','a77c9b4')->delete();
@@ -116,7 +312,7 @@ class TestingController extends Controller
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'fc63a6a',
+                 'activity_id'=>'c3b8c9f',
                  'status'=> false  
                 ]);
       }

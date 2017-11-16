@@ -900,12 +900,23 @@ public function test3(){
         $activityKeeper = array();
         $activityScores = array();
         $newActivities = array();
+
+        $offset = 0;
+
+     $requestedOffsetString = $request->input('offset');
+     $offsetInt = (int)$requestedOffsetString;
+      
+      if($offsetInt==5){
+         $offset = 0;
+      }else{
+         $offset = $offsetInt - 5;
+      }
         
 
         $activities = \DB::table('activities')->select('activities.*','users.name as foundtion_name','foundations.image_url as      foundation_imageurl') 
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
                                               ->join('users','users.user_id','=','foundations.user_id') 
-                                              ->where('activities.status',false)->get();  
+                                              ->where('activities.status',false)->skip($offset)->limit(5)->get();  
 
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
@@ -1024,9 +1035,11 @@ public function test3(){
          $offset = $offsetInt - 5;
       }
 
+      
+
        $activityList = array();
 
-        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')   
+        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')->skip($offset)->limit(5)   
                 ->get();
 
                 foreach($activities as $activity){
