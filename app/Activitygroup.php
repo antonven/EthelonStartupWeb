@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Activitygroup extends Model
 {
     //
-    protected $fillable=['id','activity_id','numOfVolunteers'];
+    protected $fillable=['id','activity_id','numOfVolunteers','type'];
     public $incrementing = false; 
     public $timestamps = false;
 

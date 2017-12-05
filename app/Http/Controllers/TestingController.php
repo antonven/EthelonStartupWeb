@@ -43,111 +43,280 @@ class TestingController extends Controller
 {
     //
 
+public function group($volunteers, $activity, $skillName){
 
-  public function groupNoMatches($volunteers,$activity){
-    dd($volunteers);
-            
-                $vol_per_group = $activity->group; 
+    //$volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+                
+                $vol_per_group = 5; 
                 $count = 0;
                 $countforId = 1;
                 $id = '';
-                $volunteerCount = 0;   
-                $activityArrays = array();
+                $volunteerCount = 0;
+                $lastGroup = '';  
+                $lastCount = 0; 
+
+                $numOfVolunteers = count($volunteers);
 
                     foreach($volunteers as $volunteer){
-                      
+
                         $this->create_volunteer_criteria_points($activity, $volunteer->volunteer_id);
 
-                      if($count < $vol_per_group){
-                            if($count == 0){
+                      if($count < $vol_per_group){//maka sud pa siya og group
+                            if($count == 0){//create new group reset
+                                if($volunteerCount + 1 == $numOfVolunteers ){
 
-                                $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                                    Volunteergroup::create([
+                                         'activity_groups_id'=>$lastGroup,
+                                         'volunteer_id' =>$volunteer->volunteer_id 
+                                    ]);  
 
-                           /*     Activitygroup::create([
-                                      'id'=> $id,
-                                      'activity_id'=>$activity->activity_id  
-                                    ]);   */
+                                    \DB::table('activitygroups')->where('id',$lastGroup)->update(['numOfVolunteers' => $lastCount+1]);
 
-                                $activityGroupObject = (object)array('id'=>$id,'activity_id'=>$activity->activity_id,'numOfVolunteers'=>0);  
-                                array_push($activityArrays,$activityGroupObject);  
-/*
-                                Volunteergroup::create([
-                                     'activity_groups_id'=>$id,
-                                     'volunteer_id' =>$volunteer->volunteer_id 
-                                ]);    */
+                                }else{
+                                   $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
-                                $count++;
-                                $countforId++;
+                                    Activitygroup::create([
+                                          'id'=> $id,
+                                          'activity_id'=>$activity->activity_id ,
+                                          'type'=>$skillName 
+                                        ]);   
 
-                             /*   if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
-                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
-                                }*/
+                                    Volunteergroup::create([
+                                         'activity_groups_id'=>$id,
+                                         'volunteer_id' =>$volunteer->volunteer_id 
+                                    ]);    
 
-                                foreach($activityArrays as $activityArray){
-                                    if($activityArray->id == $id){
-                                        $activityArray->numOfVolunteers = $count;
+                                    $count++;
+                                    $countforId++;
+                                    if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                        \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
                                     }
                                 }
+                             
 
                             }else{
 
-                               /* Volunteergroup::create([
+                                Volunteergroup::create([
                                      'activity_groups_id'=>$id,
                                      'volunteer_id' =>$volunteer->volunteer_id 
-                                ]); */
+                                ]); 
 
-                                $count++;
-                               /* if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
-                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
-                                }*/
                                
-                                foreach($activityArrays as $activityArray){
-                                    if($activityArray->id == $id){
-                                        $activityArray->numOfVolunteers = $count;
-                                    }
+                                $count++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
                                 }
+                                 $lastGroup = $id;
+                                 $lastCount = $count;
                             }
                       }
                       else{
 
                         $count = 0;
                            $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-                                    
-                              /*  Activitygroup::create([
+                            if($volunteerCount + 1 == $numOfVolunteers){
+                                  Volunteergroup::create([
+                                         'activity_groups_id'=>$lastGroup,
+                                         'volunteer_id' =>$volunteer->volunteer_id 
+                                    ]);  
+
+                                    \DB::table('activitygroups')->where('id',$lastGroup)->update(['numOfVolunteers' => $lastCount+1]);
+                            }else{
+                                    Activitygroup::create([
                                       'id'=> $id,
-                                      'activity_id'=>$activity->activity_id  
+                                      'activity_id'=>$activity->activity_id,
+                                      'type'=>$skillName  
                                     ]);   
+
+                                    Volunteergroup::create([
+                                         'activity_groups_id'=>$id,
+                                         'volunteer_id' =>$volunteer->volunteer_id 
+                                    ]);    
+
+                                  $lastGroup = $id;
+                                  $lastCount = $count;  
+                                  $count++;
+                                  $countforId++;
+                                
+                                  if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                      \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                  }
+                            }        
+                           
+
+                      }     
+                      $volunteerCount++;
+                      }      
+                      //Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);              
+                    
+}
+
+
+  public function groupVolunteers($volunteers,$activity,$skillName,$first){
+   
+            
+                $vol_per_group = 5; 
+                //4 / 9
+                $count = 0;
+                $countforId = 1;
+                $id = '';
+                $volunteerCount = 0;   
+                $activityArrays = array();
+                $numOfVolunteers = count($volunteers);
+
+                $lastGroup = null;
+                $lastCount = 0;
+
+                 // return count($volunteers);
+                $tempC = 0;
+                $agianan = array();
+
+                $atay = array();
+            
+                    foreach($volunteers as $volunteer){
+
+                          /*  if($volunteer->volunteer_id  == 'fd28a39'){
+                                    dd($id);
+                                  }*/
+
+                      /*dd($skillName);*/
+                        
+                       $this->create_volunteer_criteria_points($activity, $volunteer->volunteer_id);
+
+                        
+                      if($count < $vol_per_group){//if wala pa naka abot sa num of volunteer per group
+                            if($count == 0){//if nibalik nag reset sa num of group kay na sudlan nah
+
+                                  if($volunteerCount == $numOfVolunteers-1){//if isa nalang siya adto siya i join sa last group
+                                    $fuck = array("yawa"=>"NISULOD BRAD 1");
+                   
+                                    $lastCount = $lastCount + 1; 
+                                   
+
+                                     Volunteergroup::create([
+                                             'activity_groups_id'=>$lastGroup,
+                                             'volunteer_id' =>$volunteer->volunteer_id 
+                                     ]);    
+
+                                    \DB::table('activitygroups')->where('id',$lastGroup)->update(['numOfVolunteers' => $lastCount]);
+
+                                  }else{//if dili pa siya isa sa list of volunteers
+
+                                        $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+
+                                       if($volunteerCount + 2 != $numOfVolunteers-1){
+
+                                            Activitygroup::create([
+                                              'id'=> $id,
+                                              'activity_id'=>$activity->activity_id,
+                                              'type'=>$skillName  
+                                            ]);
+
+                                       } 
+
+
+                                        Volunteergroup::create([
+                                             'activity_groups_id'=>$id,
+                                             'volunteer_id' =>$volunteer->volunteer_id 
+                                        ]);    
+
+                                        $count++;
+                                        $countforId++;
+
+                                        if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                            \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                        }
+
+                                    }
+
+
+                            }else{
 
                                 Volunteergroup::create([
                                      'activity_groups_id'=>$id,
                                      'volunteer_id' =>$volunteer->volunteer_id 
-                                ]);    */
+                                ]); 
 
-                                $activityGroupObject = (object)array('id'=>$id,'activity_id'=>$activity->activity_id,'numOfVolunteers'=>0);
-                                //$volunteerGroupObject = (object)array('activity_groups_id'=>$id,'volunteer_id'=>$volunteer->volunteer_id);
-                                array_push($activityArrays,$activityGroupObject);    
                                 $count++;
-                                $countforId++;
 
-                              
-                                foreach($activityArrays as $activityArray){
-                                    if($activityArray->id == $id){
-                                        $activityArray->numOfVolunteers = $count;
-                                    }
-                                }
-                                
-                              /*  if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
                                     \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
-                                }*/
+                                }
+                                $lastCount = $count;
+                                $lastGroup = $id;
+
+                                }
+                            }
+                      else{//na allocatan nah og volunteer ang group so himo balik og group
+
+                        $count = 0;
+                           $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                                    //ngari 2
+                             if($volunteerCount + 2 != $numOfVolunteers-1 && $volunteerCount != $numOfVolunteers-1){//if dili pa last ang  sunod volunteer og dili siya ang last nga volunteer
+
+                                            Activitygroup::create([
+                                              'id'=> $id,
+                                              'activity_id'=>$activity->activity_id,
+                                              'type'=>$skillName  
+                                            ]);
+
+                                            Volunteergroup::create([
+                                             'activity_groups_id'=>$id,
+                                             'volunteer_id' =>$volunteer->volunteer_id 
+                                            ]);  
+
+                                            $count++;
+                                            \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+
+                                            $lastGroup = $id;
+                                            $lastCount = $count;
+
+                              }else if($volunteerCount == $numOfVolunteers-1){//if last nga volunteer
+
+                                  $fuck = array("yawa"=>"NISULOD BRAD 2","id sa last = "=>$lastGroup,"count"=>$lastCount);
+                                
+                                  $lastCount = $lastCount + 1;
+
+                                     Volunteergroup::create([
+                                             'activity_groups_id'=>$lastGroup,
+                                             'volunteer_id' =>$volunteer->volunteer_id 
+                                     ]);    
+
+                                    \DB::table('activitygroups')->where('id',$lastGroup)->update(['numOfVolunteers' => $lastCount]);
+
+                                  }/*else{
+                                       Activitygroup::create([
+                                              'id'=> $id,
+                                              'activity_id'=>$activity->activity_id,
+                                              'type'=>$skillName  
+                                            ]);
+
+                                            Volunteergroup::create([
+                                             'activity_groups_id'=>$id,
+                                             'volunteer_id' =>$volunteer->volunteer_id 
+                                            ]);
+                                  }  */
+
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
 
                       }     
                       $volunteerCount++;
+                     // $tempC++;
                       }
+                       if($skillName == 'Education'){
+                      // dd($agianan);
+                          }
 
            // $activitygroups = Activitygroup::where('activity_id','c3b8c9f')->get();
             //dd($activityArrays);
 
             //return response()->json($activitygroups);
+
+
+                      return $activityArrays;
                      
   }  
 
@@ -190,40 +359,89 @@ class TestingController extends Controller
       }
 
 
-      $this->groupNoMatches($noMatches,$activity);
-      $this->groupMatches($yesMatches,$activity);
+     // return count($noMatches). ' '.count($yesMatches);
+
+
+      $atay = array();
+
+      $rets1 = $this->group($noMatches,$activity,'none');
+      array_push($atay, $rets1);
+      $rets2 = $this->groupMatches($yesMatches,$activity);
+      array_push($atay, $rets2);
+
+      return $atay;
 
       //return $noMatches;
     }
+
+
+
     public function groupMatches($volunteers, $activity){
-      $skills = Activityskills::where('activity_id',$activity->activity_id)->get();
+
+
+      $skills = Activityskill::where('activity_id',$activity->activity_id)->get();
       $numOfSkills = $skills->count();
-      $volunteerSkills = array();
+
+      $skillsObjectsLists = array();
+      $ilhanan = false;
 
       foreach($skills as $skill){
-        $volunteerSkillsArray = array();
 
-
-        foreach($volunteers as $volunteer){
-
-          $volunteerSkills = Volunteerskill::where('volunteer_id',$allVolunteer->volunteer_id)->get();
-          $matches = false;
-
-           foreach($volunteerSkills as $volunteerSkill){
-
-               if(strcasecmp($skill->name , $volunteerSkill->name)==0){
-                       $matches = true;
-                                                                              
-                  }
-           }
-
-            array_push($volunteerSkillsArray, $volunteer);
-        }
-
+        $array = array();
+        $skillObject = (object) array("name"=>$skill->name,"volunteers"=>$array,"count"=>0);
+       
+        json_encode($skillObject);
+        array_push($skillsObjectsLists,$skillObject);
 
       }
 
+      foreach($volunteers as $volunteer){
+       
+          $skills = Volunteerskill::where('volunteer_id',$volunteer->volunteer_id)->get();
+          
+               usort($skillsObjectsLists, function($a, $b){
+                
+                return strcmp($a->count, $b->count);    
+               });
 
+              foreach($skillsObjectsLists as $skillsObjectsList){
+
+                foreach($skills as $skill){
+                     
+                    if(strcasecmp($skill->name , $skillsObjectsList->name)==0){
+
+                      if($ilhanan == false){
+                          array_push($skillsObjectsList->volunteers,$volunteer);
+                          $skillsObjectsList->count = $skillsObjectsList->count + 1;
+                          $ilhanan = true;
+                          break;
+                      }  
+                      
+                    }
+                }
+                  
+              }
+              $ilhanan = false;
+
+      }
+
+      $pangTest = array();
+
+      
+      $count_para_sa_bug = true;
+
+      foreach($skillsObjectsLists as $skillsObjectsList){
+        
+        $test = $this->group($skillsObjectsList->volunteers,$activity,$skillsObjectsList->name,$count_para_sa_bug);
+        array_push($pangTest,count($skillsObjectsList->volunteers));
+        $count_para_sa_bug = false;
+
+      }
+
+      //dd($pangTest);
+     
+      return $pangTest;
+      
     }
 
 
@@ -232,8 +450,8 @@ class TestingController extends Controller
       $activity = Activity::where('activity_id','c3b8c9f')->first();
       $volunteers = Volunteer::all();
       
-      $this->sort($activity,$volunteers);
-     // $asq = $this->groupNoMatches($volunteers_with_no_match,$activity);
+      $asq = $this->sort($activity,$volunteers);
+     // $asq = $this->groupVolunteers($volunteers_with_no_match,$activity);
 
       return $asq;
 
@@ -246,7 +464,7 @@ class TestingController extends Controller
     // \DB::table('volunteers')->delete();
     // \DB::table('activityskills')->delete();
      \DB::table('volunteergroups')->delete();
-    // \DB::table('volunteeractivities')->delete();
+    // \DB::table('volunteeractivities')->delete();f
 
     // \DB::table('groupnotifications')->delete();
     // \DB::table('volunteerbeforeactivities')->delete();
@@ -279,11 +497,12 @@ class TestingController extends Controller
 
 
                             //return response()->json(Volunteer::all());
-                          \DB::table('activities')->delete();
-                          \DB::table('activityskills')->delete();
+                          /*\DB::table('activities')->delete();
+                          \DB::table('activityskills')->delete();*/
                           \DB::table('activitygroups')->delete();
-                          \DB::table('volunteeractivities')->delete();
+                         // \DB::table('volunteeractivities')->delete();
                           \DB::table('volunteergroups')->delete();
+                          \DB::table('volunteercriteriapoints')->delete();
 
                       
 
@@ -312,7 +531,7 @@ class TestingController extends Controller
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'c3b8c9f',
+                 'activity_id'=>'1f9f4bb',
                  'status'=> false  
                 ]);
       }

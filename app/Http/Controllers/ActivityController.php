@@ -922,6 +922,7 @@ public function test3(){
 
 
             foreach($activities as $activity){
+                $data = null;
                 $count = 0; 
 
                     $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();

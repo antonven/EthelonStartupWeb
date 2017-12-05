@@ -115,9 +115,6 @@ class NotificationController extends Controller
 
     foreach($notifications as $notification){
 
-     
-
-
        if($notification->major_type == 'activity_group' ){
           
          $image = Activity::select('image_url')->where('activity_id',$notification->sender_id)->first();
@@ -130,8 +127,15 @@ class NotificationController extends Controller
 
          $hours = \Carbon\Carbon::parse($notification->created_at)->diffForHumans();
 
-         $data = array("notification_id"=>$notification->notificationID,"notification_user_id"=>$notification->notification_user_id,
-                        "body"=>$notification->body,"isRead"=>$notification->isRead,"major_type"=>$notification->major_type,"data"=>$notification->data,'image_url'=>$image->image_url,'sender_id'=>$notification->sender_id,'hours'=>$hours);
+         $data = array("notification_id"=>$notification->notificationID,
+                        "notification_user_id"=>$notification->notification_user_id,
+                        "body"=>$notification->body,
+                            "isRead"=>$notification->isRead,
+                            "major_type"=>$notification->major_type,
+                            "data"=>$notification->data,
+                            'image_url'=>$image->image_url,
+                            'sender_id'=>$notification->sender_id,
+                            'hours'=>$hours);
 
          
           array_push($notificationObject,$data);
@@ -142,5 +146,10 @@ class NotificationController extends Controller
     return response()->json($notificationObject);                         
 
   }
+
+  public function notificationClicked(){
+    
+  }
+
 
 }
