@@ -319,8 +319,8 @@ class RunScheduler extends Command
       $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
       
       $asq = $this->sort($activity,$volunteers);
-     // $this->sendNotifications($activity);
-
+      $this->sendNotifications($activity);
+      Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);      
      // $asq = $this->groupVolunteers($volunteers_with_no_match,$activity);
 
       return $asq;
