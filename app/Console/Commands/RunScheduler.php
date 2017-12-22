@@ -616,12 +616,14 @@ class RunScheduler extends Command
 
                        if($activity_deadlineTime <= $timeNow){
                             $this->info('==sulod pa '.$activity->name.' = '.$timeNow.' !! '.$activity_deadlineTime); 
-                             $this->info('GROUPTYPE  '.$activity->group_type);   
+                            $this->info('GROUPTYPE  '.$activity->group_type);   
 
                             switch($activity->group_type){
-                                case 'random': $this->randomAllocation($activity);   
+                                case 'random': $this->randomAllocation($activity);  
+                                                $this->info('random'); 
                                                break;
-                                case 'skill':  $this->skill($activity);  
+                                case 'skill':  $this->skill($activity);
+                                                $this->info('skill');  
                                                break;           
                             }
 

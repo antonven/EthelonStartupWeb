@@ -34,7 +34,7 @@ class NotificationController extends Controller
 		  foreach($notifications as $notification){
 
 			if($volunteer->fcm_token != null){
-
+                
                 $activity_group_id = \DB::table('activitygroups')->select('activitygroups.*')
                                                         ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
                                                         ->where('volunteergroups.volunteer_id',$volunter->volunteer_id)

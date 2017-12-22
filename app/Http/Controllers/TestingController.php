@@ -47,7 +47,7 @@ public function group($volunteers, $activity, $skillName){
 
     //$volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
-                $vol_per_group = 5; 
+                $vol_per_group = 3; 
                 $count = 0;
                 $countforId = 1;
                 $id = '';
@@ -137,7 +137,7 @@ public function group($volunteers, $activity, $skillName){
                                   $lastCount = $count;  
                                   $count++;
                                   $countforId++;
-                                
+                                  
                                   if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
                                       \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
                                   }
@@ -323,10 +323,12 @@ public function group($volunteers, $activity, $skillName){
 
    public function sort($activity,$volunteers){
 
+
+
       $allVolunteers = $volunteers;
       $noMatches = array();
       $yesMatches = array();
-      $skills = Activityskill::where('activity_id','c3b8c9f')->get();
+      $skills = Activityskill::where('activity_id',$activity->activity_id)->get();
     
       foreach($allVolunteers as $allVolunteer){
 
@@ -334,13 +336,17 @@ public function group($volunteers, $activity, $skillName){
         $matches = false;
         $skwa = null;
 
+
+       // dd($volunteerSkills);
+
           foreach($skills as $skill){
 
              foreach($volunteerSkills as $volunteerSkill){
                 $skwa = $allVolunteer;
                if(strcasecmp($skill->name , $volunteerSkill->name)==0){
                                     
-
+                  $tonight = $skill->name . $volunteerSkill->name;
+                  //dd($tonight);
                                     $matches = true;
                                     
                                     break;
@@ -349,6 +355,8 @@ public function group($volunteers, $activity, $skillName){
              }
 
           }
+
+        //  dd($matches);
 
         if($matches == false ){
            array_push($noMatches,$allVolunteer);
@@ -363,6 +371,26 @@ public function group($volunteers, $activity, $skillName){
 
 
       $atay = array();
+
+      //if isa  
+      if(count($noMatches) == 1){
+        foreach($noMatches as $noMatch){
+            array_push($yesMatches,$noMatch);
+        }
+
+        $noMatches = array();
+
+      }
+      
+      //if isa  
+      if(count($yesMatches) == 1){
+        foreach($yesMatches as $yesMatch){
+            array_push($noMatches,$yesMatch);
+        }
+
+        $yesMatches = array();
+      }
+
 
       $rets1 = $this->group($noMatches,$activity,'none');
       array_push($atay, $rets1);
@@ -447,9 +475,20 @@ public function group($volunteers, $activity, $skillName){
 
     public function skill(){
 
-      $activity = Activity::where('activity_id','c3b8c9f')->first();
-      $volunteers = Volunteer::all();
-      
+      $activity = Activity::where('activity_id','fc63a6a')->first();
+      $volunteers = \DB::table('volunteers')->limit(2)->get()->toArray();
+      $vol = Volunteer::where('volunteer_id','f505ca')->first();
+
+     
+
+      array_push($volunteers,$vol);
+
+      //$volunteers = (object)$volunteers;
+
+     
+
+    //  $volunteers = Volunteer::where('volunteer_id','00b35ab')->get();
+
       $asq = $this->sort($activity,$volunteers);
      // $asq = $this->groupVolunteers($volunteers_with_no_match,$activity);
 
