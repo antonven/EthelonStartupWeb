@@ -57,6 +57,7 @@ Route::post('/loginwithfb','LoginController@loginwithFb');
 //Route::get('/deleteall','ActivityController@deleteall');
 Route::post('/attendanceactivity','VolunteerController@successAttendance');
 Route::post('/test2','ActivityController@test2');
+Route::post('/notiftabclicked','TestingController@notificationTabClicked');
 
 Route::post('/test3','TestingController@test3');
 Route::post('/register','RegistrationController@register');
