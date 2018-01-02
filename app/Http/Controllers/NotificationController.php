@@ -154,9 +154,9 @@ class NotificationController extends Controller
 
       $notifications = \DB::table('notifications')->select('notifications.*','notification_users.*','notifications.id as notificationID','notification_users.id as notification_user_id')
                                                 ->join('notification_users','notification_users.notification_id','=','notifications.id')
-                                                ->where('notification_users.receiver_id',$user)->update(['isRead'=>true]]);
+                                                ->where('notification_users.receiver_id',$user)->update(['isRead'=>true]);
 
-                                                
+
 
   }
 
