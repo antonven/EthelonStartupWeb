@@ -732,9 +732,9 @@ public function test3(){
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
             
             $file->move($destinationPath, $filename);
-         
+            
             \Cloudder::upload(url('/file_attachments').'/'.$filename);
-
+              
             $url = \Cloudder::getResult();
             
             if($url){

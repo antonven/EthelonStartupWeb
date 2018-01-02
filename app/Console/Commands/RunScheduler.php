@@ -168,7 +168,7 @@ class RunScheduler extends Command
 
                             }
                            
-             }
+            }
 
 
                             $optionBuilder = new OptionsBuilder();
@@ -321,6 +321,7 @@ class RunScheduler extends Command
       $asq = $this->sort($activity,$volunteers);
       $this->sendNotifications($activity);
       Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);      
+      $this->info('FUCKCKCK');
      // $asq = $this->groupVolunteers($volunteers_with_no_match,$activity);
 
       return $asq;
@@ -581,7 +582,7 @@ class RunScheduler extends Command
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
                                 ->where('activities.status',false)
                                 ->get();
-
+                                    
                                 if($activities->count()){
                                     $this->info('nay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
                                 }else{

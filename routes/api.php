@@ -38,6 +38,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 });
+
 Route::post('/joinactivity','VolunteerController@joinActivity');
 Route::post('/activitycriteria','ActivityController@criteria');
 Route::post('/fcm_token','VolunteerController@fcm_token');
@@ -60,6 +61,8 @@ Route::post('/test2','ActivityController@test2');
 Route::post('/test3','TestingController@test3');
 Route::post('/register','RegistrationController@register');
 Route::post('/login','LoginController@login');
+
+Route::post('/getnumofnotifs','NotificationController@numOfUnread');
 
 
 Route::post('/kobedelete','TestingController@kobedelete');

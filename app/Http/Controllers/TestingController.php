@@ -566,19 +566,21 @@ public function group($volunteers, $activity, $skillName){
       
       
 
-
+/*
       foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'1f9f4bb',
+                 'activity_id'=>'c3b8c9f',
                  'status'=> false  
                 ]);
       }
+*/
+
 
        
 
-       // $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
-/*
+        $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
+
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -588,7 +590,7 @@ public function group($volunteers, $activity, $skillName){
                              $body = 'Your groupmates have been revealed for '.$kobe.' activity';
  
                           $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Vincent Ramas bayot')
+                          $notificationBuilder->setBody('ANDROID STUDIO BOGO')
                                               ->setSound('default'); 
 
                             $dataBuilder = new PayloadDataBuilder();
@@ -601,10 +603,10 @@ public function group($volunteers, $activity, $skillName){
                             $notification = $notificationBuilder->build();
                            // $data = $dataBuilder->build();
 
-                            $downstreamResponse = FCM::sendTo('ffQ_FPL2P24:APA91bFvQbvj1IcdPRlOiC-BEtAYGH2crG-dcU-qMHgxpAq-2N7y26e9YUDnDOxd8uPQbcKLd1xxOylTw1PPZuYEE4zUepevfh4pXyF4iauOs_fDZjGjp48_Epa_er_H1vpiB0RsCAmO', $option, $notification, null);
+                            $downstreamResponse = FCM::sendTo('cncXed496kY:APA91bFX3s-aGJ1jmW8E3zhvXJkjUX18i1yS-XXxcEqyi4RezYJwofiNFoZLRgdh3T_NW3QVS6d8YHxwmpMKxg3VlcTRc4cG106TWCz_TGlaYFKqDyA_N4CJ5OTRSMfhco5tBVBQdb7H', $option, $notification, null);
 
                             dd($downstreamResponse);
-*/
+
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
      /* Activitygroup::where('activity_id','a77c9b4')->delete();

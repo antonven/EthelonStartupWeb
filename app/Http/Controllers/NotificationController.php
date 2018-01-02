@@ -115,6 +115,7 @@ class NotificationController extends Controller
 
     foreach($notifications as $notification){
 
+
        if($notification->major_type == 'activity_group' ){
           
          $image = Activity::select('image_url')->where('activity_id',$notification->sender_id)->first();
@@ -149,6 +150,30 @@ class NotificationController extends Controller
 
   public function notificationClicked(){
     
+  }
+
+  public function numOfUnread(Request $request){
+
+    $user = $request->input('volunteer_id');
+    $numOfUnread = 0;
+
+    $notifications = \DB::table('notifications')->select('notifications.*','notification_users.*','notifications.id as notificationID','notification_users.id as notification_user_id')
+                                                ->join('notification_users','notification_users.notification_id','=','notifications.id')
+                                                ->where('notification_users.receiver_id',$user)->orderBy('notification_users.date','asc')->get();
+
+                                      
+    foreach($notifications as $notification){
+
+         if($notification->isRead == false){
+            $numOfUnread++;
+          }
+
+    } 
+
+    $data = array("number"=>$numOfUnread);
+
+    return response()->json($numOfUnread);
+
   }
 
 

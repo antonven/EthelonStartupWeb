@@ -183,14 +183,14 @@ class VolunteerController extends Controller
             // $numOfHours = $start_time->diffInHours($end_time);
              //$numOfHours = 2;
                 
-                   $sumOfPoints = 0;
+               $sumOfPoints = 0;
                $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
                
                foreach($activity_skills as $activity_skill){
-
+                  
                 $skill = $activity_skill->name;
                 $sumOfPoints = $this->points($skill,$sumOfPoints);
-
+                
                }    
 
             $sumOfPoints = $sumOfPoints + $activity->points_equivalent;
