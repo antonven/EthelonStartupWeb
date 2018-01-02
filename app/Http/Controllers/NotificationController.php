@@ -172,7 +172,7 @@ class NotificationController extends Controller
 
     $data = array("number"=>$numOfUnread);
 
-    return response()->json($numOfUnread);
+    return response()->json($data);
 
   }
 
