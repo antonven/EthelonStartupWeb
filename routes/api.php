@@ -48,27 +48,24 @@ Route::post('/getallactivities','ActivityController@getActivitiesNotDone');
 Route::post('/portfolio','ActivityController@portfolio');
 Route::post('/checkIfAlreadyAttended','VolunteerController@checkIfAlreadyAttended');
 Route::get('/leaderboard','VolunteerController@leaderboard');
-Route::post('/sendNotif','ActivityController@sendNotifications');	
+
 Route::post('/rategroupmate','VolunteerController@rategroupmate');	
-Route::post('/sendnotif','ActivityController@sendNotifications');
-Route::post('/test','ActivityController@test');
+// Route::post('/sendnotif','ActivityController@sendNotifications');
+
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
 //Route::get('/deleteall','ActivityController@deleteall');
 Route::post('/attendanceactivity','VolunteerController@successAttendance');
-Route::post('/test2','ActivityController@test2');
-
 
 Route::post('/notiftabclicked','NotificationController@notificationTabClicked');
 
-Route::post('/test3','TestingController@test3');
 Route::post('/register','RegistrationController@register');
 Route::post('/login','LoginController@login');
 
-Route::post('/getnumofnotifs','NotificationController@numOfUnread');
-Route::post('/kobedelete','TestingController@kobedelete');
 
-Route::post('/test4','TestingController@runScheduler');
+
+
+
 Route::post('/volunteerstorate','ActivityController@volunteersToRate');
 
 Route::group(['middleware'=>'foundation'],function(){
@@ -76,11 +73,21 @@ Route::group(['middleware'=>'foundation'],function(){
 });
 
 Route::post('/picture','RegistrationController@addPhoto');
-Route::post('/notif','NotificationController@getNofitications');
+
+
+
+//testing
 Route::post('/skillprac','TestingController@skill');
+Route::post('/test2','ActivityController@test2');
+Route::post('/test3','TestingController@test3');
+Route::post('/test','ActivityController@test');
+Route::post('/test4','TestingController@runScheduler');
+Route::post('/kobedelete','TestingController@kobedelete');
 
-
-
+//notification
+Route::post('/notif','NotificationController@getNofitications');
+Route::post('/sendNotif','ActivityController@sendNotifications');	
+Route::post('/getnumofnotifs','NotificationController@numOfUnread');
 
 
 

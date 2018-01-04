@@ -156,7 +156,7 @@ class NotificationController extends Controller
                                                 ->join('notification_users','notification_users.notification_id','=','notifications.id')
                                                 ->where('notification_users.receiver_id',$user)->update(['isRead'=>true]);
 
-
+                                                return $notifications;
 
   }
 
