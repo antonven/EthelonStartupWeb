@@ -219,7 +219,18 @@ class NotificationController extends Controller
 
 
                 
-                  $activity = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.activity_id',$activity_id)->where('volunteeractivities.volunteer_id',$volunteer_id)->first();
+                  /*$activity = \DB::table('activities')
+                                ->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as   foundation_name')
+                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+                                ->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')
+                                ->where('volunteeractivities.activity_id',$activity_id)
+                                ->where('volunteeractivities.volunteer_id',$volunteer_id)->first();*/
+
+                               /* dd($activity_id);
+                                dd($volunteer_id);
+*/
+                                $activity = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.activity_id',$activity_id)->where('volunteeractivities.volunteer_id',$volunteer_id)->first();
+
 
                   $volunteerCount = Volunteeractivity::where('activity_id',$activity_id)->get();
 
