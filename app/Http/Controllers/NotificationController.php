@@ -191,7 +191,8 @@ class NotificationController extends Controller
 
     switch ($notif_type) {
         case 'activity_group':
-               $this->getActivity($request->input('data'));
+               $activity = $this->getActivity($request->input('data'));
+               return response()->json($activity);
                break;
         
     }
