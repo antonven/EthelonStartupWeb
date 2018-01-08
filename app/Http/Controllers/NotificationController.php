@@ -184,5 +184,70 @@ class NotificationController extends Controller
 
   }
 
+  public function notificationClicked(Request $request){
+
+    $notif_type = $request->input('notif_type');
+
+
+    switch ($notif_type) {
+        case 'activity_group':
+               $this->getActivity($request->input('data'));
+               break;
+        
+    }
+
+
+  }
+
+  public function getActivity($ativity_id){
+
+
+
+                  $activity = Activity::where('activity_id',$activity_id)->first();
+                  $volunteerCount = Volunteeractivity::where('activity_id',$activity_id)->get();
+
+                  $activitySkills = Activityskill::where('activity_id',$activity_id)->get();
+
+                  $activityCriteria = Activitycriteria::where('activity_id',$activity_id)->get();                   
+
+                  $foundation = \DB::table('activities')->select('users.name as foundtion_name','foundations.image_url as  foundation_imageurl') 
+                                              ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
+                                              ->join('users','users.user_id','=','foundations.user_id') 
+                                              ->where('activities.activity_id',$activity_id)->first();  
+
+                  $activityTempo = array("activity_id"=>$activity->activity_id,
+                                            "foundation_id"=>$activity->foundation_id,
+                                            "name"=>$activity->name,
+                                            "image_url"=>$activity->image_url,
+                                            "imageQr_url"=>$activity->imageQr_url,
+                                            "description"=>$activity->description,
+                                            "location"=>$activity->location,
+                                            "start_time"=>$activity->start_time,
+                                            "end_time"=>$activity->end_time,
+                                            "group"=>$activity->group,
+                                            "long"=>$activity->long,
+                                            "lat"=>$activity->lat,
+                                            "points_equivalent"=>$activity->points_equivalent,
+                                            "status"=>$activity->status,
+                                            "created_at"=>$activity->created_at,
+                                            "updated_at"=>$activity->updated_at,
+                                            "contactperson"=>$activity->contactperson,
+                                            "contact"=>$activity->contact,
+                                            "startDate"=>$activity->startDate,
+                                            "foundation_name"=>$activity->foundation_name,
+                                            "status"=>$activity->status,
+                                            "joined"=>$activity->joined,
+                                            "points"=>$activity->points,
+                                            "foundation_img" =>$foundation->foundation_imageurl,
+                                            "foundtion_name" =>$foundation->foundtion_name,
+                                            "volunteer_count"=>$volunteerCount->count(),
+                                            "activity_skills"=>$activitySkills,
+                                            "activity_criteria"=>$activityCriteria);
+
+            
+            return response()->json($activityTempo);
+
+  }
+
 
 }

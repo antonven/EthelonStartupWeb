@@ -21,59 +21,57 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware'=>'auth:api'],function(){
 
-		Route::post('/volunteerskills','VolunteerController@inputSkills');	
-				
-
-		Route::post('/getactivitiesbefore','VolunteerController@getBeforeActivities');
-		Route::post('/getactivitiesafter','VolunteerController@getAfterActivities');
-		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
-	    Route::get('/getallfoundations','FoundationController@getallfoundations');
-		Route::post('/activitypoints','VolunteerController@points');				
-		
+		//activity
+		Route::post('/joinactivity','VolunteerController@joinActivity');
 		Route::post('/activitycriteria','ActivityController@criteria');
-	
-		
+		Route::post('/portfolio','ActivityController@portfolio');
+		Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
 		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
+		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
+		Route::post('/activitycriteria','ActivityController@criteria');
+		Route::post('/attendanceactivity','VolunteerController@successAttendance');
+
+		//volunteer
+		Route::post('/volunteerstorate','ActivityController@volunteersToRate');
+		Route::post('/checkIfAlreadyAttended','VolunteerController@checkIfAlreadyAttended');
+		Route::get('/leaderboard','VolunteerController@leaderboard');
+		Route::post('/rategroupmate','VolunteerController@rategroupmate');	
 		Route::post('/groupmatestorate','ActivityController@volunteersToRate');
+		Route::post('/volunteerskills','VolunteerController@inputSkills');	
+		Route::post('/activitypoints','VolunteerController@points');	
+
+		//foundations
+		Route::get('/getallfoundations','FoundationController@getallfoundations');
+		
+
+		//notification
+		Route::post('/notif','NotificationController@getNofitications');
+		Route::post('/sendNotif','ActivityController@sendNotifications');	
+		Route::post('/getnumofnotifs','NotificationController@numOfUnread');
+		Route::post('/notiftabclicked','NotificationController@notificationTabClicked');
 		Route::post('/checkNotif','NotificationController@groupsController');
+		Route::post('/notificationClicked','NotificationController@notificationClicked');
+
+		//login
+		Route::post('/register','RegistrationController@register');
+		Route::post('/login','LoginController@login');
+		Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
+		Route::post('/loginwithfb','LoginController@loginwithFb');
+
+		//get fcm token 
+		Route::post('/fcm_token','VolunteerController@fcm_token');
+		
+		
+	    Route::post('/picture','RegistrationController@addPhoto');
+					
+		
 		
 });
 
-Route::post('/joinactivity','VolunteerController@joinActivity');
-Route::post('/activitycriteria','ActivityController@criteria');
-Route::post('/fcm_token','VolunteerController@fcm_token');
-Route::post('/delete','TestingController@deleteall');
-Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
-Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
-Route::post('/portfolio','ActivityController@portfolio');
-Route::post('/checkIfAlreadyAttended','VolunteerController@checkIfAlreadyAttended');
-Route::get('/leaderboard','VolunteerController@leaderboard');
-
-Route::post('/rategroupmate','VolunteerController@rategroupmate');	
-// Route::post('/sendnotif','ActivityController@sendNotifications');
-
-Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
-Route::post('/loginwithfb','LoginController@loginwithFb');
-//Route::get('/deleteall','ActivityController@deleteall');
-Route::post('/attendanceactivity','VolunteerController@successAttendance');
-
-Route::post('/notiftabclicked','NotificationController@notificationTabClicked');
-
-Route::post('/register','RegistrationController@register');
-Route::post('/login','LoginController@login');
-
-
-
-
-
-Route::post('/volunteerstorate','ActivityController@volunteersToRate');
 
 Route::group(['middleware'=>'foundation'],function(){
 
 });
-
-Route::post('/picture','RegistrationController@addPhoto');
-
 
 
 //testing
@@ -83,12 +81,6 @@ Route::post('/test3','TestingController@test3');
 Route::post('/test','ActivityController@test');
 Route::post('/test4','TestingController@runScheduler');
 Route::post('/kobedelete','TestingController@kobedelete');
-
-//notification
-Route::post('/notif','NotificationController@getNofitications');
-Route::post('/sendNotif','ActivityController@sendNotifications');	
-Route::post('/getnumofnotifs','NotificationController@numOfUnread');
-
-
+Route::post('/delete','TestingController@deleteall');
 
 
