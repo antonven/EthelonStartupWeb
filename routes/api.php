@@ -50,8 +50,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/getnumofnotifs','NotificationController@numOfUnread');
 		Route::post('/notiftabclicked','NotificationController@notificationTabClicked');
 		Route::post('/checkNotif','NotificationController@groupsController');
-		Route::post('/notificationClicked','NotificationController@notificationClicked');
-
+		
 		//login
 		Route::post('/register','RegistrationController@register');
 		Route::post('/login','LoginController@login');
@@ -75,6 +74,7 @@ Route::group(['middleware'=>'foundation'],function(){
 
 
 //testing
+Route::post('/notificationClicked','NotificationController@notificationClicked');
 Route::post('/skillprac','TestingController@skill');
 Route::post('/test2','ActivityController@test2');
 Route::post('/test3','TestingController@test3');

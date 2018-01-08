@@ -5,14 +5,29 @@ namespace App\Http\Controllers;
 use App\Notification;
 use App\Notification_user;
 
+use App\Volunteerbeforeactivity;
+use App\Volunteerafteractivity;
+use App\Activity;
+use App\Volunteeractivity;
+use App\Volunteerskill;
+use App\Activityskill;
+use App\User;
+use App\Events\HelloPusherEvent;
+use App\Volunteer;
+use App\Activitycriteria;
+use Carbon\Carbon;
+use App\Activitygroup;
+use App\Volunteergroup;
+use App\Volunteercriteria;
+use App\Volunteercriteriapoint;
+
 use Illuminate\Http\Request;
 use App\Groupnotification;
-use App\Activity;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
-use App\Volunteer;
+
 
 class NotificationController extends Controller
 {
@@ -191,7 +206,7 @@ class NotificationController extends Controller
 
     switch ($notif_type) {
         case 'activity_group':
-               $activity = $this->getActivity($request->input('data'));
+               $activity = $this->getActivity($request->input('data'),$request->input('volunteer_id'));
                return response()->json($activity);
                break;
         
@@ -200,11 +215,12 @@ class NotificationController extends Controller
 
   }
 
-  public function getActivity($ativity_id){
+  public function getActivity($activity_id,$volunteer_id){
 
 
+                
+                  $activity = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.activity_id',$activity_id)->where('volunteeractivities.volunteer_id',$volunteer_id)->first();
 
-                  $activity = Activity::where('activity_id',$activity_id)->first();
                   $volunteerCount = Volunteeractivity::where('activity_id',$activity_id)->get();
 
                   $activitySkills = Activityskill::where('activity_id',$activity_id)->get();
@@ -216,6 +232,7 @@ class NotificationController extends Controller
                                               ->join('users','users.user_id','=','foundations.user_id') 
                                               ->where('activities.activity_id',$activity_id)->first();  
 
+                                            
                   $activityTempo = array("activity_id"=>$activity->activity_id,
                                             "foundation_id"=>$activity->foundation_id,
                                             "name"=>$activity->name,
@@ -246,7 +263,7 @@ class NotificationController extends Controller
                                             "activity_criteria"=>$activityCriteria);
 
             
-            return response()->json($activityTempo);
+            return $activityTempo;
 
   }
 
