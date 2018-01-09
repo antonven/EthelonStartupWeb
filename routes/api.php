@@ -52,10 +52,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/checkNotif','NotificationController@groupsController');
 		
 		//login
-		Route::post('/register','RegistrationController@register');
-		Route::post('/login','LoginController@login');
-		Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
-		Route::post('/loginwithfb','LoginController@loginwithFb');
+		
 
 		//get fcm token 
 		Route::post('/fcm_token','VolunteerController@fcm_token');
@@ -82,5 +79,10 @@ Route::post('/test','ActivityController@test');
 Route::post('/test4','TestingController@runScheduler');
 Route::post('/kobedelete','TestingController@kobedelete');
 Route::post('/delete','TestingController@deleteall');
+
+Route::post('/register','RegistrationController@register');
+Route::post('/login','LoginController@login');
+Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
+Route::post('/loginwithfb','LoginController@loginwithFb');
 
 
