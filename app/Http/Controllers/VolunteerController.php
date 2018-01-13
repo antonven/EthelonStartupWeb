@@ -22,6 +22,7 @@ use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
+use App\Volunteerbadge;
 use App\Groupnotification;
 
 
@@ -165,13 +166,97 @@ class VolunteerController extends Controller
       return response()->json($data);
    }
 
+
+   public function badgePercentage($volunteerBadge){
+
+    $equivalentPercentage = 0;
+
+      switch($volunteerBadge){
+          case 'Newbie':
+            $equivalentPercentage = 0.5;
+            # code...
+            break;
+
+          case "Archon":
+            $equivalentPercentage = 0.4;
+            break;
+
+          case "Expert":
+            $equivalentPercentage = 0.3;
+            break;
+
+          case "Legend":
+            $equivalentPercentage = 0.2;
+            break;
+
+      }
+      return $equivalentPercentage;
+   }
+
+
+   public function updateBadge($volunteerBadge, $gauge_points){
+
+      switch($volunteerBadge->badge) {
+        case 'Newbie':
+         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+          ->where('badge', 'Newbie')->update(['badge'=>'Archon','gauge_points'=>$gauge_points,'points'=>0]);
+          break;
+        
+        case 'Archon':
+          Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+          ->where('badge', 'Archon')->update(['badge'=>'Expert','gauge_points'=>$gauge_points,'points'=>0]);
+          break;
+
+        case 'Expert':
+          Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+          ->where('badge', 'Expert')->update(['badge'=>'Legend','gauge_points'=>$gauge_points,'points'=>0]);
+          break;
+
+      }
+
+   }
+
+
+   public function updateStar($volunteerBadge, $received_gauge_points){
+    switch ($volunteerBadge->star) {
+
+      
+        case 0:
+        $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
+        Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+          ->where('star', 0)->update(['star'=>1, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+        # code...
+        break;
+        case 1:
+        Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+          ->where('star', 1)->update(['star'=>2, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+        # code...
+        break;
+        case 2:
+        Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+          ->where('star', 2)->update(['star'=>3, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+        # code...
+        break;
+        case 3:
+        Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+          ->where('star', 3)->update(['star'=>4, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+        # code...
+        break;
+        case 4:
+        Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+          ->where('star', 4)->update(['star'=>5, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+        # code...
+        break;
+          
+    }
+
+
+   }
+
    
    public function successAttendance(Request $request){
   
-    //diri padung nga code basta maka rate nah siya tanan volunteers kato gae next nga button 
-
-
-
+  
              \DB::table('volunteeractivities')
                 ->where('volunteer_id',$request->input('volunteer_id'))
                 ->where('activity_id',$request->input('activity_id'))
@@ -182,20 +267,56 @@ class VolunteerController extends Controller
              
              $start_time = \Carbon\Carbon::parse($activity->start_time);   
              $end_time =   \Carbon\Carbon::parse($activity->end_time); 
+             $criteria = Volunteercriteriapoint::where('activity_id', $request->input('actvity_id'))
+             ->where('volunteer_id', $request->input('volunteer_id'))->get()
 
-                
+               $criteriaTotal = 0;
                $sumOfPoints = 0;
+
                $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
+               $volunteer = Volunteer::where('volunteer_id', $request->input('volunteer_id'))->first();
+               $volunteerBadges = Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))->get();
+               
+  
+               foreach ($criteria as $criterion) {
+                    
+                    $criteriaTotal = $criteriaTotal + $criterion->average_points;
 
-               $criterias = Volunteercriteriapoint::where('activity_id',$request->input('activity_id'))->where('volunteer_id',$request->input('volunteer_id'))->get();
-
-               //gikuha nako ang mga volunteercriterpoint sa volunteer. kay ang volunteercriteria nga table naa dira ang average point sa volunteer 
-
-
-               foreach($criterias as $criteria){
-                  
-
+                 # code...
                }
+                $activity_points = $criteriaTotal + $activity->points_equivalent;
+                $total_points = $activity_points + $volunteer->points;
+
+               foreach ($activity_skills as $activity_skill) {
+                  foreach ($volunteerBadges as $volunteerBadge) {
+                    # code...
+                    if(strcmp($activity_skill, $volunteerBadge->skill) == 0){
+                       
+                      $skill_points_local = $volunteerBadge->points + $activity_points;
+                      $gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge->badge);
+
+                        if($gauge_points >= 100){
+
+                              if($volunteerBadge->star == 5){
+                                $this->updateBadge($volunteerBadge, $gauge_points);
+                              }
+                              else{
+                                $this->updateStar($volunteerBadge, $gauge_points);
+                              }
+                        }
+                        else{
+                           Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))
+                              ->where('badge', $volunteerBadge->badge)
+                              ->update(['gauge_points'=>$gauge_points, 'points'=>$skill_points_local]);
+                        }
+                       
+                    }
+                  }
+                 # code...
+               }
+              
+               
+
 
             $sumOfPoints = $sumOfPoints + $activity->points_equivalent;
 
@@ -208,152 +329,4 @@ class VolunteerController extends Controller
 
             $new_points = $volunteer_points->points + $sumOfPoints;
 
-            Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
-            \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
-
-            $data = array("result"=>$sumOfPoints);
-            return response()->json($data);            
-            
-    }
-
-
-    public function inputSkills(Request $request){
-    	
-
-      $arrays = array();
-    	$volunteer_id = $request->input('volunteer_id');
-
-
-        $i = 1;
-
-       
-        if($stringcount = $request->input('count')){
-            $count = (int)$stringcount;
-
-            for($i = 0; $i < $count; $i++){
-
-                 array_push($arrays, $request->input('params'.$i));      
-                  //return response()->json($request->input('params'.$i));
-            }
-
-            
-            foreach($arrays as $value){
-
-                 Volunteerskill::create([
-                  'name' => $value,
-                  'volunteer_id' => $volunteer_id 
-                ]);      
-
-            }
-
-          }
-
-          else{
-
-            return "wtf";
-
-          }
-
-        return "Success";
-    }
-
-    //join activity nga wala pa nahitabo
-    public function joinActivity(Request $request){
-
-       $watch = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
-                                  ->where('activity_id',$request->input('activity_id'))->get();
-
-         if($watch->count()){
-
-            $data = array("message"=>"Already Joined");
-            return response()->json($data);
-            
-         }                                   
-         else{
-
-      
-            Volunteeractivity::create([
-                 'volunteer_id'=>$request->input('volunteer_id'),
-                 'activity_id'=>$request->input('activity_id'),
-                 'status'=> false  
-                ]);
-            
-
-            $data = array("message"=>"Success");
-
-            return response()->json($data);
-            
-            }
-    }
-
     
-    public function points($skill, $sumOfPoints){
-
-
-                    switch($skill){
-
-                         case 'Environmental': $sumOfPoints = $sumOfPoints + 10;
-                                      break;          
-                         case 'Sports': $sumOfPoints = $sumOfPoints + 8;                       
-                                      break;
-                         case 'Culinary': $sumOfPoints = $sumOfPoints + 8;
-                                      break;
-                         case 'Medical': $sumOfPoints = $sumOfPoints + 10;
-                                      break;
-                         case 'Charity': $sumOfPoints = $sumOfPoints + 10;
-                                      break;
-                         case 'Livelihood': $sumOfPoints = $sumOfPoints + 10;
-                                      break;
-                         case 'Education': $sumOfPoints = $sumOfPoints + 10;
-                                      break;
-                         case 'Arts': $sumOfPoints = $sumOfPoints + 8;
-                                      break;
-                         case 'Free for all': $sumOfPoints = $sumOfPoints + 15;
-                                      break;            
-
-                    }        
-
-                    return $sumOfPoints;
-      
-    }
-
-
-    //kuhaon ang activities nga wala pah na attendan sa volunteer* 
-    public function getBeforeActivities(Request $request){
-
-    	$volunteer_id = $request->input('volunteer_id');
-
-    	$activitiesBefore = Volunteerbeforeactivity::where('volunteer_id',$volunteer_id)->get();
-
-    	return response()->json($activitiesBefore);
-
-    }
-
-    //kuhaon ang activities nga na attendan nah sa volunteer
-    public function getAfterActivities(Request $request){
-    	$volunteer_id = $request->input('volunteer_id');
-
-    	//return dd($volunteer_id);
-    	$activitiesAfter = Volunteerafteractivity::where('volunteer_id',$volunteer_id)->get();
-
-    	return response()->json($activitiesAfter);
-    }
-
-    public function leaderboard(){
-
-        $volunteerLeaders = \DB::table('volunteers')->select('users.name as name', 'volunteers.*')
-                                                        ->join('users','users.user_id','=','volunteers.user_id')->orderBy('volunteers.points','desc')->get();
-
-
-        return response()->json($volunteerLeaders);
-
-    }  
-
-    public function volunteeractivitycriteria(){
-        
-    }
-
-
-
-
-}
