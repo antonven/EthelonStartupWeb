@@ -168,7 +168,10 @@ class VolunteerController extends Controller
    
    public function successAttendance(Request $request){
   
-  
+    //diri padung nga code basta maka rate nah siya tanan volunteers kato gae next nga button 
+
+
+
              \DB::table('volunteeractivities')
                 ->where('volunteer_id',$request->input('volunteer_id'))
                 ->where('activity_id',$request->input('activity_id'))
@@ -180,18 +183,19 @@ class VolunteerController extends Controller
              $start_time = \Carbon\Carbon::parse($activity->start_time);   
              $end_time =   \Carbon\Carbon::parse($activity->end_time); 
 
-            // $numOfHours = $start_time->diffInHours($end_time);
-             //$numOfHours = 2;
                 
                $sumOfPoints = 0;
                $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
-               
-               foreach($activity_skills as $activity_skill){
+
+               $criterias = Volunteercriteriapoint::where('activity_id',$request->input('activity_id'))->where('volunteer_id',$request->input('volunteer_id'))->get();
+
+               //gikuha nako ang mga volunteercriterpoint sa volunteer. kay ang volunteercriteria nga table naa dira ang average point sa volunteer 
+
+
+               foreach($criterias as $criteria){
                   
-                $skill = $activity_skill->name;
-                $sumOfPoints = $this->points($skill,$sumOfPoints);
-                
-               }    
+
+               }
 
             $sumOfPoints = $sumOfPoints + $activity->points_equivalent;
 
