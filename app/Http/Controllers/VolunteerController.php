@@ -171,7 +171,15 @@ class VolunteerController extends Controller
 
     $equivalentPercentage = 0;
 
-      switch($volunteerBadge){
+      switch($volunteerBadge->badge){
+          case 'Nothing': $equivalentPercentage = 0.5;
+           $atay =  Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+            ->where('badge', 'Nothing')
+            ->where('skill',$volunteerBadge->skill)  
+            ->update(['badge'=>'Newbie']);  
+            
+            break;   
+
           case 'Newbie':
             $equivalentPercentage = 0.5;
             # code...
@@ -199,17 +207,20 @@ class VolunteerController extends Controller
       switch($volunteerBadge->badge) {
         case 'Newbie':
          Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-          ->where('badge', 'Newbie')->update(['badge'=>'Archon','gauge_points'=>$gauge_points,'points'=>0]);
+          ->where('badge', 'Newbie')
+          ->where('skill',$volunteerBadge->skill)->update(['badge'=>'Archon','gaugeExp'=>$gauge_points,'points'=>0,'star'=>0]);
           break;
         
         case 'Archon':
           Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-          ->where('badge', 'Archon')->update(['badge'=>'Expert','gauge_points'=>$gauge_points,'points'=>0]);
+          ->where('skill',$volunteerBadge->skill) 
+          ->where('badge', 'Archon')->update(['badge'=>'Expert','gaugeExp'=>$gauge_points,'points'=>0,'star'=>0]);
           break;
 
         case 'Expert':
           Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-          ->where('badge', 'Expert')->update(['badge'=>'Legend','gauge_points'=>$gauge_points,'points'=>0]);
+          ->where('skill',$volunteerBadge->skill) 
+          ->where('badge', 'Expert')->update(['badge'=>'Legend','gaugeExp'=>$gauge_points,'points'=>0,'star'=>0]);
           break;
 
       }
@@ -222,29 +233,36 @@ class VolunteerController extends Controller
 
       
         case 0:
-        $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
+        $new_gauge_points = (int)($volunteerBadge->gauge_points + $received_gauge_points) - 100;
+        $new_gauge_points = (int)$new_gauge_points;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-          ->where('star', 0)->update(['star'=>1, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+          ->where('star', 0)->where('skill',$volunteerBadge->skill)->update(['star'=>1, 'points'=>0, 'gaugeExp'=>(int)$new_gauge_points]);
+          echo 'success';
+           
         # code...
         break;
         case 1:
+        $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-          ->where('star', 1)->update(['star'=>2, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+          ->where('star', 1)->where('skill',$volunteerBadge->skill)->update(['star'=>2, 'points'=>0, 'gaugeExp'=>$new_gauge_points]);
         # code...
         break;
         case 2:
+        $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-          ->where('star', 2)->update(['star'=>3, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+          ->where('star', 2)->where('skill',$volunteerBadge->skill)->update(['star'=>3, 'points'=>0, 'gaugeExp'=>$new_gauge_points]);
         # code...
         break;
         case 3:
+        $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-          ->where('star', 3)->update(['star'=>4, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+          ->where('star', 3)->where('skill',$volunteerBadge->skill)->update(['star'=>4, 'points'=>0, 'gaugeExp'=>$new_gauge_points]);
         # code...
         break;
         case 4:
+        $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-          ->where('star', 4)->update(['star'=>5, 'points'=>0, 'gauge_points'=>$new_gauge_points]);
+          ->where('star', 4)->where('skill',$volunteerBadge->skill)->update(['star'=>5, 'points'=>0, 'gaugeExp'=>$new_gauge_points]);
         # code...
         break;
           
@@ -257,18 +275,20 @@ class VolunteerController extends Controller
    public function successAttendance(Request $request){
   
   
-             \DB::table('volunteeractivities')
+         /*    \DB::table('volunteeractivities')
                 ->where('volunteer_id',$request->input('volunteer_id'))
                 ->where('activity_id',$request->input('activity_id'))
-                ->update(['status' => true]);
+                ->update(['status' => true]);*/
                 
+
 
              $activity = Activity::where('activity_id',$request->input('activity_id'))->first();
              
              $start_time = \Carbon\Carbon::parse($activity->start_time);   
              $end_time =   \Carbon\Carbon::parse($activity->end_time); 
-             $criteria = Volunteercriteriapoint::where('activity_id', $request->input('actvity_id'))
-             ->where('volunteer_id', $request->input('volunteer_id'))->get()
+             $criteria = Volunteercriteriapoint::where('activity_id', $request->input('activity_id'))
+             ->where('volunteer_id', $request->input('volunteer_id'))->get();
+             
 
                $criteriaTotal = 0;
                $sumOfPoints = 0;
@@ -277,27 +297,41 @@ class VolunteerController extends Controller
                $volunteer = Volunteer::where('volunteer_id', $request->input('volunteer_id'))->first();
                $volunteerBadges = Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))->get();
                
-  
+                
+
                foreach ($criteria as $criterion) {
                     
                     $criteriaTotal = $criteriaTotal + $criterion->average_points;
 
                  # code...
                }
+
+                
+
                 $activity_points = $criteriaTotal + $activity->points_equivalent;
+
+
                 $total_points = $activity_points + $volunteer->points;
+              $count = 0;
 
                foreach ($activity_skills as $activity_skill) {
                   foreach ($volunteerBadges as $volunteerBadge) {
-                    # code...
-                    if(strcmp($activity_skill, $volunteerBadge->skill) == 0){
+                    
+                    if(strcmp($activity_skill->name, $volunteerBadge->skill) == 0){
                        
                       $skill_points_local = $volunteerBadge->points + $activity_points;
-                      $gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge->badge);
+
+                      echo $activity_skill->name . $volunteerBadge->skill . $skill_points_local;
+                      
+
+                      $gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge);
+                         echo ' gauge_points = '.$gauge_points;
+
 
                         if($gauge_points >= 100){
 
                               if($volunteerBadge->star == 5){
+                                $gauge_points = (int)($volunteerBadge->gauge_points + $gauge_points) - 100;
                                 $this->updateBadge($volunteerBadge, $gauge_points);
                               }
                               else{
@@ -305,20 +339,27 @@ class VolunteerController extends Controller
                               }
                         }
                         else{
+
                            Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))
                               ->where('badge', $volunteerBadge->badge)
-                              ->update(['gauge_points'=>$gauge_points, 'points'=>$skill_points_local]);
+                              ->where('skill',$activity_skill->name)
+                              ->update(['gaugeExp'=>$gauge_points, 'points'=>$skill_points_local]);
+                               
                         }
                        
+                    }else{
+                      
                     }
+
                   }
-                 # code...
+                     $count++;
+
                }
               
                
 
 
-            $sumOfPoints = $sumOfPoints + $activity->points_equivalent;
+            $sumOfPoints = $sumOfPoints + $total_points;
 
              \DB::table('volunteeractivities')
                 ->where('volunteer_id',$request->input('volunteer_id'))
@@ -330,10 +371,11 @@ class VolunteerController extends Controller
             $new_points = $volunteer_points->points + $sumOfPoints;
 
             Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $new_points]);
-            \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);
+            /*
+            \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);*/
 
             $data = array("result"=>$sumOfPoints);
-            return response()->json($data);            
+            /*return response()->json($data);  */          
             
     }
 
@@ -473,3 +515,4 @@ class VolunteerController extends Controller
     public function volunteeractivitycriteria(){
         
     }
+  }
