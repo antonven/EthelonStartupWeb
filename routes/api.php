@@ -39,7 +39,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/groupmatestorate','ActivityController@volunteersToRate');
 		Route::post('/volunteerskills','VolunteerController@inputSkills');	
 		Route::post('/activitypoints','VolunteerController@points');
-		Route::post('/volunteerprofile','VolunteerController@volunteerProfile');	
+			
 
 		//foundations
 		Route::get('/getallfoundations','FoundationController@getallfoundations');
@@ -74,6 +74,7 @@ Route::group(['middleware'=>'foundation'],function(){
 
 Route::post('/attendanceactivity','VolunteerController@successAttendance');
 Route::get('/leaderboard','VolunteerController@leaderboard');
+Route::post('/volunteerprofile','VolunteerController@volunteerProfile');
 
 //testing
 
