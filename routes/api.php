@@ -29,16 +29,17 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
 		Route::post('/activitycriteria','ActivityController@criteria');
-		Route::post('/attendanceactivity','VolunteerController@successAttendance');
+		
 
 		//volunteer
 		Route::post('/volunteerstorate','ActivityController@volunteersToRate');
 		Route::post('/checkIfAlreadyAttended','VolunteerController@checkIfAlreadyAttended');
-		Route::get('/leaderboard','VolunteerController@leaderboard');
+		
 		Route::post('/rategroupmate','VolunteerController@rategroupmate');	
 		Route::post('/groupmatestorate','ActivityController@volunteersToRate');
 		Route::post('/volunteerskills','VolunteerController@inputSkills');	
-		Route::post('/activitypoints','VolunteerController@points');	
+		Route::post('/activitypoints','VolunteerController@points');
+		Route::post('/volunteerprofile','VolunteerController@volunteerProfile');	
 
 		//foundations
 		Route::get('/getallfoundations','FoundationController@getallfoundations');
@@ -70,7 +71,12 @@ Route::group(['middleware'=>'foundation'],function(){
 });
 
 
+
+Route::post('/attendanceactivity','VolunteerController@successAttendance');
+Route::get('/leaderboard','VolunteerController@leaderboard');
+
 //testing
+
 Route::post('/notificationClicked','NotificationController@notificationClicked');
 Route::post('/skillprac','TestingController@skill');
 Route::post('/test2','ActivityController@test2');
@@ -84,5 +90,7 @@ Route::post('/register','RegistrationController@register');
 Route::post('/login','LoginController@login');
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
+
+
 
 
