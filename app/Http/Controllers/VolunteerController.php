@@ -24,6 +24,7 @@ use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
 use App\Volunteerbadge;
 use App\Groupnotification;
+use App\Badge;
 
 
   
@@ -37,13 +38,34 @@ class VolunteerController extends Controller
 
       $volunteer_id = $request->input('volunteer_id');
 
-      $info = Volunteerbadge::select('volunteerbadges.*','badges.url as url')
+      $infos = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
                               ->join('badges',function($join){
                                 $join->on('badges.badge','=','volunteerbadges.badge')
                                     ->on('badges.skill','=','volunteerbadges.skill');
-                              })->where('volunteerbadges.volunteer_id','=','2deaf28')->get();
+                              })->where('volunteerbadges.volunteer_id','=',$volunteer_id)->get();
 
-                              return response()->json($info);
+           $infoBadges = array();       
+
+      foreach($infos as $info){
+
+         
+      /*$badges = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
+                              ->join('badges',function($join){
+                                $join->on('badges.skill','=','volunteerbadges.skill');
+                              })->where('volunteerbadges.skill','=',$info->skill)->get();*/
+                              $badges = Badge::where('skill',$info->skill)->get();
+
+
+
+                 $infoBadge = array("info"=>$info,"badges"=>$badges);
+                 array_push($infoBadges,$infoBadge);  
+
+
+
+      }
+                     
+
+                              return response()->json($infoBadges);
 
 
     } 
@@ -285,7 +307,33 @@ class VolunteerController extends Controller
 
    }
 
-   
+   public function getGauge($badge){
+    switch ($badge) {
+
+      case "Nothing":
+          return 100;
+          break;
+
+        case "Newbie":
+          return 100;
+          break;
+
+        case "Archon":
+          return 200;
+          break;
+
+        case "Expert":
+          return 300;
+          break;
+
+        case "Legend":
+          return 400;
+          break;  
+
+    }
+
+   }
+
    public function successAttendance(Request $request){
   
   
@@ -308,27 +356,26 @@ class VolunteerController extends Controller
              $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
              $volunteer = Volunteer::where('volunteer_id', $request->input('volunteer_id'))->first();
              $volunteerBadges = Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))->get();
+
                
               
             //$activity_points = $criteriaTotal + $activity->points_equivalent;
 
-            $total_points = $activity->points_equivalent + $volunteer->points;
-              
+            $total_points = $activity->points_equivalent + $volunteer->points; //update volunteerpoints 
 
             foreach ($activity_skills as $activity_skill) {
                   foreach ($volunteerBadges as $volunteerBadge) {
                     
                     if(strcmp($activity_skill->name, $volunteerBadge->skill) == 0){
                        
-                          $skill_points_local = $volunteerBadge->points + $activity_points + $criteriaTotal;
-    
-                          $gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge);
-                             
-                            if($gauge_points >= 100){ 
+                          $skill_points_local = $volunteerBadge->points + $activity->points_equivalent; //points daan sa skill Badge + points_equivalent
+                          $gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge); //gaugepoints = totalbadgeskillpoints apil karon * multiplier(0.2,0.3,0.4)
+                              
+                            if($gauge_points >= $this->getGauge($volunteerBadge->badge)){ 
 
-                                $gauge_points = (int)($volunteerBadge->gauge_points + $gauge_points) - 100;
+                                $gauge_points = (int)($volunteerBadge->gauge_points + $gauge_points) - $this->getGauge($volunteerBadge->badge); //kuhaon ang subra para ibutang sa pts
 
-                                  if($volunteerBadge->star == 5){
+                                  if($volunteerBadge->star == 5){//updateBadge kay 5 stars nah siya 
                                     
                                     $this->updateBadge($volunteerBadge, $gauge_points);
                                   }
@@ -339,7 +386,7 @@ class VolunteerController extends Controller
                             }
                             else{
 
-                              $gauge_points = (int)($volunteerBadge->gauge_points + $gauge_points) - 100;
+                              $gauge_points = (int)($volunteerBadge->gauge_points + $gauge_points) - $this->getGauge($volunteerBadge->badge);
 
                                Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))
                                   ->where('badge', $volunteerBadge->badge)
@@ -354,8 +401,6 @@ class VolunteerController extends Controller
             }
               
                
-
-
             $sumOfPoints = $sumOfPoints + $total_points;
 
              \DB::table('volunteeractivities')
