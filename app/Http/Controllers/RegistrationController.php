@@ -49,6 +49,19 @@ class RegistrationController extends Controller
                          'fcm_token'=>$request->input('fcm_token')
                        ]);
 
+                       $skills = array('Environment','Education','Sports','Arts','Medical','Culinary','Livelihood','Charity');
+
+                    foreach($skills as $skill){
+                             $sd = Volunteerbadge::create([
+                                      'badge'=>'Nothing',
+                                      'volunteer_id'=>$volunteer_id,
+                                      'gaugeExp'=>0,
+                                      'star'=>0,
+                                      'skill'=>$skill,
+                                      'points'=>0
+                              ]);
+                    }
+
                        $data = array("api_token"=>$api_token,"volunteer_id" => $volunteer_id,"name"=>$request->input('name'),"message"=>"success");
 
                 //auth()->login($user);

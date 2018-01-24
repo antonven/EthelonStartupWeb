@@ -104,6 +104,19 @@ class LoginController extends Controller
                              'fcm_token'=>$request->input('fcm_token'),
                              'points'=> 0
                      ]);
+
+                    $skills = array('Environment','Education','Sports','Arts','Medical','Culinary','Livelihood','Charity');
+
+                    foreach($skills as $skill){
+                             $sd = Volunteerbadge::create([
+                                      'badge'=>'Nothing',
+                                      'volunteer_id'=>$volunteer_id,
+                                      'gaugeExp'=>0,
+                                      'star'=>0,
+                                      'skill'=>$skill,
+                                      'points'=>0
+                              ]);
+                    }
                                         
                     
                      $data = array("message"=>"First Time","volunteer_id"=>$volunteer_id,"api_token"=>$api_token);    
