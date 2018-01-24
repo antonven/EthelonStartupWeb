@@ -1155,13 +1155,14 @@ public function test3(){
                                             "volunteer_id"=>$volunteerToRate->volunteer_id,
                                             "image_url"=>$volunteerToRate->image_url,
                                             "activity_group_id"=>$activity_group_id->id,
-                                            "num_of_vol"=>$activity_group_id->numOfVolunteers
+                                            "num_of_vol"=>$activity_group_id->numOfVolunteers,
                                             "type"=>$activity_group_id->type);
 
                              array_push($volunteersKeeper,$data);
                      }                           
 
-                                                
+
+                                               
         return response()->json($volunteersKeeper);                       
 
    }
