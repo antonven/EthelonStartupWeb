@@ -138,8 +138,7 @@ public function test4(){
                                 ]);*/
 
                               $dataBuilder->addData([
-                                "asds"=>"dsd"  
-                                
+                                "activity_id"=>"406756a"  
                                 ]);
 
                             $option = $optionBuilder->build();
@@ -147,7 +146,7 @@ public function test4(){
                             $data = $dataBuilder->build();
                              
                         
-                                 $downstreamResponse = FCM::sendTo('dU7P0ilocYo:APA91bGF9ydcXb4osmAz1y-8CdPhHiYhn_vt3Zg9Nt8rz5KO1XwwMgt5z5TYKZn5QECs1DdY5CJ-xYUgcQWqpTxYt9E0oMCktcJeKBzDZX1n1pRc2P7qjPagMqfxFJVYZrH_Pba18DbQ', $option, $notification, $data);
+                                 $downstreamResponse = FCM::sendTo('cncXed496kY:APA91bFX3s-aGJ1jmW8E3zhvXJkjUX18i1yS-XXxcEqyi4RezYJwofiNFoZLRgdh3T_NW3QVS6d8YHxwmpMKxg3VlcTRc4cG106TWCz_TGlaYFKqDyA_N4CJ5OTRSMfhco5tBVBQdb7H', $option, $notification, $data);
 
                                  return response()->json($downstreamResponse);
 
@@ -1156,7 +1155,8 @@ public function test3(){
                                             "volunteer_id"=>$volunteerToRate->volunteer_id,
                                             "image_url"=>$volunteerToRate->image_url,
                                             "activity_group_id"=>$activity_group_id->id,
-                                            "num_of_vol"=>$activity_group_id->numOfVolunteers);
+                                            "num_of_vol"=>$activity_group_id->numOfVolunteers
+                                            "type"=>$activity_group_id->type);
 
                              array_push($volunteersKeeper,$data);
                      }                           
