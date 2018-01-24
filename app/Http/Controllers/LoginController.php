@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Volunteer;
 use App\User;
+use App\Volunteerbadge;
 
 class LoginController extends Controller
 {

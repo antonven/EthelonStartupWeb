@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use App\Volunteer;
+use App\Volunteerbadge;
 
 class RegistrationController extends Controller
 {
