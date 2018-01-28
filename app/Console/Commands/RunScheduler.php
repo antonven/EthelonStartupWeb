@@ -469,7 +469,7 @@ class RunScheduler extends Command
 
     //$volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
                 
-                $vol_per_group = 5; 
+                $vol_per_group = $activity->group; 
                 $count = 0;
                 $countforId = 1;
                 $id = '';
@@ -643,10 +643,10 @@ class RunScheduler extends Command
                             $this->info('GROUPTYPE  '.$activity->group_type);   
 
                             switch($activity->group_type){
-                                case 'random': $this->randomAllocation($activity);  
+                                case 'random': //$this->randomAllocation($activity);  
                                                 //$this->info('random'); 
                                                break;
-                                case 'skill':  $this->skill($activity);
+                                case 'skill':  //$this->skill($activity);
                                                // $this->info('skill');  
                                                break;           
                             }
