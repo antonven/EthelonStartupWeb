@@ -46,7 +46,7 @@ use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
 use App\Notification;
 use App\Notification_user;
-
+use App\Volunteerbadge;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
@@ -221,6 +221,8 @@ class RunScheduler extends Command
     public function randomAllocation($activity){
         
                 $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
+
+
                 
                 $vol_per_group = $activity->group; 
                 $count = 0;
@@ -334,8 +336,14 @@ class RunScheduler extends Command
       $noMatches = array();
       $yesMatches = array();
       $skills = Activityskill::where('activity_id',$activity->activity_id)->get();
-    
-      foreach($allVolunteers as $allVolunteer){
+
+      if(count($allVolunteers) == 2){
+
+        $rets1 = $this->group($allVolunteers,$activity,'none');
+
+      }else{
+
+         foreach($allVolunteers as $allVolunteer){
 
         $volunteerSkills = Volunteerskill::where('volunteer_id',$allVolunteer->volunteer_id)->get();
         $matches = false;
@@ -363,6 +371,14 @@ class RunScheduler extends Command
 
       }
 
+      if(count($noMatches) == 1){
+
+      }
+
+      if(count($yesMatches) == 1){
+
+      }
+
 
      // return count($noMatches). ' '.count($yesMatches);
 
@@ -374,6 +390,9 @@ class RunScheduler extends Command
       array_push($atay, $rets2);
 
       return $atay;
+      }
+    
+     
 
       //return $noMatches;
     }
@@ -552,7 +571,7 @@ class RunScheduler extends Command
                       }      
                       //Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);              
                     
-}
+   }
 
 
     protected function runScheduler()
@@ -577,6 +596,10 @@ class RunScheduler extends Command
 */
 
         //09210296430
+
+                            //$activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('5hrs',false)->get();
+                             $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('fiveHours',false)->get();
+                             $this->addCriteriaTotal($activities_with_false_5hrs);  
 
                             $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name','foundations.foundation_id as foundation_id')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
@@ -621,10 +644,10 @@ class RunScheduler extends Command
 
                             switch($activity->group_type){
                                 case 'random': $this->randomAllocation($activity);  
-                                                $this->info('random'); 
+                                                //$this->info('random'); 
                                                break;
                                 case 'skill':  $this->skill($activity);
-                                                $this->info('skill');  
+                                               // $this->info('skill');  
                                                break;           
                             }
 
@@ -648,6 +671,112 @@ class RunScheduler extends Command
         sleep($this->nextMinute());
         $this->runScheduler();
     }
+
+     public function sendNotifForFiveHours($fcm_token,$criteriaTotal,$activityName){
+
+      echo  'total = '.$criteriaTotal;
+      dd($fcm_token);
+
+                            $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+
+                            $body = 'You have earned additional '.$criteriaTotal.'points for the ' .$activityName. 'activity';
+                          $notificationBuilder = new PayloadNotificationBuilder($activityName);
+                          $notificationBuilder->setBody($body)
+                                              ->setSound('default'); 
+
+                             $dataBuilder = new PayloadDataBuilder();
+                         /*    $dataBuilder->addData([
+                                
+                                'eventImage'=>$activity->image_url,
+                                'eventHost' =>$activity->foundation_name,
+                                'eventName'=>$activity->name,
+                                'activity_id'=>$activity->activity_id,
+                                'eventDate'=>$activity->startDate, 
+                                'eventTimeStart'=>$activity->start_time,
+                                'eventLocation'=>$activity->location, 
+                                'contactNo'=>$activity->contact, 
+                                'contactPerson'=>$activity->contactperson,  
+                                
+                                ]);*/
+
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+
+                         /*   Notification::create([
+                                    'id'=>$notification_id,
+                                    'title'=>$activity->name,
+                                    'body' => $body,
+                                    'major_type'=>'activity_group',
+                                    'sub_type'=>'activity_group',
+                                    'data'=>$activity->activity_id
+                                ]);*/
+
+                            $downstreamResponse = FCM::sendTo($fcm_token, $option, $notification, $data); 
+
+                                          
+
+    }
+
+    public function addCriteriaTotal($activities_with_false_5hrs){
+
+      foreach($activities_with_false_5hrs as $activity_with_false_5hrs){
+
+        // echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
+
+          if(\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5) <=  \Carbon\Carbon::now()){
+              //echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
+
+             $volunteers = \DB::table('volunteers')->select('volunteers.*')
+                                                ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id')
+                                                ->where('volunteeractivities.activity_id',$activity_with_false_5hrs->activity_id)
+                                                ->where('volunteeractivities.status',true)
+                                                ->get(); 
+
+              $activityskills = Activityskill::where('activity_id',$activity_with_false_5hrs->activity_id)->get();                                  
+                   
+                    foreach($volunteers as $volunteer){
+
+                       $volunteercriteriapoints = Volunteercriteriapoint::where('volunteer_id',$volunteer->volunteer_id)
+                                                                          ->where('activity_id',$activity_with_false_5hrs->activity_id)
+                                                                          ->get();
+
+                                        $criteriaTotal = 0;
+
+                       foreach($volunteercriteriapoints as $Volunteercriteriapoint){
+
+                            $criteriaTotal = $Volunteercriteriapoint->average_points + $criteriaTotal;
+
+                       }
+                      
+                        foreach($activityskills as $activityskill){
+
+                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
+                                                                ->where('skill',$activityskill->name)
+                                                                ->first();
+                                                                 
+                                $newBadgePoints = $volunteerbadge->points + $criteriaTotal;
+
+                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
+                                                                ->where('skill',$activityskill->name)
+                                                                ->update(['points'=>$newBadgePoints]);
+
+                                $totalVolPoints = $volunteer->points + $criteriaTotal;                                  
+                                Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
+                        }     
+
+                        $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name);                                                   
+                    }                             
+
+          }
+
+          $activity_with_false_5hrs->fiveHours = false;
+          $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>true]);
+     }
+
+    } 
 
     /**
      * Works out seconds until the next minute starts;
