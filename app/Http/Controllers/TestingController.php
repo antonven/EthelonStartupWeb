@@ -24,6 +24,8 @@ use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
 use App\Notification;
 use App\Notification_user;
+use App\Volunteerbadge;
+use App\Badge;
 
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -42,6 +44,15 @@ use Illuminate\Http\Request;
 class TestingController extends Controller
 {
     //
+
+public function test2(){
+
+$vol = Volunteer::all();
+
+foreach($vol as $val){
+  Volunteeractivity::create(['activity_id'=>'d43ce07','volunteer_id'=>$val->volunteer_id]);
+}
+}
 
 public function group($volunteers, $activity, $skillName){
 
@@ -547,13 +558,210 @@ public function group($volunteers, $activity, $skillName){
 
     }
 
+    public function sendNotifForFiveHours($fcm_token,$criteriaTotal,$activityName){
+
+      echo  'total = '.$criteriaTotal;
+      dd($fcm_token);
+
+                            $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+
+                            $body = 'You have earned additional '.$criteriaTotal.'points for the ' .$activityName. 'activity';
+                          $notificationBuilder = new PayloadNotificationBuilder($activityName);
+                          $notificationBuilder->setBody($body)
+                                              ->setSound('default'); 
+
+                             $dataBuilder = new PayloadDataBuilder();
+                         /*    $dataBuilder->addData([
+                                
+                                'eventImage'=>$activity->image_url,
+                                'eventHost' =>$activity->foundation_name,
+                                'eventName'=>$activity->name,
+                                'activity_id'=>$activity->activity_id,
+                                'eventDate'=>$activity->startDate, 
+                                'eventTimeStart'=>$activity->start_time,
+                                'eventLocation'=>$activity->location, 
+                                'contactNo'=>$activity->contact, 
+                                'contactPerson'=>$activity->contactperson,  
+                                
+                                ]);*/
+
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+
+                         /*   Notification::create([
+                                    'id'=>$notification_id,
+                                    'title'=>$activity->name,
+                                    'body' => $body,
+                                    'major_type'=>'activity_group',
+                                    'sub_type'=>'activity_group',
+                                    'data'=>$activity->activity_id
+                                ]);*/
+
+                            $downstreamResponse = FCM::sendTo($fcm_token, $option, $notification, $data); 
+
+                            dd($downstreamResponse);                     
+
+    }
+
+
+
     public function test3(){
+
+      $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('fiveHours',true)->get();
+                                        
+     
+      foreach($activities_with_false_5hrs as $activity_with_false_5hrs){
+
+        // echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
+
+          if(\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5) <=  \Carbon\Carbon::now()){
+              //echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
+
+             $volunteers = \DB::table('volunteers')->select('volunteers.*')
+                                                ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id')
+                                                ->where('volunteeractivities.activity_id',$activity_with_false_5hrs->activity_id)
+                                                ->where('volunteeractivities.status',false)
+                                                ->where('volunteers.volunteer_id','2deaf28')
+                                                ->get(); 
+
+                                          
+
+              $activityskills = Activityskill::where('activity_id',$activity_with_false_5hrs->activity_id)->get();                                  
+                   
+                    foreach($volunteers as $volunteer){
+
+                       $volunteercriteriapoints = Volunteercriteriapoint::where('volunteer_id',$volunteer->volunteer_id)
+                                                                          ->where('activity_id',$activity_with_false_5hrs->activity_id)
+                                                                          ->get();
+
+                                        $criteriaTotal = 0;
+
+                       foreach($volunteercriteriapoints as $Volunteercriteriapoint){
+
+                            $criteriaTotal = $Volunteercriteriapoint->average_points + $criteriaTotal;
+
+                       }
+                      
+                        foreach($activityskills as $activityskill){
+
+                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
+                                                                ->where('skill',$activityskill->name)
+                                                                ->first();
+                                                                 
+                                $newBadgePoints = $volunteerbadge->points + $criteriaTotal;
+
+                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
+                                                                ->where('skill',$activityskill->name)
+                                                                ->update(['points'=>$newBadgePoints]);
+
+                                $totalVolPoints = $volunteer->points + $criteriaTotal;                                  
+                                Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
+                        }     
+
+                        $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name);                                                   
+                    }                             
+
+          }
+
+          $activity_with_false_5hrs->fiveHours = false;
+          $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>false]);
+
+      }
+
+
+    /*  Volunteercriteriapoint::create(['id'=>'asds','volunteer_id'=>'2deaf28','activity_id'=>'c3b8c9f','criteria_name'=>'gwapo','total_points'=>10,'no_of_raters'=>2,'average_points'=>5]);
+      Volunteercriteriapoint::create(['id'=>'asds','volunteer_id'=>'2deaf28','activity_id'=>'c3b8c9f','criteria_name'=>'kobe','total_points'=>10,'no_of_raters'=>2,'average_points'=>5]);*/
       
-      $volunteers = Volunteer::all();
+     /*$volunteers = Volunteer::all();
+     $array = array();*/
+
+    /* Volunteerbadge::where('volunteer_id','2deaf28')->where('skill','Environmental')->update(['gaugeExp'=>0,'star'=>3,'points'=>0,'badge'=>'Legend']);
+     
+     Volunteerbadge::where('volunteer_id','2deaf28')->where('skill','Sports')->update(['gaugeExp'=>0,'star'=>0,'points'=>4,'badge'=>'Legend']);
+     Volunteerbadge::where('volunteer_id','2deaf28')->where('skill','Culinary')->update(['gaugeExp'=>0,'star'=>0,'points'=>3,'badge'=>'Legend']);
+     Volunteerbadge::where('volunteer_id','2deaf28')->where('skill','Medical')->update(['gaugeExp'=>0,'star'=>0,'points'=>2,'badge'=>'Legend']);
+     Volunteerbadge::where('volunteer_id','2deaf28')->where('skill','Charity')->update(['gaugeExp'=>0,'star'=>0,'points'=>1,'badge'=>'Legend']);
+     Volunteerbadge::where('volunteer_id','2deaf28')->where('skill','Livelihood')->update(['gaugeExp'=>0,'star'=>4,'points'=>0,'badge'=>'Legend']);
+     Volunteerbadge::where('volunteer_id','2deaf28')->where('skill','Education')->update(['gaugeExp'=>0,'star'=>4,'points'=>0,'badge'=>'Legend']);
+     Volunteerbadge::where('volunteer_id','2deaf28')->where('skill','Arts')->update(['gaugeExp'=>0,'star'=>0,'points'=>5,'badge'=>'Legend']);*/
+
+
+
+
+     /*$array = array();
+
+     \DB::table('Volunteerbadges')->where('volunteer_id','2deaf28')->delete();
+
+     $skills = array('Environment','Education','Sports','Arts','Medical','Culinary','Livelihood','Charity');
+
+
+     foreach($skills as $skill){
+
+            $sd = Volunteerbadge::create([
+                  'badge'=>'Nothing',
+                  'volunteer_id'=>'2deaf28',
+                  'gaugeExp'=>0,
+                  'star'=>0,
+                  'skill'=>$skill,
+                  'points'=>0
+          ]);
+
+          array_push($array,$sd);
+           
+     }
+
+      return response()->json($array);*/
+
+   /*  json_encode($skill);
+     dd($skill);
+     array_push($array,$skill);
+     $skill = array('skill'=>'Education');
+     json_encode($skill);
+     array_push($array,$skill);
+     $skill = array('skill'=>'Sports');
+     json_encode($skill);
+     array_push($array,$skill);
+     $skill = array('skill'=>'Medical');
+     json_encode($skill);
+     array_push($array,$skill);
+     $skill = array('skill'=>'Culinary');
+     json_encode($skill);
+     array_push($array,$skill);
+     $skill = array('skill'=>'Livelihood');
+     json_encode($skill);
+     array_push($array,$skill);
+     $skill = array('skill'=>'Charity');
+     json_encode($skill);
+     array_push($array,$skill);
+     $skill = array('skill'=>'Arts');
+     json_encode($skill);
+     array_push($array,$skill);*/
+
+    
      /* $skills = Volunteerskill::where('volunteer_id','b5feb04')->get();
       return response()->json($skills);*/
 
+/*
+      foreach($volunteers as $volunteer){
+        foreach($skills as $skill){
+          
 
+           Volunteerbadge::create([
+                  'badge'=>'Nothing',
+                  'volunteer_id'=>$volunteer->volunteer_id,
+                  'gaugeExp'=>0,
+                  'star'=>0,
+                  'skill'=>$skill,
+                  'points'=>0
+          ]);
+
+        }
+
+      }
+*/
 
 /*
   Volunteeractivity::create([
@@ -561,24 +769,24 @@ public function group($volunteers, $activity, $skillName){
                  'activity_id'=>'7ca34a3',
                  'status'=> false  
                 ]);
-
 */
+
       
       
 
-/*
-      foreach($volunteers as $volunteer){
+
+     /* foreach($volunteers as $volunteer){
         Volunteeractivity::create([
                  'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'c3b8c9f',
+                 'activity_id'=>'3b35ef4',
                  'status'=> false  
                 ]);
-      }
-*/
+      }*/
+
 
 
        
-
+/*
         $volunteerTokens = Volunteer::pluck('fcm_token')->toArray();
 
                             $optionBuilder = new OptionsBuilder();
@@ -605,7 +813,7 @@ public function group($volunteers, $activity, $skillName){
 
                             $downstreamResponse = FCM::sendTo('cncXed496kY:APA91bFX3s-aGJ1jmW8E3zhvXJkjUX18i1yS-XXxcEqyi4RezYJwofiNFoZLRgdh3T_NW3QVS6d8YHxwmpMKxg3VlcTRc4cG106TWCz_TGlaYFKqDyA_N4CJ5OTRSMfhco5tBVBQdb7H', $option, $notification, null);
 
-                            dd($downstreamResponse);
+                            dd($downstreamResponse);*/
 
 
     /*   Volunteeractivity::where('activity_id','a77c9b4')->delete();*/
