@@ -640,6 +640,7 @@ class RunScheduler extends Command
                        $timeNow = \Carbon\Carbon::now()->format('h:i');
                        $formattedTime =  \Carbon\Carbon::parse($timeNow)->tz('UTC');
                        $activity_deadline = \Carbon\Carbon::parse($activity->registration_deadline)->format('y-m-d');
+                       
 
                 if($activity_deadline <= \Carbon\Carbon::now()->format('y-m-d')){
                         $this->info('sud sa date if');
