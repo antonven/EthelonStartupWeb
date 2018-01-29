@@ -682,7 +682,8 @@ class RunScheduler extends Command
      public function sendNotifForFiveHours($fcm_token,$criteriaTotal,$activityName,$activity_id,$newBadgePoints){
           $this->info('ni sud sa send notif For five hours = '.$newBadgePoints);
       
-
+                            $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                            
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
