@@ -599,7 +599,11 @@ class RunScheduler extends Command
 
                             //$activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('5hrs',false)->get();
                              $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('fiveHours',false)->get();
-                             //$this->addCriteriaTotal($activities_with_false_5hrs);  
+
+                              if($activities_with_false_5hrs->count()){
+
+                                  $this->addCriteriaTotal($activities_with_false_5hrs);  
+                             }
 
                             $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name','foundations.foundation_id as foundation_id')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
@@ -643,10 +647,10 @@ class RunScheduler extends Command
                             $this->info('GROUPTYPE  '.$activity->group_type);   
 
                             switch($activity->group_type){
-                                case 'random': //$this->randomAllocation($activity);  
+                                case 'random': $this->randomAllocation($activity);  
                                                 //$this->info('random'); 
                                                break;
-                                case 'skill':  //$this->skill($activity);
+                                case 'skill':  $this->skill($activity);
                                                // $this->info('skill');  
                                                break;           
                             }
@@ -715,7 +719,7 @@ class RunScheduler extends Command
                                     'data'=>$activity->activity_id
                                 ]);*/
 
-                            //$downstreamResponse = FCM::sendTo($fcm_token, $option, $notification, $data); 
+                            $downstreamResponse = FCM::sendTo($fcm_token, $option, $notification, $data); 
 
                                           
 
@@ -774,12 +778,13 @@ class RunScheduler extends Command
                         }     
 
                         $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name);                                                   
-                    }                             
+                    }  
+
+                     $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>true]);                           
 
           }
 
-          $activity_with_false_5hrs->fiveHours = false;
-          $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>true]);
+         
      }
 
     } 
