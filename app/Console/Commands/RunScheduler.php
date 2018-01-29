@@ -651,10 +651,10 @@ class RunScheduler extends Command
 
                             switch($activity->group_type){
                                 case 'random': $this->randomAllocation($activity);  
-                                                //$this->info('random'); 
+                                                $this->info('random'); 
                                                break;
                                 case 'skill': $this->skill($activity);
-                                               // $this->info('skill');  
+                                                $this->info('skill');  
                                                break;           
                             }
 
