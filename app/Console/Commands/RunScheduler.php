@@ -679,11 +679,11 @@ class RunScheduler extends Command
         $this->runScheduler();
     }
 
-     public function sendNotifForFiveHours($fcm_token,$criteriaTotal,$activityName,$activity_id,$newBadgePoints){
+     public function sendNotifForFiveHours($fcm_token,$criteriaTotal,$activityName,$activity_id,$newBadgePoints,$volunteer_id){
           $this->info('ni sud sa send notif For five hours = '.$newBadgePoints);
       
                             $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-                            
+
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -722,6 +722,16 @@ class RunScheduler extends Command
                                     'sub_type'=>'criteriaTotal',
                                     'data'=>$activity_id
                                 ]);
+
+                            $notification_user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                                Notification_user::create([
+                                       'id'=>$notification_user_id,
+                                       'notification_id' => $notification_id,
+                                       'sender_id'=> $activity_id,
+                                       'receiver_id'=>$volunteer->volunteer_id,
+                                       'date'=> \Carbon\Carbon::now()->format('Y-m-d h:i')
+                                    ]);
 
                             $downstreamResponse = FCM::sendTo($fcm_token, $option, $notification, $data); 
 
@@ -783,7 +793,7 @@ class RunScheduler extends Command
                                 Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
                         }     
 
-                        $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name,$criteriaTotal,$activity_with_false_5hrs->activity_id,$newBadgePoints);                                                   
+                        $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name,$criteriaTotal,$activity_with_false_5hrs->activity_id,$newBadgePoints,$volunteer->volunteer_id);                                                   
                     }  
                      $this->info('iya nang i update to true'); 
                      $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>true]);                           
