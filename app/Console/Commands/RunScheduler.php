@@ -599,7 +599,7 @@ class RunScheduler extends Command
 
                             //$activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('5hrs',false)->get();
                              $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('fiveHours',false)->get();
-                             $this->addCriteriaTotal($activities_with_false_5hrs);  
+                             //$this->addCriteriaTotal($activities_with_false_5hrs);  
 
                             $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name','foundations.foundation_id as foundation_id')
                                 ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
@@ -673,9 +673,8 @@ class RunScheduler extends Command
     }
 
      public function sendNotifForFiveHours($fcm_token,$criteriaTotal,$activityName){
-
-      echo  'total = '.$criteriaTotal;
-      dd($fcm_token);
+          $this->info('ni sud sa send notif For five hours = '.$newBadgePoints);
+      
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -685,6 +684,8 @@ class RunScheduler extends Command
                           $notificationBuilder = new PayloadNotificationBuilder($activityName);
                           $notificationBuilder->setBody($body)
                                               ->setSound('default'); 
+
+                            $this->info('Notification body: '.$body);                  
 
                              $dataBuilder = new PayloadDataBuilder();
                          /*    $dataBuilder->addData([
@@ -714,7 +715,7 @@ class RunScheduler extends Command
                                     'data'=>$activity->activity_id
                                 ]);*/
 
-                            $downstreamResponse = FCM::sendTo($fcm_token, $option, $notification, $data); 
+                            //$downstreamResponse = FCM::sendTo($fcm_token, $option, $notification, $data); 
 
                                           
 
@@ -722,11 +723,15 @@ class RunScheduler extends Command
 
     public function addCriteriaTotal($activities_with_false_5hrs){
 
+      $this->info('nisulod sa addcriteria Total function');
+
       foreach($activities_with_false_5hrs as $activity_with_false_5hrs){
+        $this->info('nisulod sa foreach');
 
         // echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
 
           if(\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5) <=  \Carbon\Carbon::now()){
+            $this->info('nisulod sa condtion endTime + 5 hours <= karon'. \Carbon\Carbon::now(). ' add hours 5 = '.\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5));
               //echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
 
              $volunteers = \DB::table('volunteers')->select('volunteers.*')
@@ -748,7 +753,7 @@ class RunScheduler extends Command
                        foreach($volunteercriteriapoints as $Volunteercriteriapoint){
 
                             $criteriaTotal = $Volunteercriteriapoint->average_points + $criteriaTotal;
-
+                            $this->info('criteriaTotal = '.$criteriaTotal);
                        }
                       
                         foreach($activityskills as $activityskill){
@@ -758,12 +763,13 @@ class RunScheduler extends Command
                                                                 ->first();
                                                                  
                                 $newBadgePoints = $volunteerbadge->points + $criteriaTotal;
-
+                                 $this->info('New badge points  = '.$newBadgePoints); 
                                 $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
                                                                 ->where('skill',$activityskill->name)
                                                                 ->update(['points'=>$newBadgePoints]);
 
-                                $totalVolPoints = $volunteer->points + $criteriaTotal;                                  
+                                $totalVolPoints = $volunteer->points + $criteriaTotal;
+                                $this->info('New Volunteer points  = '.$totalVolPoints);                                  
                                 Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
                         }     
 
