@@ -200,6 +200,8 @@ class RunScheduler extends Command
                             $notification = $notificationBuilder->build();
                             $data = $dataBuilder->build();
 
+                            $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
                             Notification::create([
                                     'id'=>$notification_id,
                                     'title'=>$activity->name,
