@@ -277,24 +277,28 @@ class VolunteerController extends Controller
           ->where('star', 0)->where('skill',$volunteerBadge->skill)->update(['star'=>1, 'points'=>0, 'gaugeExp'=>(int)$new_gauge_points]);
           echo 'success';
         break;
+
         case 1:
         $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 1)->where('skill',$volunteerBadge->skill)->update(['star'=>2, 'points'=>0, 'gaugeExp'=>$new_gauge_points]);
         # code...
         break;
+
         case 2:
         $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 2)->where('skill',$volunteerBadge->skill)->update(['star'=>3, 'points'=>0, 'gaugeExp'=>$new_gauge_points]);
         # code...
         break;
+
         case 3:
         $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 3)->where('skill',$volunteerBadge->skill)->update(['star'=>4, 'points'=>0, 'gaugeExp'=>$new_gauge_points]);
         # code...
         break;
+
         case 4:
         $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
@@ -360,6 +364,7 @@ class VolunteerController extends Controller
                
               
             //$activity_points = $criteriaTotal + $activity->points_equivalent;
+             
 
             $total_points = $activity->points_equivalent + $volunteer->points; //update volunteerpoints 
 
@@ -386,7 +391,7 @@ class VolunteerController extends Controller
                             }
                             else{
 
-                              $gauge_points = (int)($volunteerBadge->gauge_points + $gauge_points) - $this->getGauge($volunteerBadge->badge);
+                              $gauge_points = (int)($volunteerBadge->gauge_points + $gauge_points);
 
                                Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))
                                   ->where('badge', $volunteerBadge->badge)
