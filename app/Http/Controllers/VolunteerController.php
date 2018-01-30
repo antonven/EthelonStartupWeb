@@ -395,7 +395,7 @@ class VolunteerController extends Controller
     
                           $newVolunteerBadgePoints = $volunteerBadge->points + $activity->points_equivalent; //points daan sa skill Badge + points_equivalent
                           //$gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge); //gaugepoints = totalbadgeskillpoints apil karon * multiplier(0.2,0.3,0.4)
-                          echo $newVolunteerBadgePoints. ' WTF';
+                          //echo $newVolunteerBadgePoints. ' WTF';
                             if(strcmp($volunteerBadge->badge, "Nothing") == 0){
 
                                  Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
@@ -417,14 +417,14 @@ class VolunteerController extends Controller
 
                                     $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
                                     array_push($earnedAchievement,$earned);
-                                    echo $newbie;
+                                    //echo $newbie;
 
                               }
 
                             if($newVolunteerBadgePoints >= $this->getGauge($volunteerBadge->badge)){ 
          
                                 $newVolunteerBadgePoints = $newVolunteerBadgePoints - $this->getGauge($volunteerBadge->badge); //kuhaon ang subra para ibutang sa pts
-                                  echo $newVolunteerBadgePoints;  
+                                 // echo $newVolunteerBadgePoints;  
                                   if($volunteerBadge->star == 5){//updateBadge kay 5 stars nah siya 
                                     
                                     $newVolunteerBadge = $this->updateBadge($volunteerBadge, $newVolunteerBadgePoints);
@@ -446,7 +446,7 @@ class VolunteerController extends Controller
 
                             }
                             else{
-                                  echo ' damn ni sud sa else'.$newVolunteerBadgePoints;
+                                  //echo ' damn ni sud sa else'.$newVolunteerBadgePoints;
                               //$skill_points_local = (int)($volunteerBadge->gauge_points + $gauge_points);
                                Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))
                                   ->where('badge', $volunteerBadge->badge)
