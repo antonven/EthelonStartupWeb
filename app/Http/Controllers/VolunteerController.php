@@ -407,7 +407,8 @@ class VolunteerController extends Controller
                                                                     ->join('badges',function($join){
                                                                       $join->on('badges.badge','=','volunteerbadges.badge')
                                                                           ->on('badges.skill','=','volunteerbadges.skill');
-                                                                    })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)->first();
+                                                                    })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)
+                                                                      ->where('volunteerbadges.skill',$volunteerBadge->skill)->first();
                         
 
                                     $update = "new badge";
