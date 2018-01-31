@@ -787,19 +787,19 @@ class RunScheduler extends Command
                                                                  
                                 $newBadgePoints = $volunteerbadge->points + $criteriaTotal;
                                  $this->info('New badge points  = '.$newBadgePoints); 
-                                // $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
-                                //                                 ->where('skill',$activityskill->name)
-                                //                                 ->update(['points'=>$newBadgePoints]);
+                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
+                                                                ->where('skill',$activityskill->name)
+                                                                ->update(['points'=>$newBadgePoints]);
 
                                 $totalVolPoints = $volunteer->points + $criteriaTotal;
                                 $this->info('New Volunteer points  = '.$totalVolPoints);                                  
-                               // Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
+                                Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
                         }     
-/*
-                         $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name,$criteriaTotal,$activity_with_false_5hrs->activity_id,$newBadgePoints,$volunteer->volunteer_id);        */                                           
+
+                         $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name,$criteriaTotal,$activity_with_false_5hrs->activity_id,$newBadgePoints,$volunteer->volunteer_id);                                                   
                     }  
                      $this->info('iya nang i update to true'); 
-                     //$activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>true]);                           
+                     $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>true]);                           
 
           }
 
