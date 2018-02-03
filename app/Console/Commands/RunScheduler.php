@@ -683,9 +683,11 @@ class RunScheduler extends Command
     }
 
      public function sendNotifForFiveHours($fcm_token,$criteriaTotal,$activityName,$activity_id,$newBadgePoints,$volunteer_id){
-          $this->info('ni sud sa send notif For five hours = '.$newBadgePoints);
+          $this->info('volunteer_id   = '.$volunteer_id);
+
       
                             $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                            $this->info('asds'.$notification_id);
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -699,19 +701,9 @@ class RunScheduler extends Command
                             $this->info('Notification body: '.$body);                  
 
                              $dataBuilder = new PayloadDataBuilder();
-                         /*    $dataBuilder->addData([
-                                
-                                'eventImage'=>$activity->image_url,
-                                'eventHost' =>$activity->foundation_name,
-                                'eventName'=>$activity->name,
-                                'activity_id'=>$activity->activity_id,
-                                'eventDate'=>$activity->startDate, 
-                                'eventTimeStart'=>$activity->start_time,
-                                'eventLocation'=>$activity->location, 
-                                'contactNo'=>$activity->contact, 
-                                'contactPerson'=>$activity->contactperson,  
-                                
-                                ]);*/
+                             $dataBuilder->addData([
+                               'sample'=>'asds'
+                                ]);
 
                             $option = $optionBuilder->build();
                             $notification = $notificationBuilder->build();
@@ -726,7 +718,9 @@ class RunScheduler extends Command
                                     'data'=>$activity_id
                                 ]);
 
+
                             $notification_user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                            $this->info('asds'.$notification_id);
 
                                 Notification_user::create([
                                        'id'=>$notification_user_id,
@@ -796,7 +790,7 @@ class RunScheduler extends Command
                                 Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
                         }     
 
-                         $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name,$criteriaTotal,$activity_with_false_5hrs->activity_id,$newBadgePoints,$volunteer->volunteer_id);                                                   
+                         $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name,$activity_with_false_5hrs->activity_id,$newBadgePoints,$volunteer->volunteer_id);                                                   
                     }  
                      $this->info('iya nang i update to true'); 
                      $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>true]);                           
