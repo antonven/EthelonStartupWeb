@@ -130,9 +130,7 @@ class NotificationController extends Controller
 
     foreach($notifications as $notification){
 
-
-       if($notification->major_type == 'activity_group' ){
-          
+    
          $image = Activity::select('image_url')->where('activity_id',$notification->sender_id)->first();
          $timeNowz = \Carbon\Carbon::now()->format('Y-m-d h:i');
 
@@ -155,7 +153,7 @@ class NotificationController extends Controller
 
          
           array_push($notificationObject,$data);
-       }
+
 
     }               
 
@@ -209,6 +207,7 @@ class NotificationController extends Controller
                $activity = $this->getActivity($request->input('data'),$request->input('volunteer_id'));
                return response()->json($activity);
                break;
+        case 'criteriaTotal':       
         
     }
 

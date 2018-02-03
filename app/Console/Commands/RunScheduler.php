@@ -605,6 +605,8 @@ class RunScheduler extends Command
                               if($activities_with_false_5hrs->count()){
                                   $this->info('ni sud if acitivites count');
                                   $this->addCriteriaTotal($activities_with_false_5hrs);  
+                             }else{
+                              $this->info('wala nisud acitivites count');
                              }
 
 
