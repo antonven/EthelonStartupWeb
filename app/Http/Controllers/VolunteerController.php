@@ -38,6 +38,7 @@ class VolunteerController extends Controller
 
       $volunteer_id = $request->input('volunteer_id');
 
+
       $infos = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
                               ->join('badges',function($join){
                                 $join->on('badges.badge','=','volunteerbadges.badge')
@@ -46,18 +47,20 @@ class VolunteerController extends Controller
 
            $infoBadges = array();       
 
-      foreach($infos as $info){
 
+      foreach($infos as $info){
          
       /*$badges = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
                               ->join('badges',function($join){
                                 $join->on('badges.skill','=','volunteerbadges.skill');
                               })->where('volunteerbadges.skill','=',$info->skill)->get();*/
+
                               $badges = Badge::where('skill',$info->skill)->get();
 
+                       $points = ($info->star*$this->getGauge($info->badge)) +$info->points;
+                       $percentCompleted = ($points/($this->getGauge($info->badge)*6))*100;        
 
-
-                 $infoBadge = array("info"=>$info,"badges"=>$badges);
+                 $infoBadge = array("info"=>$info,"percentCompleted"=>$percentCompleted,"badges"=>$badges);
                  array_push($infoBadges,$infoBadge);  
 
 
@@ -246,7 +249,7 @@ class VolunteerController extends Controller
         case 'Newbie':
          Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('badge', 'Newbie')
-          ->where('skill',$volunteerBadge->skill)->update(['badge'=>'Archon','points'=>$newVolunteerBadgePoints,'star'=>0]);
+          ->where('skill',$volunteerBadge->skill)->update(['badge'=>'Explorer','points'=>$newVolunteerBadgePoints,'star'=>0]);
 
         $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
                               ->join('badges',function($join){
@@ -257,10 +260,10 @@ class VolunteerController extends Controller
 
           break;
         
-        case 'Archon':
+        case 'Explorer':
           Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('skill',$volunteerBadge->skill) 
-          ->where('badge', 'Archon')->update(['badge'=>'Expert','points'=>$newVolunteerBadgePoints,'star'=>0]);
+          ->where('badge', 'Explorer')->update(['badge'=>'Expert','points'=>$newVolunteerBadgePoints,'star'=>0]);
 
           $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
                               ->join('badges',function($join){
@@ -295,7 +298,7 @@ class VolunteerController extends Controller
         case 0:
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 0)->where('skill',$volunteerBadge->skill)->update(['star'=>1, 'points'=>$newVolunteerBadgePoints]);
-          echo 'success';
+        
         break;
 
         case 1:
@@ -339,7 +342,7 @@ class VolunteerController extends Controller
           return 100;
           break;
 
-        case "Archon":
+        case "Explorer":
           return 200;
           break;
 
