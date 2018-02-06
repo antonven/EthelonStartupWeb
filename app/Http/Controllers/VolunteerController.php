@@ -45,7 +45,7 @@ class VolunteerController extends Controller
                                     ->on('badges.skill','=','volunteerbadges.skill');
                               })->where('volunteerbadges.volunteer_id','=',$volunteer_id)->get();
 
-           $infoBadges = array();       
+           $infoBadges = array(); 
 
 
       foreach($infos as $info){
@@ -298,32 +298,71 @@ class VolunteerController extends Controller
         case 0:
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 0)->where('skill',$volunteerBadge->skill)->update(['star'=>1, 'points'=>$newVolunteerBadgePoints]);
+
+          $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
+                              ->join('badges',function($join){
+                                $join->on('badges.badge','=','volunteerbadges.badge')
+                                    ->on('badges.skill','=','volunteerbadges.skill');
+                              })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)->first();
+
+                  return $newVolunteerBadge;            
         
         break;
 
         case 1:
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 1)->where('skill',$volunteerBadge->skill)->update(['star'=>2, 'points'=>$newVolunteerBadgePoints]);
-        # code...
+
+          $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
+                              ->join('badges',function($join){
+                                $join->on('badges.badge','=','volunteerbadges.badge')
+                                    ->on('badges.skill','=','volunteerbadges.skill');
+                              })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)->first();
+
+                  return $newVolunteerBadge;
+       
         break;
 
         case 2:
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 2)->where('skill',$volunteerBadge->skill)->update(['star'=>3, 'points'=>$newVolunteerBadgePoints]);
-        # code...
+
+           $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
+                              ->join('badges',function($join){
+                                $join->on('badges.badge','=','volunteerbadges.badge')
+                                    ->on('badges.skill','=','volunteerbadges.skill');
+                              })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)->first();
+
+                  return $newVolunteerBadge;
+        
         break;
 
         case 3:
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 3)->where('skill',$volunteerBadge->skill)->update(['star'=>4, 'points'=>$newVolunteerBadgePoints]);
-        # code...
+
+           $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
+                              ->join('badges',function($join){
+                                $join->on('badges.badge','=','volunteerbadges.badge')
+                                    ->on('badges.skill','=','volunteerbadges.skill');
+                              })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)->first();
+
+                  return $newVolunteerBadge;
+        
         break;
 
         case 4:
-       // $new_gauge_points = ($volunteerBadge->gauge_points + $received_gauge_points) - 100;
         Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
           ->where('star', 4)->where('skill',$volunteerBadge->skill)->update(['star'=>5, 'points'=>$newVolunteerBadgePoints]);
-        # code...
+
+           $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
+                              ->join('badges',function($join){
+                                $join->on('badges.badge','=','volunteerbadges.badge')
+                                    ->on('badges.skill','=','volunteerbadges.skill');
+                              })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)->first();
+
+                  return $newVolunteerBadge;
+        
         break;
           
     }
@@ -439,10 +478,12 @@ class VolunteerController extends Controller
 
                                   }
                                   else{
-                                    $this->updateStar($volunteerBadge, $newVolunteerBadgePoints);
+
+                                    $newVolunteerBadge = $this->updateStar($volunteerBadge, $newVolunteerBadgePoints);
                                     $update = "new star";
                                     $body = "NEW STAR EARNED!";
-                                    $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>null);
+                                    
+                                    $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
                                     array_push($earnedAchievement,$earned);
 
                                   }
