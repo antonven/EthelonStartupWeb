@@ -439,7 +439,7 @@ class VolunteerController extends Controller
                        $body = null;
                        $update = "nothing";
                     if(strcmp($activity_skill->name, $volunteerBadge->skill) == 0){
-                      echo $volunteerBadge->skill. ' = '. $activity_skill->name;
+                     
     
                           $newVolunteerBadgePoints = $volunteerBadge->points + $activity->points_equivalent; //points daan sa skill Badge + points_equivalent
                           //$gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge); //gaugepoints = totalbadgeskillpoints apil karon * multiplier(0.2,0.3,0.4)
@@ -472,8 +472,7 @@ class VolunteerController extends Controller
                             }
 
                             if($newVolunteerBadgePoints >= $this->getGauge($volunteerBadge->badge)){ 
-                                    echo '469 ';
-                                    echo  $volunteerBadge->skill;
+                                  
                                 $newVolunteerBadgePoints = $newVolunteerBadgePoints - $this->getGauge($volunteerBadge->badge); //kuhaon ang subra para ibutang sa pts
                                  // echo $newVolunteerBadgePoints;  
                                   if($volunteerBadge->star == 5){//updateBadge kay 5 stars nah siya 
