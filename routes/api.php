@@ -92,6 +92,8 @@ Route::post('/login','LoginController@login');
 Route::post('/loginwithfbnoemail','LoginController@loginwithFbnoEmail');
 Route::post('/loginwithfb','LoginController@loginwithFb');
 Route::post('/groupmatestorate','ActivityController@volunteersToRate');
+Route::post('/getSkills','VolunteerController@getSkills');
 
+Route::post('/profileDetails','VolunteerController@profileDetails');
 
 
