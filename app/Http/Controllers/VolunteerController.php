@@ -50,7 +50,7 @@ class VolunteerController extends Controller
                          ->where('volunteer_id',$request->input('volunteer_id'))
                          ->get();
 
-                
+
       $skills = Volunteerskill::select("name")->where('volunteer_id',$volunteer_id)->get();
 
       $details = array("details"=>$vol,"skills"=>$skills);
@@ -702,7 +702,7 @@ class VolunteerController extends Controller
 
     public function leaderboard(){
 
-        $volunteerLeaders = \DB::table('volunteers')->select('users.name as name', 'volunteers.*')
+        $volunteerLeaders = \DB::table('volunteers')->select('users.name as name', 'volunteers.*','users.api_token as api_token')
                                                         ->join('users','users.user_id','=','volunteers.user_id')->orderBy('volunteers.points','desc')->get();
 
 
