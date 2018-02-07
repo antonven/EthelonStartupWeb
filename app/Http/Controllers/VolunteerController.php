@@ -33,6 +33,30 @@ class VolunteerController extends Controller
 
 
     //
+    public function getSkills(Request $request){
+        $volunteer_id = $request->input('volunteer_id');
+
+        $skills = Volunteerskill::select("name")->where('volunteer_id',$volunteer_id)->get();
+
+        return response()->json($skills);
+    }
+
+    public function profileDetails(Request $request){
+
+       $volunteer_id = $request->input('volunteer_id');
+
+       $vol = Volunteer::select('volunteers.image_url','users.name','users.email')
+                         ->join('users','users.user_id','=','volunteers.user_id')
+                         ->where('volunteer_id',$request->input('volunteer_id'))
+                         ->get();
+
+                
+      $skills = Volunteerskill::select("name")->where('volunteer_id',$volunteer_id)->get();
+
+      $details = array("details"=>$vol,"skills"=>$skills);
+
+                return response()->json($details);         
+    }
 
     public function volunteerProfile(Request $request){
 
