@@ -869,12 +869,12 @@ public function test3(){
     	$activity_id = $request->input('activity_id');
 
 
-        $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.image_url as image_url')
+        $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.*')
                                            ->join('volunteers','volunteers.user_id','=','users.user_id')
                                            ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id') 
                                            ->where('volunteeractivities.activity_id',$activity_id)
                                            ->get();
-
+                                           
     	return response()->json($volunteersBefore);
         
     }
