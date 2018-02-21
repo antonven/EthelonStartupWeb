@@ -29,6 +29,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
 		Route::post('/activitycriteria','ActivityController@criteria');
+
 		
 
 		//volunteer
@@ -70,6 +71,7 @@ Route::group(['middleware'=>'foundation'],function(){
 
 });
 
+Route::post('/foundation','VolunteerController@getFoundationProfile');
 Route::post('/fcm_token','VolunteerController@fcm_token');
 Route::post('/groupmatestorate','ActivityController@volunteersToRate');
 Route::post('/attendanceactivity','VolunteerController@successAttendance');

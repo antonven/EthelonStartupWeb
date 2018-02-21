@@ -14,6 +14,7 @@ use App\Events\HelloPusherEvent;
 use App\Volunteer;
 use App\Activitycriteria;
 use Carbon\Carbon;
+use App\Foundation;
 use App\Activitygroup;
 use App\Volunteergroup;
 use App\Volunteercriteria;
@@ -39,6 +40,14 @@ class VolunteerController extends Controller
         $skills = Volunteerskill::select("name")->where('volunteer_id',$volunteer_id)->get();
 
         return response()->json($skills);
+    }
+
+    public function getFoundationProfile(Request $request){
+
+        $foundation = Foundation::where('foundation_id',$request->input('foundation_id'))->first();
+
+
+        return response()->json($foundation);
     }
 
     public function profileDetails(Request $request){
@@ -90,10 +99,8 @@ class VolunteerController extends Controller
 
 
       }
-                     
 
                               return response()->json($infoBadges);
-
 
     } 
 
@@ -113,7 +120,8 @@ class VolunteerController extends Controller
 
       
     }
-     public function checkIfAlreadyAttended(Request $request){
+
+    public function checkIfAlreadyAttended(Request $request){
     $vol_activity = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
                                           ->where('activity_id',$request->input('activity_id'))
                                           ->where('status',true)->get();
