@@ -453,8 +453,6 @@ class VolunteerController extends Controller
                 ->first();
 
 
-return response()->json(\Carbon\Carbon::now()->format('Y-m-d h:i'));
-
     if($volunteeractivity->volunteerTimedIn == false){
 
             \DB::table('volunteeractivities')
