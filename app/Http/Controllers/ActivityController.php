@@ -97,172 +97,9 @@ public function webtest($id){
                  
                 ]);
       }
-    }
-
-public function test4(){
-
-  /*$volunteers = Volunteer::all();
-
-  foreach($volunteers as $volunteer){
-      Volunteeractivity::create([
-            'activity_id' => '6b1d8fe',
-            'volunteer_id'=> $volunteer->volunteer_id,
-            'status' => false
-            ]);
-    }*/
-    
-    // $activity = Activity::where('activity_id','6b1d8fe')->first();
-    // $volunteer = Volunteer::all();
-                                                        
-                            $optionBuilder = new OptionsBuilder();
-                            $optionBuilder->setTimeToLive(60*20);
-                            $optionBuilder->setPriority('high');
- 
-                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates has been revealed')
-                                              ->setSound('default'); 
-
-                            $dataBuilder = new PayloadDataBuilder();
-
-                          /*  $dataBuilder->addData([
-                                'eventImage'=>$activity->image_url,
-                                'eventHost' =>$activity->foundation_name,
-                                'eventName'=>$activity->name,
-                                'activity_id'=>$activity->activity_id,
-                                 'eventDate'=>$activity->startDate, 
-                                 'eventTimeStart'=>$activity->start_time,
-                                 'eventLocation'=>$activity->location, 
-                                 'contactNo'=>$activity->contact, 
-                                 'contactPerson'=>$activity->contactperson,  
-                                
-                                ]);*/
-
-                              $dataBuilder->addData([
-                                "activity_id"=>"406756a"  
-                                ]);
-
-                            $option = $optionBuilder->build();
-                            $notification = $notificationBuilder->build();
-                            $data = $dataBuilder->build();
-                             
-                        
-                                 $downstreamResponse = FCM::sendTo('cncXed496kY:APA91bFX3s-aGJ1jmW8E3zhvXJkjUX18i1yS-XXxcEqyi4RezYJwofiNFoZLRgdh3T_NW3QVS6d8YHxwmpMKxg3VlcTRc4cG106TWCz_TGlaYFKqDyA_N4CJ5OTRSMfhco5tBVBQdb7H', $option, $notification, $data);
-
-                                 return response()->json($downstreamResponse);
-
-                   /*               $optionBuilder = new OptionsBuilder();
-                            $optionBuilder->setTimeToLive(60*20);
-                            $optionBuilder->setPriority('high');
- 
-                          $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates has been revealed')
-                                              ->setSound('default'); 
-
-                            $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
-                                "sds"=>"dsds"
-                                
-                                ]);
-
-                            $option = $optionBuilder->build();
-                            $notification = $notificationBuilder->build();
-                            $data = $dataBuilder->build();
-                             
-                        
-                                 $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
-
-                                 dd($downstreamResponse);*/
-
-}
-
-public function test3(){
-
-     /* $activities = Activity::where('status',false)->get();
-
-      if($activities->count()){
-
-         $this->randomAllocation($activities);  
-        
-      }else{
-        return 'atay';
-      }*/
-
-      $volunteers = Volunteer::all();
-
-      foreach($volunteers as $volunteer){
-
-       Volunteeractivity::create([
-        
-                 'volunteer_id'=>$volunteer->volunteer_id,
-                 'activity_id'=>'a277327',
-                 'status'=> false  
-                ]);
-            
-      }
-      
-/*
-      Activityskill::create([
-          'activity_id'=> '6b1d8fe',
-          'name'=> 'Sports'
-        ]);
-
-        Activityskill::create([
-          'activity_id'=> '6b1d8fe',
-          'name'=> 'Culinary'
-        ]);
-*/
-}
-
-
-  public function test2(){
-
-    //Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->update(['status'=> true]);
-
-
-    //$activities = Activity::whereDate('startDate',\Carbon\Carbon::tomorrow()->format('Y-m-d'))->get();*/
-/*
-    $activities = Activity::where('activity_id','d7a75')->get();
-
-     $this->randomAllocation($activities);
-     $this->sendNotifications($activities);*/
-
-//fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4
-
-    /*$optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-        $optionBuilder->setPriority('high');
-
-        $notificationBuilder = new PayloadNotificationBuilder('Ethelon');
-                          $notificationBuilder->setBody('Your groupmates for  has been revealed')
-                                              ->setSound('default'); 
-
-                            $dataBuilder = new PayloadDataBuilder();
-                            $dataBuilder->addData([
-                                'activity'=>'wew',
-                                'volunteersToRate'=>'yawa'
-                                ]);
-                              
-                             $option = $optionBuilder->build();
-                             $notification = $notificationBuilder->build();
-                             $data = $dataBuilder->build();
-
-                             $downstreamResponse = FCM::sendTo('fz58IBx65j0:APA91bHr3Bz__NOpnfIEVpifvCkVNSMtJeZidl7OHAm-FHt0eLLsIje_pwMKzh6MHTTCkOB9RLscaYbnqChSqw_iubcnlQsW1GdNi_3qbVjYNBN4lcGk4Fb9_2g3GmiyBc-l8srOI7d4', $option, $notification, $data);
-
-                             return dd($downstreamResponse);*/
-
-
-        $activities = Activity::where('status',false)->get();
-
-      if($activities->count()){
-        
-        $this->randomAllocation($activities);  
-
-        $returns = $this->sendNotifications($activities);
-
-        return response()->json($returns);
-      }
-
   }
+
+
 
   public function sendnoTif(){
     $volunteers = Volunteer::all();
@@ -693,31 +530,6 @@ public function test3(){
         return redirect(url('/activity'));
     }
 
-/*    public function uploadQr($activity_id){
-
-            
-            $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-            $destinationPath = public_path('file_attachments');
-
-             
-  
-            // $qrCode->move($destinationPath, $filename);   
-
-            
-             
-             \Cloudder::upload(url('/file_attachments').'/'.$filename);
-
-            $url = \Cloudder::getResult();
-            
-            if($url){
-
-                return $url['url'];
-
-            }
-
-      
-   
-    }*/
 
     public function uploadFile($file)
     {
@@ -1039,7 +851,7 @@ public function test3(){
 
        $activityList = array();
 
-        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')->skip($offset)->limit(5)   
+        $activities = \DB::table('activities')->select('activities.*','volunteeractivities.status as joined','volunteeractivities.points as points','foundations.name as foundation_name','volunteeractivities.volunteerTimedIn as volunteerTimedIn')->join('foundations','foundations.foundation_id','=','activities.foundation_id')->join('volunteeractivities','volunteeractivities.activity_id','=','activities.activity_id')->where('volunteeractivities.volunteer_id',$request->input('volunteer_id'))->orderBy('activities.startDate','DESC')->skip($offset)->limit(5)   
                 ->get();
 
                 foreach($activities as $activity){
@@ -1082,7 +894,8 @@ public function test3(){
                                             "foundtion_name" =>$foundation->foundtion_name,
                                             "volunteer_count"=>$volunteerCount->count(),
                                             "activity_skills"=>$activitySkills,
-                                            "activity_criteria"=>$activityCriteria);
+                                            "activity_criteria"=>$activityCriteria,
+                                            "volunteerTimedIn"=>$activity->volunteerTimedIn);
 
                          array_push($activityList,$activityTempo);                          
 
