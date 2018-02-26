@@ -34,6 +34,10 @@ class VolunteerController extends Controller
 
 
     //
+
+
+
+
     public function getSkills(Request $request){
         $volunteer_id = $request->input('volunteer_id');
 
@@ -440,148 +444,186 @@ class VolunteerController extends Controller
 
    }
 
+   public function qrPicture(Request $request){
+
+
+      $volunteeractivity =  \DB::table('volunteeractivities')
+                ->where('volunteer_id',$request->input('volunteer_id'))
+                ->where('activity_id',$request->input('activity_id'))
+                ->first();
+
+
+return response()->json(\Carbon\Carbon::now()->format('Y-m-d h:i'));
+
+    if($volunteeractivity->volunteerTimedIn == false){
+
+            \DB::table('volunteeractivities')
+                    ->where('volunteer_id',$request->input('volunteer_id'))
+                    ->where('activity_id',$request->input('activity_id'))
+                    ->update(['volunteerTimedIn' => true,'timeIn'=>\Carbon\Carbon::now()->format('Y-m-d h:i')]);
+
+            $data = array("update"=>"timein");    
+
+            return response()->json($data);
+
+    }else{
+            $data = array("update"=>"timeout");    
+
+            return response()->json($data);
+    }
+
+   }
+
    public function successAttendance(Request $request){
-  
-  
-             \DB::table('volunteeractivities')
-                ->where('volunteer_id',$request->input('volunteer_id'))
-                ->where('activity_id',$request->input('activity_id'))
-                ->update(['status' => true]);
-                
-             /*$start_time = \Carbon\Carbon::parse($activity->start_time);   
-             $end_time =   \Carbon\Carbon::parse($activity->end_time); 
-             */
-             
-             $criteriaTotal = 0;
-             $sumOfPoints = 0;
-
-              //query
-             $activity = Activity::where('activity_id',$request->input('activity_id'))->first();
-             $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
-             $volunteer = Volunteer::where('volunteer_id', $request->input('volunteer_id'))->first();
-             $volunteerBadges = Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))->get();
-
-               
-              
-            //$activity_points = $criteriaTotal + $activity->points_equivalent;
-
-             // = "nothing", "new star", "new badge";
-             $newVolunteerBadge = null;        
-             $earnedAchievement = array();
-
-            $total_points = $activity->points_equivalent + $volunteer->points; //update volunteerpoints 
- 
-            foreach ($activity_skills as $activity_skill) {
-                  foreach ($volunteerBadges as $volunteerBadge) {
-                       $newbie = false;
-                       $body = null;
-                       $update = "nothing";
-                    if(strcmp($activity_skill->name, $volunteerBadge->skill) == 0){
-                     
     
-                          $newVolunteerBadgePoints = $volunteerBadge->points + $activity->points_equivalent; //points daan sa skill Badge + points_equivalent
-                          //$gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge); //gaugepoints = totalbadgeskillpoints apil karon * multiplier(0.2,0.3,0.4)
-                          //echo $newVolunteerBadgePoints. ' WTF';
+                    \DB::table('volunteeractivities')
+                    ->where('volunteer_id',$request->input('volunteer_id'))
+                    ->where('activity_id',$request->input('activity_id'))
+                    ->update(['status' => true]);
 
-                            if(strcmp($volunteerBadge->badge, "Nothing") == 0){
+                 
+                    
+                 /*$start_time = \Carbon\Carbon::parse($activity->start_time);   
+                 $end_time =   \Carbon\Carbon::parse($activity->end_time); 
+                 */
+                 
+                 $criteriaTotal = 0;
+                 $sumOfPoints = 0;
 
-                                 Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
-                                                ->where('badge', 'Nothing')
-                                                ->where('skill',$volunteerBadge->skill)  
-                                                ->update(['badge'=>'Newbie']);  
+                  //query
+                 $activity = Activity::where('activity_id',$request->input('activity_id'))->first();
+                 $volunteeractivity = Volunteeractivity::where('activity_id',$request->input('activity_id'))
+                                                     ->where('volunteer_id',$request->input('volunteer_id'))->first();     
 
-                                 $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
-                                                                    ->join('badges',function($join){
-                                                                      $join->on('badges.badge','=','volunteerbadges.badge')
-                                                                          ->on('badges.skill','=','volunteerbadges.skill');
-                                                                    })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)
-                                                                      ->where('volunteerbadges.skill',$volunteerBadge->skill)->first();
-                        
+                                                     
+                 $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
+                 $volunteer = Volunteer::where('volunteer_id', $request->input('volunteer_id'))->first();
+                 $volunteerBadges = Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))->get();
 
-                                    $update = "new badge";
-                                    $body = "NEW BADGE EARNED!";
-                                    $newbie = true;
+                 $timeIn = \Carbon\Carbon::parse($volunteeractivity->timeIn);
+                 $timeOut =  \Carbon\Carbon::parse($activity->endDate);
+                  
+                 $timeInTimeOutDifference = $timeIn->diffInHours($timeOut);
 
-                                    $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
-                                    array_push($earnedAchievement,$earned);
-                                   // echo $newbie.' siya';
-                                    //echo $newbie;
+                //$activity_points = $criteriaTotal + $activity->points_equivalent;
 
-                            }
+                 // = "nothing", "new star", "new badge";
+                 $newVolunteerBadge = null;        
+                 $earnedAchievement = array();
 
-                            if($newVolunteerBadgePoints >= $this->getGauge($volunteerBadge->badge)){ 
-                                  
-                                $newVolunteerBadgePoints = $newVolunteerBadgePoints - $this->getGauge($volunteerBadge->badge); //kuhaon ang subra para ibutang sa pts
-                                 // echo $newVolunteerBadgePoints;  
-                                  if($volunteerBadge->star == 5){//updateBadge kay 5 stars nah siya 
-                                    
-                                    $newVolunteerBadge = $this->updateBadge($volunteerBadge, $newVolunteerBadgePoints);
-                                    $update = "new badge";
-                                    $body = "NEW BADGE EARNED!";
+                $total_points = $activity->points_equivalent + $volunteer->points; //update volunteerpoints 
+     
+                foreach ($activity_skills as $activity_skill) {
+                      foreach ($volunteerBadges as $volunteerBadge) {
+                           $newbie = false;
+                           $body = null;
+                           $update = "nothing";
+                        if(strcmp($activity_skill->name, $volunteerBadge->skill) == 0){
+                         
+        
+                              $newVolunteerBadgePoints = $volunteerBadge->points + $activity->points_equivalent; //points daan sa skill Badge + points_equivalent
+                              //$gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge); //gaugepoints = totalbadgeskillpoints apil karon * multiplier(0.2,0.3,0.4)
+                              //echo $newVolunteerBadgePoints. ' WTF';
 
-                                    $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
+                                if(strcmp($volunteerBadge->badge, "Nothing") == 0){
 
-                                      //echo '480 ';
-                                    
-                                    array_push($earnedAchievement,$earned);
+                                     Volunteerbadge::where('volunteer_id', $volunteerBadge->volunteer_id)
+                                                    ->where('badge', 'Nothing')
+                                                    ->where('skill',$volunteerBadge->skill)  
+                                                    ->update(['badge'=>'Newbie']);  
 
-                                  }
-                                  else{
+                                     $newVolunteerBadge = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
+                                                                        ->join('badges',function($join){
+                                                                          $join->on('badges.badge','=','volunteerbadges.badge')
+                                                                              ->on('badges.skill','=','volunteerbadges.skill');
+                                                                        })->where('volunteerbadges.volunteer_id','=',$volunteerBadge->volunteer_id)
+                                                                          ->where('volunteerbadges.skill',$volunteerBadge->skill)->first();
+                            
 
-                                   // echo '487  ';
+                                        $update = "new badge";
+                                        $body = "NEW BADGE EARNED!";
+                                        $newbie = true;
 
-                                    $newVolunteerBadge = $this->updateStar($volunteerBadge, $newVolunteerBadgePoints);
-                                    $update = "new star";
-                                    $body = "NEW STAR EARNED!";
-                                    
-                                    $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
+                                        array_push($earnedAchievement,$earned);
+                                       // echo $newbie.' siya';
+                                        //echo $newbie;
 
-                                    array_push($earnedAchievement,$earned);
+                                }
 
-                                  }
+                                if($newVolunteerBadgePoints >= $this->getGauge($volunteerBadge->badge)){ 
+                                      
+                                    $newVolunteerBadgePoints = $newVolunteerBadgePoints - $this->getGauge($volunteerBadge->badge); //kuhaon ang subra para ibutang sa pts
+                                     // echo $newVolunteerBadgePoints;  
+                                      if($volunteerBadge->star == 5){//updateBadge kay 5 stars nah siya 
+                                        
+                                        $newVolunteerBadge = $this->updateBadge($volunteerBadge, $newVolunteerBadgePoints);
+                                        $update = "new badge";
+                                        $body = "NEW BADGE EARNED!";
 
-                            }
-                            else{
-                                  //echo ' damn ni sud sa else'.$newVolunteerBadgePoints;
-                              //$skill_points_local = (int)($volunteerBadge->gauge_points + $gauge_points);
-                               Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))
-                                  ->where('badge', $volunteerBadge->badge)
-                                  ->where('skill',$activity_skill->name)
-                                  ->update(['points'=>$newVolunteerBadgePoints]);
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
 
-                                //echo ' 508';
+                                          //echo '480 ';
+                                        
+                                        array_push($earnedAchievement,$earned);
 
-                                   if($newbie == false){
-                                    $update = "nothing";
+                                      }
+                                      else{
 
-                                    $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>null);
-                                    array_push($earnedAchievement,$earned);
-                                   } 
-                                   
-                            }
-                       
-                    }
-                  }
-                     
-            }
-              
+                                       // echo '487  ';
 
-             \DB::table('volunteeractivities')
-                ->where('volunteer_id',$request->input('volunteer_id'))
-                ->where('activity_id',$request->input('activity_id'))
-                ->update(['points' => $activity->points_equivalent]);
+                                        $newVolunteerBadge = $this->updateStar($volunteerBadge, $newVolunteerBadgePoints);
+                                        $update = "new star";
+                                        $body = "NEW STAR EARNED!";
+                                        
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
 
-            Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $total_points]);
-            /*  
-            \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);*/
+                                        array_push($earnedAchievement,$earned);
 
-            $data = array("update"=>$update,"badgedata"=>$newVolunteerBadge,"text"=>$body);
+                                      }
 
-            return response()->json($earnedAchievement);
+                                }
+                                else{
+                                      //echo ' damn ni sud sa else'.$newVolunteerBadgePoints;
+                                  //$skill_points_local = (int)($volunteerBadge->gauge_points + $gauge_points);
+                                   Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))
+                                      ->where('badge', $volunteerBadge->badge)
+                                      ->where('skill',$activity_skill->name)
+                                      ->update(['points'=>$newVolunteerBadgePoints]);
 
-            /*return response()->json($data);  */          
-            /*"You have gained a new star"
-            "You earned a new badge"*/
+                                    //echo ' 508';
+
+                                       if($newbie == false){
+                                        $update = "nothing";
+
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>null);
+                                        array_push($earnedAchievement,$earned);
+                                       } 
+                                       
+                                }
+                           
+                        }
+                      }
+                         
+                }
+                  
+
+                 \DB::table('volunteeractivities')
+                    ->where('volunteer_id',$request->input('volunteer_id'))
+                    ->where('activity_id',$request->input('activity_id'))
+                    ->update(['points' => $activity->points_equivalent]);
+
+                Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $total_points]);
+                /*  
+                \DB::table('activities')->where('activity_id',$request->input('activity_id'))->update(['points_equivalent' => $sumOfPoints]);*/
+
+                $data = array("update"=>$update,"badgedata"=>$newVolunteerBadge,"text"=>$body);
+
+                return response()->json($earnedAchievement);
+
+                /*return response()->json($data);  */          
+                /*"You have gained a new star"
+                "You earned a new badge"*/
 
     }
 

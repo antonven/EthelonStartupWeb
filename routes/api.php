@@ -80,6 +80,7 @@ Route::post('/volunteerprofile','VolunteerController@volunteerProfile');
 
 //testingge
 
+Route::post('/qr','VolunteerController@qrPicture');
 Route::post('/notificationClicked','NotificationController@notificationClicked');
 Route::post('/skillprac','TestingController@skill');
 Route::post('/test2','TestingController@test2');
