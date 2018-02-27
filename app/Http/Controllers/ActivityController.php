@@ -718,7 +718,7 @@ public function webtest($id){
 
         $offset = 0;
 
-     $requestedOffsetString = $request->input('offset');
+     $requestedOffsetString = $request->input('count');
      $offsetInt = (int)$requestedOffsetString;
       
       if($offsetInt==5){
