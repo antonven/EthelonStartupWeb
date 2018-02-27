@@ -712,6 +712,10 @@ public function webtest($id){
         $activityScores = array();
         $newActivities = array();
 
+        $activityMatches = array();
+        $recentMatches = array();
+        $activityNoMatches = array();
+
         $offset = 0;
 
      $requestedOffsetString = $request->input('offset');
@@ -722,28 +726,33 @@ public function webtest($id){
       }else{
          $offset = $offsetInt - 5;
       }
+
+      $countForOffset = 0;
+
+
         
 
         $activities = \DB::table('activities')->select('activities.*','users.name as foundtion_name','foundations.image_url as      foundation_imageurl') 
                                               ->join('foundations','foundations.foundation_id','=','activities.foundation_id') 
                                               ->join('users','users.user_id','=','foundations.user_id') 
-                                              ->where('activities.status',false)->skip($offset)->limit(5)->get();  
+                                              ->where('activities.status',false)->get();  
 
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
+        for($i = $offset; $i < $activities->count(); $i++){
 
-            foreach($activities as $activity){
-                $data = null;
+            if($countForOffset < 5){
+                 $data = null;
                 $count = 0; 
 
-                    $activityskills = Activityskill::where('activity_id',$activity->activity_id)->get();
+                    $activityskills = Activityskill::where('activity_id',$activities[$i]->activity_id)->get();
 
                     $watch = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
-                                       ->where('activity_id',$activity->activity_id)->get();
+                                       ->where('activity_id',$activities[$i]->activity_id)->get();
 
-                    $activityCriteria = Activitycriteria::where('activity_id',$activity->activity_id)->get();                   
+                    $activityCriteria = Activitycriteria::where('activity_id',$activities[$i]->activity_id)->get();                   
 
-                    $volunteerCount = Volunteeractivity::where('activity_id',$activity->activity_id)->get();                   
+                    $volunteerCount = Volunteeractivity::where('activity_id',$activities[$i]->activity_id)->get();                   
 
                     if($watch->count()){
                         $data = "yes";
@@ -752,28 +761,28 @@ public function webtest($id){
                     }
 
 
-                    $activityTempo = array("activity_id"=>$activity->activity_id,
-                                            "foundation_id"=>$activity->foundation_id,
-                                            "name"=>$activity->name,
-                                            "image_url"=>$activity->image_url,
-                                            "imageQr_url"=>$activity->imageQr_url,
-                                            "description"=>$activity->description,
-                                            "location"=>$activity->location,
-                                            "start_time"=>$activity->start_time,
-                                            "end_time"=>$activity->end_time,
-                                            "group"=>$activity->group,
-                                            "long"=>$activity->long,
-                                            "lat"=>$activity->lat,
-                                            "points_equivalent"=>$activity->points_equivalent,
-                                            "status"=>$activity->status,
-                                            "created_at"=>$activity->created_at,
-                                            "updated_at"=>$activity->updated_at,
-                                            "contactperson"=>$activity->contactperson,
-                                            "contact"=>$activity->contact,
-                                            "startDate"=>$activity->startDate,
-                                            "foundtion_name"=>$activity->foundtion_name,
+                    $activityTempo =(object)  array("activity_id"=>$activities[$i]->activity_id,
+                                            "foundation_id"=>$activities[$i]->foundation_id,
+                                            "name"=>$activities[$i]->name,
+                                            "image_url"=>$activities[$i]->image_url,
+                                            "imageQr_url"=>$activities[$i]->imageQr_url,
+                                            "description"=>$activities[$i]->description,
+                                            "location"=>$activities[$i]->location,
+                                            "start_time"=>$activities[$i]->start_time,
+                                            "end_time"=>$activities[$i]->end_time,
+                                            "group"=>$activities[$i]->group,
+                                            "long"=>$activities[$i]->long,
+                                            "lat"=>$activities[$i]->lat,
+                                            "points_equivalent"=>$activities[$i]->points_equivalent,
+                                            "status"=>$activities[$i]->status,
+                                            "created_at"=>$activities[$i]->created_at,
+                                            "updated_at"=>$activities[$i]->updated_at,
+                                            "contactperson"=>$activities[$i]->contactperson,
+                                            "contact"=>$activities[$i]->contact,
+                                            "startDate"=>$activities[$i]->startDate,
+                                            "foundtion_name"=>$activities[$i]->foundtion_name,
                                             "volunteerstatus"=>$data,
-                                            "foundation_img" =>$activity->foundation_imageurl,
+                                            "foundation_img" =>$activities[$i]->foundation_imageurl,
                                             "volunteer_count"=>$volunteerCount->count(),
                                             "activity_skills"=>$activityskills,
                                             "activity_criteria"=>$activityCriteria
@@ -784,7 +793,6 @@ public function webtest($id){
 
                             foreach($skills as $skill){
 
-
                                 if(strcasecmp($skill->name , $activityskill->name)==0){
                                     
                                     $matches = $matches + 1;
@@ -794,20 +802,32 @@ public function webtest($id){
                             }//innermost foreach
 
                     }//2nd foreach
-                
-                    array_push($activityKeeper,$activityTempo);
-                    array_push($activityScores,$matches);
 
+
+                    if($matches > 0){
+
+                      array_push($activityMatches,$activityTempo);
+                      array_push($activityScores,$matches);
+
+                    }else{
+
+                      array_push($activityNoMatches,$activityTempo);
+
+                    }
+                
                     $count++;    
                     $matches = 0;
 
+            }else{
+                break;
             }
 
+            $countForOffset++;
+               
+        }//for loop sa activity
 
-            //the 2 arrays are parallel to each other
-
-            //sort the 2 arrays accordingly
-            for($j = 0; $j < count($activityScores); $j ++) {
+          
+         for($j = 0; $j < count($activityScores); $j ++) {
 
                 for($i = 0; $i < count($activityScores)-1; $i ++){
 
@@ -817,18 +837,27 @@ public function webtest($id){
                         $activityScores[$i+1]=$activityScores[$i];
                         $activityScores[$i]=$temp;
 
-                        $temp2 = $activityKeeper[$i+1];
-                        $activityKeeper[$i+1]=$activityKeeper[$i];
-                        $activityKeeper[$i]=$temp2;
+                        $temp2 = $activityMatches[$i+1];
+                        $activityMatches[$i+1]=$activityMatches[$i];
+                        $activityMatches[$i]=$temp2;
     
                         }    
                 }
                 
-            } 
+         } 
 
-            return response()->json(array_reverse($activityKeeper));
+              $reversed_array = array_reverse($activityMatches);
 
-    	   //return response()->json($activities);
+              usort($activityNoMatches, function($a, $b) {
+                    return strtotime($a->startDate) - strtotime($b->startDate);
+                });
+
+              $reversedNoMatchhes = array_reverse($activityNoMatches);
+
+
+              array_push($reversed_array,$reversedNoMatchhes);
+              return response()->json($reversed_array);
+
         
     }
 
@@ -980,10 +1009,7 @@ public function webtest($id){
 
    }
 
-   
-
- 
-
+  
    public function successAttendanceAndPointsEarned(){
 
    }

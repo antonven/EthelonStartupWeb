@@ -150,20 +150,20 @@ class VolunteerController extends Controller
                                           ->where('activity_id',$request->input('activity_id'))
                                           ->where('status',true)->get();
 
-                                
+                 $rate_result = $this->rate($request);               
 
-  if($vol_activity->count()){
+      if($vol_activity->count()){
 
-            $data = array("message"=>"Registered");
-            return response()->json($data);
+                $data = array("message"=>"Registered");
+                return response()->json($data);
 
-     }else{
+         }else{
 
-        $rate_result = $this->rate($request);
+            
 
-        $data = array("message"=>"Success");
-        return response()->json($data);;
-     }
+            $data = array("message"=>"Success");
+            return response()->json($data);;
+         }
 
     
    }
@@ -193,6 +193,7 @@ class VolunteerController extends Controller
                         ->where('skill',$activity_skill->name)
                         ->update(['points'=>$additional5PointsForRating]);               
         }
+
         
      for($i = 0; $i < $count; $i++){
 
