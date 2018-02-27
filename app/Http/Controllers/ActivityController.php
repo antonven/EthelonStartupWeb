@@ -483,7 +483,7 @@ public function webtest($id){
 
         $numOfHours = $start_time->diffInHours($end_time);
 
-        $preSetPoints = 5*$numOfHours;
+        $preSetPoints = 2*$numOfHours;
 
         $url = $this->uploadFile($request->file('file'));
         

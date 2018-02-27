@@ -75,7 +75,6 @@ class VolunteerController extends Controller
 
       $volunteer_id = $request->input('volunteer_id');
 
-
       $infos = Volunteerbadge::select('volunteerbadges.*','badges.url as url','badges.*')
                               ->join('badges',function($join){
                                 $join->on('badges.badge','=','volunteerbadges.badge')
@@ -92,7 +91,7 @@ class VolunteerController extends Controller
                                 $join->on('badges.skill','=','volunteerbadges.skill');
                               })->where('volunteerbadges.skill','=',$info->skill)->get();*/
 
-                              $badges = Badge::where('skill',$info->skill)->get();
+                       $badges = Badge::where('skill',$info->skill)->get();
 
                        $points = ($info->star*$this->getGauge($info->badge)) +$info->points;
                        $percentCompleted = ($points/($this->getGauge($info->badge)*6))*100;        
@@ -179,8 +178,22 @@ class VolunteerController extends Controller
         $count = $request->input('count');
         $errors = 0;
         $data = array("message"=>"Something's wrong");
-        
 
+        $activity_skills = Activityskill::where('activity_id',$activity_id)->get();
+
+        foreach($activity_skills as $activity_skill){
+
+          $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer_id)
+                        ->where('skill',$activity_skill->name)
+                        ->first();
+
+          $additional5PointsForRating = $volunteerbadge->points + 5;
+
+           Volunteerbadge::where('volunteer_id',$volunteer_id)
+                        ->where('skill',$activity_skill->name)
+                        ->update(['points'=>$additional5PointsForRating]);               
+        }
+        
      for($i = 0; $i < $count; $i++){
 
         $criteria =  $request->input('criteriaParams'.$i);
@@ -211,18 +224,7 @@ class VolunteerController extends Controller
                                                                    'no_of_raters'=>$num_of_raters,
                                                                    'average_points'=>$average_points]);
 
-                                     $group = Activitygroup::where('id',$activity_group_id)->first();
-
-                                      if($num_of_raters == $group->numOfVolunteers){
-
-                                          $volunteer = Volunteer::where('volunteer_id',$volunteer_id_to_rate)->first();
-                                          $points = $average_points + $volunteer->points;
-
-                                          Volunteer::where('volunteer_id',$volunteer_id_to_rate)
-                                                    ->update(['points'=>$points]);
-
-                                      }                    
-
+                                     $group = Activitygroup::where('id',$activity_group_id)->first();                    
                                     if($volunteercriteriapoints){
                                           $data = array("message"=>"Success");
                                     }else{
@@ -479,12 +481,7 @@ class VolunteerController extends Controller
                     ->where('activity_id',$request->input('activity_id'))
                     ->update(['status' => true]);
 
-                 
-                    
-                 /*$start_time = \Carbon\Carbon::parse($activity->start_time);   
-                 $end_time =   \Carbon\Carbon::parse($activity->end_time); 
-                 */
-                 
+                      
                  $criteriaTotal = 0;
                  $sumOfPoints = 0;
 
@@ -502,14 +499,16 @@ class VolunteerController extends Controller
                  $timeOut =  \Carbon\Carbon::parse($activity->endDate);
                   
                  $timeInTimeOutDifference = $timeIn->diffInHours($timeOut);
+                 $totalPointsEarnedFromActivity = $activity->points_equivalent + ($timeInTimeOutDifference * 5);
 
+                 
                 //$activity_points = $criteriaTotal + $activity->points_equivalent;
 
                  // = "nothing", "new star", "new badge";
                  $newVolunteerBadge = null;        
                  $earnedAchievement = array();
 
-                $total_points = $activity->points_equivalent + $volunteer->points; //update volunteerpoints 
+                $total_points = $totalPointsEarnedFromActivity + $volunteer->points; //update volunteerpoints 
      
                 foreach ($activity_skills as $activity_skill) {
                       foreach ($volunteerBadges as $volunteerBadge) {
