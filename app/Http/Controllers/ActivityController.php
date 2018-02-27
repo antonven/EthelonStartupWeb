@@ -718,18 +718,6 @@ public function webtest($id){
 
         $offset = 0;
 
-     $requestedOffsetString = $request->input('count');
-     $offsetInt = (int)$requestedOffsetString;
-      
-      if($offsetInt==5){
-         $offset = 0;
-      }else{
-         $offset = $offsetInt - 5;
-      }
-
-      $countForOffset = 0;
-
-
         
 
         $activities = \DB::table('activities')->select('activities.*','users.name as foundtion_name','foundations.image_url as      foundation_imageurl') 
@@ -739,10 +727,10 @@ public function webtest($id){
 
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
-        for($i = $offset; $i < $activities->count(); $i++){
+        for($i = $0; $i < $activities->count(); $i++){
 
-            if($countForOffset < 5){
-                 $data = null;
+            
+                $data = null;
                 $count = 0; 
 
                     $activityskills = Activityskill::where('activity_id',$activities[$i]->activity_id)->get();
@@ -818,11 +806,8 @@ public function webtest($id){
                     $count++;    
                     $matches = 0;
 
-            }else{
-                break;
-            }
-
-            $countForOffset++;
+            
+            
                
         }//for loop sa activity
 
