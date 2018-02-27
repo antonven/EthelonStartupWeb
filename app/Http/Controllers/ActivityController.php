@@ -840,8 +840,8 @@ public function webtest($id){
               $reversedNoMatchhes = array_reverse($activityNoMatches);
 
 
-              array_push($reversed_array,$reversedNoMatchhes);
-              return response()->json($reversed_array);
+              $activitiesToSend = array_merge($reversed_array,$reversedNoMatchhes);
+              return response()->json($activitiesToSend);
 
         
     }
