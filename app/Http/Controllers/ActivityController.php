@@ -727,7 +727,7 @@ public function webtest($id){
 
         $skills = Volunteerskill::where('volunteer_id',$request->input('volunteer_id'))->get();
 
-        for($i = $0; $i < $activities->count(); $i++){
+        for($i = 0; $i < $activities->count(); $i++){
 
             
                 $data = null;
