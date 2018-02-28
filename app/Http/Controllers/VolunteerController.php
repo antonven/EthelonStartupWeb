@@ -479,11 +479,6 @@ class VolunteerController extends Controller
 
    public function successAttendance(Request $request){
     
-                    /*\DB::table('volunteeractivities')
-                    ->where('volunteer_id',$request->input('volunteer_id'))
-                    ->where('activity_id',$request->input('activity_id'))
-                    ->update(['status' => true]);*/
-
                   
                  $criteriaTotal = 0;
                  $sumOfPoints = 0;
@@ -505,6 +500,11 @@ class VolunteerController extends Controller
 
                  $timeInTimeOutDifference = $timeIn->diffInHours($timeOut);
                  $totalPointsEarnedFromActivity = $activity->points_equivalent + ($timeInTimeOutDifference * 5);
+                 
+                 \DB::table('volunteeractivities')
+                    ->where('volunteer_id',$request->input('volunteer_id'))
+                    ->where('activity_id',$request->input('activity_id'))
+                    ->update(['status' => true,'points'=> $totalPointsEarnedFromActivity]);
 
                  
                 //$activity_points = $criteriaTotal + $activity->points_equivalent;
