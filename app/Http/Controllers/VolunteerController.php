@@ -500,7 +500,7 @@ class VolunteerController extends Controller
 
                  $timeInTimeOutDifference = $timeIn->diffInHours($timeOut);
                  $totalPointsEarnedFromActivity = $activity->points_equivalent + ($timeInTimeOutDifference * 5);
-                 
+
                  \DB::table('volunteeractivities')
                     ->where('volunteer_id',$request->input('volunteer_id'))
                     ->where('activity_id',$request->input('activity_id'))
@@ -609,11 +609,6 @@ class VolunteerController extends Controller
                          
                 }
                   
-
-                 \DB::table('volunteeractivities')
-                    ->where('volunteer_id',$request->input('volunteer_id'))
-                    ->where('activity_id',$request->input('activity_id'))
-                    ->update(['points' => $activity->points_equivalent]);
 
                 Volunteer::where('volunteer_id',$request->input('volunteer_id'))->update(['points' => $total_points]);
                 /*  
