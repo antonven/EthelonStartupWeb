@@ -479,7 +479,7 @@ class VolunteerController extends Controller
 
    public function successAttendance(Request $request){
     
-                  
+              
                  $criteriaTotal = 0;
                  $sumOfPoints = 0;
 
@@ -495,10 +495,21 @@ class VolunteerController extends Controller
 
                  //$timeIn = \Carbon\Carbon::parse($volunteeractivity->timeIn)->format('h:i');
 
-                 $timeOut =  \Carbon\Carbon::parse($activity->endDate);
+                 $timeOut =  \Carbon\Carbon::parse(\Carbon\Carbon::now()->format('Y-m-d H:i'));
                  $timeIn =  \Carbon\Carbon::parse($volunteeractivity->timeIn);
+                 $ActivityEndtime = \Carbon\Carbon::parse($activity->endDate);
 
-                 $timeInTimeOutDifference = $timeIn->diffInHours($timeOut);
+                 $timeInTimeOutDifference = null;
+
+                 if($timeOut > $ActivityEndtime){
+                    
+                       $timeInTimeOutDifference = $timeIn->diffInHours($ActivityEndtime); 
+                 }else{
+
+                       $timeInTimeOutDifference = $timeIn->diffInHours($timeOut); 
+                 }
+
+          
                  $totalPointsEarnedFromActivity = $activity->points_equivalent + ($timeInTimeOutDifference * 5);
 
                  \DB::table('volunteeractivities')
