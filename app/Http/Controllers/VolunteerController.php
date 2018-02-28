@@ -510,7 +510,9 @@ class VolunteerController extends Controller
                  $earnedAchievement = array();
 
                 $total_points = $totalPointsEarnedFromActivity + $volunteer->points; //update volunteerpoints 
-     
+                  
+
+
                 foreach ($activity_skills as $activity_skill) {
                       foreach ($volunteerBadges as $volunteerBadge) {
                            $newbie = false;
@@ -542,7 +544,7 @@ class VolunteerController extends Controller
                                         $body = "NEW BADGE EARNED!";
                                         $newbie = true;
 
-                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge,"points"=>$totalPointsEarnedFromActivity);
                                         array_push($earnedAchievement,$earned);
                                        // echo $newbie.' siya';
                                         //echo $newbie;
@@ -559,7 +561,7 @@ class VolunteerController extends Controller
                                         $update = "new badge";
                                         $body = "NEW BADGE EARNED!";
 
-                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge,"points"=>$totalPointsEarnedFromActivity);
 
                                           //echo '480 ';
                                         
@@ -574,7 +576,7 @@ class VolunteerController extends Controller
                                         $update = "new star";
                                         $body = "NEW STAR EARNED!";
                                         
-                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge);
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>$newVolunteerBadge,"points"=>$totalPointsEarnedFromActivity);
 
                                         array_push($earnedAchievement,$earned);
 
@@ -594,7 +596,7 @@ class VolunteerController extends Controller
                                        if($newbie == false){
                                         $update = "nothing";
 
-                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>null);
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>null,$totalPointsEarnedFromActivity);
                                         array_push($earnedAchievement,$earned);
                                        } 
                                        
