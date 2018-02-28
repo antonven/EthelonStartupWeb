@@ -224,8 +224,7 @@ class VolunteerController extends Controller
                                                          ->update(['total_points'=>$total_points,
                                                                    'no_of_raters'=>$num_of_raters,
                                                                    'average_points'=>$average_points]);
-
-                                     $group = Activitygroup::where('id',$activity_group_id)->first();                    
+                  
                                     if($volunteercriteriapoints){
                                           $data = array("message"=>"Success");
                                     }else{
@@ -458,10 +457,13 @@ class VolunteerController extends Controller
 
     if($volunteeractivity->volunteerTimedIn == false){
 
+      
+      $sd = Carbon::instance($now);
+
             \DB::table('volunteeractivities')
                     ->where('volunteer_id',$request->input('volunteer_id'))
                     ->where('activity_id',$request->input('activity_id'))
-                    ->update(['volunteerTimedIn' => true,'timeIn'=>\Carbon\Carbon::now()->format('Y-m-d h:i')]);
+                    ->update(['volunteerTimedIn' => true,'timeIn'=>\Carbon\Carbon::now()->format('Y-m-d H:i')]);
 
             $data = array("update"=>"timein");    
 
@@ -477,12 +479,12 @@ class VolunteerController extends Controller
 
    public function successAttendance(Request $request){
     
-                    \DB::table('volunteeractivities')
+                    /*\DB::table('volunteeractivities')
                     ->where('volunteer_id',$request->input('volunteer_id'))
                     ->where('activity_id',$request->input('activity_id'))
-                    ->update(['status' => true]);
+                    ->update(['status' => true]);*/
 
-                      
+                  
                  $criteriaTotal = 0;
                  $sumOfPoints = 0;
 
@@ -495,10 +497,12 @@ class VolunteerController extends Controller
                  $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
                  $volunteer = Volunteer::where('volunteer_id', $request->input('volunteer_id'))->first();
                  $volunteerBadges = Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))->get();
+                 
+                 //$timeIn = \Carbon\Carbon::parse($volunteeractivity->timeIn)->format('h:i');
 
-                 $timeIn = \Carbon\Carbon::parse($volunteeractivity->timeIn);
                  $timeOut =  \Carbon\Carbon::parse($activity->endDate);
-                  
+                 $timeIn =  \Carbon\Carbon::parse($volunteeractivity->timeIn);
+
                  $timeInTimeOutDifference = $timeIn->diffInHours($timeOut);
                  $totalPointsEarnedFromActivity = $activity->points_equivalent + ($timeInTimeOutDifference * 5);
 
