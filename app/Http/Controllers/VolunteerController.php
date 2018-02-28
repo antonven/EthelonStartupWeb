@@ -497,7 +497,7 @@ class VolunteerController extends Controller
                  $activity_skills = Activityskill::where('activity_id',$request->input('activity_id'))->get();
                  $volunteer = Volunteer::where('volunteer_id', $request->input('volunteer_id'))->first();
                  $volunteerBadges = Volunteerbadge::where('volunteer_id', $request->input('volunteer_id'))->get();
-                 
+
                  //$timeIn = \Carbon\Carbon::parse($volunteeractivity->timeIn)->format('h:i');
 
                  $timeOut =  \Carbon\Carbon::parse($activity->endDate);
@@ -515,8 +515,6 @@ class VolunteerController extends Controller
 
                 $total_points = $totalPointsEarnedFromActivity + $volunteer->points; //update volunteerpoints 
                   
-
-
                 foreach ($activity_skills as $activity_skill) {
                       foreach ($volunteerBadges as $volunteerBadge) {
                            $newbie = false;
@@ -600,7 +598,7 @@ class VolunteerController extends Controller
                                        if($newbie == false){
                                         $update = "nothing";
 
-                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>null,$totalPointsEarnedFromActivity);
+                                        $earned = array("update"=>$update,"body"=>$body,"BadgeInfo"=>null,"points"=>$totalPointsEarnedFromActivity);
                                         array_push($earnedAchievement,$earned);
                                        } 
                                        
