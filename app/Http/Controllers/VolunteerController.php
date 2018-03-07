@@ -458,7 +458,7 @@ class VolunteerController extends Controller
     if($volunteeractivity->volunteerTimedIn == false){
 
       
-      $sd = Carbon::instance($now);
+      //$sd = Carbon::instance($now);
 
             \DB::table('volunteeractivities')
                     ->where('volunteer_id',$request->input('volunteer_id'))
@@ -502,7 +502,7 @@ class VolunteerController extends Controller
                  $timeInTimeOutDifference = null;
 
                  if($timeOut > $ActivityEndtime){
-                    
+                        
                        $timeInTimeOutDifference = $timeIn->diffInHours($ActivityEndtime); 
                  }else{
 
@@ -534,7 +534,7 @@ class VolunteerController extends Controller
                         if(strcmp($activity_skill->name, $volunteerBadge->skill) == 0){
                          
         
-                              $newVolunteerBadgePoints = $volunteerBadge->points + $activity->points_equivalent; //points daan sa skill Badge + points_equivalent
+                              $newVolunteerBadgePoints = $volunteerBadge->points + $totalPointsEarnedFromActivity; //points daan sa skill Badge + points_equivalent
                               //$gauge_points = $skill_points_local * $this->badgePercentage($volunteerBadge); //gaugepoints = totalbadgeskillpoints apil karon * multiplier(0.2,0.3,0.4)
                               //echo $newVolunteerBadgePoints. ' WTF';
 
@@ -604,7 +604,7 @@ class VolunteerController extends Controller
                                       ->where('skill',$activity_skill->name)
                                       ->update(['points'=>$newVolunteerBadgePoints]);
 
-                                    //echo ' 508';
+                            
 
                                        if($newbie == false){
                                         $update = "nothing";
