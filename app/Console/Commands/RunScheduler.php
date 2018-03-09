@@ -961,7 +961,7 @@ class RunScheduler extends Command
                             $this->info('GROUPTYPE  '.$activity->group_type);   
                             $activity = Activity::where('activity_id',$activity->activity_id)->first();
                              
-                          //  $this->thesis($activity);
+                            $this->thesis($activity);
                             
 
                        }else{
