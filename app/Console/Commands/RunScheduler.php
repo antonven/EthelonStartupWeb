@@ -435,7 +435,7 @@ class RunScheduler extends Command
                            
                             $objects = array_merge($nM,$m);
                             Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
-                            //$this->sendNotifications($activity);
+                            $this->sendNotifications($activity);
 
                            
     }
