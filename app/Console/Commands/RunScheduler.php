@@ -172,9 +172,7 @@ class RunScheduler extends Command
             }
 
 
-                            $foundation = \DB::table('foundations')->select('foundations.*')
-                            ->join('activities','activities.foundation_id','=','foundations.foundation_id')
-                            ->where('activities.activity_id',$activity->activity_id)->first();
+                           
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -963,7 +961,7 @@ class RunScheduler extends Command
                             $this->info('GROUPTYPE  '.$activity->group_type);   
                             $activity = Activity::where('activity_id',$activity->activity_id)->first();
                              
-                            $this->thesis($activity);
+                          //  $this->thesis($activity);
                             
 
                        }else{
