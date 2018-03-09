@@ -45,6 +45,7 @@ use App\Volunteergroup;
 use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
 use App\Notification;
+use App\Foundation;
 use App\Notification_user;
 use App\Volunteerbadge;
 use LaravelFCM\Message\OptionsBuilder;
@@ -171,6 +172,10 @@ class RunScheduler extends Command
             }
 
 
+                $foundation = \DB::table('foundations')->select('foundations.*')
+                                                        ->join('activities','activities.foundation_id','=','foundations.foundation_id')
+                                                        ->where('activities.activity_id',$activity->activity_id)->first();
+
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
@@ -185,7 +190,7 @@ class RunScheduler extends Command
                              $dataBuilder->addData([
                                 
                                 'eventImage'=>$activity->image_url,
-                                'eventHost' =>$activity->foundation_name,
+                                'eventHost' =>$foundation->foundation_name,
                                 'eventName'=>$activity->name,
                                 'activity_id'=>$activity->activity_id,
                                 'eventDate'=>$activity->startDate, 
@@ -274,7 +279,7 @@ class RunScheduler extends Command
                         $count = 0;
                            $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
                                     
-                                  Activitygroup::create([
+                                Activitygroup::create([
                                       'id'=> $id,
                                       'activity_id'=>$activity->activity_id,
                                       'type'=>'none'  
@@ -283,7 +288,7 @@ class RunScheduler extends Command
                                 Volunteergroup::create([
                                      'activity_groups_id'=>$id,
                                      'volunteer_id' =>$volunteer->volunteer_id 
-                                ]);    
+                                    ]);    
 
                                 $count++;
                                 $countforId++;
@@ -325,9 +330,9 @@ class RunScheduler extends Command
       $asq = $this->sort($activity,$volunteers);
       $this->sendNotifications($activity);
       Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);      
-      $this->info('FUCKCKCK');
+      
      // $asq = $this->groupVolunteers($volunteers_with_no_match,$activity);
-
+      
       return $asq;
 
     }
@@ -347,125 +352,405 @@ class RunScheduler extends Command
 
          foreach($allVolunteers as $allVolunteer){
 
-        $volunteerSkills = Volunteerskill::where('volunteer_id',$allVolunteer->volunteer_id)->get();
-        $matches = false;
-        $skwa = null;
+            $volunteerSkills = Volunteerskill::where('volunteer_id',$allVolunteer->volunteer_id)->get();
+            $matches = false;
+            
 
-          foreach($skills as $skill){
+              foreach($skills as $skill){
 
-             foreach($volunteerSkills as $volunteerSkill){
-                $skwa = $allVolunteer;
-               if(strcasecmp($skill->name , $volunteerSkill->name)==0){
-                                    
-                                    $matches = true;
-                                    break;
+                 foreach($volunteerSkills as $volunteerSkill){
+                   
+                   if(strcasecmp($skill->name , $volunteerSkill->name)==0){
                                         
-                  }
-             }
+                                        $matches = true;
+                                        break;
+                                            
+                      }
+                 }
 
-          }
+              }
 
-        if($matches == false ){
-           array_push($noMatches,$allVolunteer);
-        }else{
-           array_push($yesMatches,$allVolunteer);
+            if($matches == false ){
+               array_push($noMatches,$allVolunteer);
+            }else{
+               array_push($yesMatches,$allVolunteer);
+            }
+
         }
-
-      }
-
-      if(count($noMatches) == 1){
-
-      }
-
-      if(count($yesMatches) == 1){
-
-      }
 
 
      // return count($noMatches). ' '.count($yesMatches);
 
-      $atay = array();
-
+      
       $rets1 = $this->group($noMatches,$activity,'none');
-      array_push($atay, $rets1);
+      
       $rets2 = $this->groupMatches($yesMatches,$activity);
-      array_push($atay, $rets2);
-
-      return $atay;
+      
       }
     
      
 
       //return $noMatches;
     }
+    public function thesis($activity){
+                         
+                         $this->info('392');
+                         
+                         $this->info('394');
+                         $this->info(' 395 '.$activity->name);
 
-     public function groupMatches($volunteers, $activity){
+                         $actskills = $activity->skills;
 
+                         //$volunteer = Volunteer::first();
 
-      $skills = Activityskill::where('activity_id',$activity->activity_id)->get();
-      $numOfSkills = $skills->count();
+                         $activityId = $activity->activity_id; 
 
-      $skillsObjectsLists = array();
-      $ilhanan = false;
+                        $volunteersNoMatch = Volunteer::whereDoesntHave('volunteerSkills',function($query) use ($actskills){
+                                                     $query->whereIn('name',$actskills);
+                                             })->whereHas('activitiesJoined',function($query2)use ($activity){
+                                                     $query2->whereIn('activity_id',$activity);
+                                             })->get();
+                                           
 
-      foreach($skills as $skill){
+                        $volunteersMatch = Volunteer::whereHas('volunteerSkills',function($query) use ($actskills){
+                                                     $query->whereIn('name',$actskills);
+                                             })->whereHas('activitiesJoined',function($query2)use ($activity){
+                                                     $query2->whereIn('activity_id',$activity);
+                                             })->get(); 
 
-        $array = array();
-        $skillObject = (object) array("name"=>$skill->name,"volunteers"=>$array,"count"=>0);
-       
-        json_encode($skillObject);
-        array_push($skillsObjectsLists,$skillObject);
+                                            // dd($volunteersNoMatch);
+                                             //dd($skills);  
 
-      }
+                            $grpN = $activity->group / 2;
 
-      foreach($volunteers as $volunteer){
-       
-          $skills = Volunteerskill::where('volunteer_id',$volunteer->volunteer_id)->get();
-          
-               usort($skillsObjectsLists, function($a, $b){
-                
-                return strcmp($a->count, $b->count);    
-               });
+                            $grpM = $grpN + ($activity->group % 2);
 
-              foreach($skillsObjectsLists as $skillsObjectsList){
+                          // echo (int)$grpN . (int)$grpM;
 
-                foreach($skills as $skill){
-                     
-                    if(strcasecmp($skill->name , $skillsObjectsList->name)==0){
+                           $nM = $this->thesis1($activity,$volunteersNoMatch,$grpN);  
 
-                      if($ilhanan == false){
-                          array_push($skillsObjectsList->volunteers,$volunteer);
-                          $skillsObjectsList->count = $skillsObjectsList->count + 1;
-                          $ilhanan = true;
-                          break;
-                      }  
-                      
-                    }
-                }
-                  
-              }
+                           
+                           $m = $this->thesis1($activity,$volunteersMatch,$grpM);  
 
-              $ilhanan = false;
+                           
+                            $objects = array_merge($nM,$m);
+                            Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
+                            //$this->sendNotifications($activity);
 
-      }
-
-      $pangTest = array();
-
-      $count_para_sa_bug = true;
-
-      foreach($skillsObjectsLists as $skillsObjectsList){
-        
-        $test = $this->group($skillsObjectsList->volunteers,$activity,$skillsObjectsList->name,$count_para_sa_bug);
-        array_push($pangTest,count($skillsObjectsList->volunteers));
-        $count_para_sa_bug = false;
-
-      }
-
-      //dd($pangTest);
-     
-      return $pangTest;
-      
+                           
     }
+
+      public function thesis1($activity,$volunteers,$group){
+/*
+      $volunteers = \DB::table('volunteeractivities')->select('volunteeractivities.volunteer_id')
+                        ->join('activityskills','activityskills.activity_id','=','volunteeractivities.activity_id')
+                        ->join('volunteerskills','volunteerskills.volunteer_id','=','volunteeractivities.volunteer_id')
+                        ->('volunteerskills.name')
+                        ->where('volunteeractivities.activity_id','df7505a')
+                        ->get();
+*/
+
+                      /*  $volunteersWithMatched = \DB::table('volunteerskills')->select('volunteers.*','volunteerskills.name')
+                                      ->join('volunteers','volunteers.volunteer_id','=','volunteerskills.volunteer_id')
+                                      ->whereIn('volunteerskills.name',function($query){
+                                             $query->select('name')->from('activityskills')->where('activity_id','df7505a');
+                                        })->get();*/
+
+
+                        
+
+                        /*$volunteersNotMatched = \DB::table('volunteerskills')
+                                      ->select('volunteers.*','volunteerskills.name')
+                                      ->join('volunteers','volunteers.volunteer_id','=','volunteerskills.volunteer_id')
+                                      ->whereNotIn('volunteerskills.name',function($query){
+                                             $query->select('name')->from('activityskills')->where('activity_id','df7505a');
+                                        })->get();  
+
+                               $volunteers = Volunteer::all();*/
+ 
+                       //$activityskills = Activityskill::where('volunteer_id','df7505a')->get(); 
+
+                                      
+
+                        //dd($volunteerz);
+
+
+                        //return response()->json($volunteer);
+
+                         /*$volunteers = Volunteeractivity::select('volunteers.*')->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
+                                                        ->where('volunteeractivities.activity_id','df7505a')
+                                                        ->whereHas('volunteeractivities.name',function($query){
+                            $query->whereIn('name',['activityskills']);
+                         })->get();*/
+
+                         // /dd($volunteers);
+                         //dd($activity);
+
+                      //$volunteers = Volunteeractivity::select('volunteers.*')->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')->where('volunteeractivities.activity_id','df7505a')->get();   
+
+//                          $volunteers = Volunteer::select('volunteers.*')->limit(10)->get();
+
+
+                       //dd($volunteers);
+
+                     //  $volunteers = Volunteer::all();           
+
+                        $volObj = array();
+
+                        foreach($volunteers as $volunteer){
+
+                          $ageWeight = 70-($volunteer->age/100)*70;
+                          $pointWeight = 30-($volunteer->points/1000)*30;
+                          $total = $ageWeight + $pointWeight;
+
+                          $vol = (object)array("volunteer"=>$volunteer,"total"=>$total,"previous"=>null,"index"=>null);
+
+                          array_push($volObj,$vol);
+                          
+                        }
+
+
+                        $move = true;
+                        $first = true;
+                        $objects = array();
+
+                      
+                            for($i = 0; $i < $group; $i++){
+
+                              $min = $volObj[$i]->total;
+                              $max = 100;
+                              $array = array();
+                             // echo 'nisud for';
+                              $dat = rand($min,$max);
+
+                              $object = (object)array("centroid"=>$min,"array"=>$array,"id"=>$i);
+                              array_push($objects,$object);
+
+                              $first = false;
+                            } 
+                         //   dd($objects);
+                            
+
+                            
+                     $test = 0;
+                          do{
+                            
+
+                             $move = false;
+                             
+
+                            foreach($volObj as $volObj1){
+                              $last = 99999999999999999999999999999999; 
+                              $centroid = null;
+
+                             
+                             
+                             // echo '125'.$move;
+                              foreach($objects as $object){
+
+                                $difference = null;
+                                
+                                if($object->centroid > $volObj1->volunteer->points ){
+                                    $ans =  $volObj1->total - $object->centroid;
+                                    $difference =  abs($ans);
+                                    
+                                }else{
+                                    $ans =  $volObj1->total - $object->centroid;
+                                    $difference =  abs($ans);
+                                }
+                                
+
+                                if($last > $difference){
+
+                                  $last = $difference;
+                                  $centroid = $object->centroid;
+                                 
+                                 
+                                } 
+
+
+                              }
+
+                            //  echo ' last ='.$last. ' centroid = '.$centroid;
+
+                               
+                              foreach($objects as $object){
+
+                               // echo $object->centroid .' = '. $centroid;
+                                $forIndex = 0;
+                                
+                                if($object->centroid == $centroid){
+                                  $match = false;
+
+                                  foreach($object->array as $array){
+
+                                    if($array->volunteer->volunteer_id == $volObj1->volunteer->volunteer_id){
+                                    //  echo 'nana';
+                                      $match = true;//nana siya daan
+                                      break;
+                                      
+                                    }
+                                  }
+                                   
+                                  if($match == false){
+                                    if($volObj1->previous==null && $volObj1->index == null){
+                                      
+                                     $volObj1->index = $forIndex;
+                                     $volObj1->previous = $object->id;
+
+                                      //dd($volObj1-);
+                                     // echo ' index if = '. $volObj1->index;
+                                      array_push($object->array,$volObj1);
+                                      
+
+                                    }else{
+                                      
+                                      foreach($objects as $arrayObj){
+                                          if($volObj1->previous == $arrayObj->id){
+                                           // echo $arrayObj->array[$volObj1->index]->volunteer->volunteer_id. '  ';
+                                           // unset($arrayObj->array[$volObj1->index]);
+                                            array_splice($arrayObj->array,$volObj1->index,1);
+                                            //echo $arrayObj->array[$volObj1->index]->volunteer->volunteer_id. '  ';
+                                            //return response()->json($arrayObj->array);
+                                          }
+                                      }
+                                      $volObj1->previous = $object->id;
+                                      $volObj1->index = $forIndex;
+                                     // echo ' index = '.$forIndex;
+                                      array_push($object->array,$volObj1);
+                                    }
+                                    
+                                    $move = true;
+                                   // echo '180'.$move;
+                                  }
+
+                                }
+
+                                $forIndex++;
+                                
+                              }
+                             // echo $centroid;
+                             // return response()->json($volObj1);
+                              
+                              $last = 9999999999999999999999999999; 
+
+                            }
+
+                            foreach($objects as $object){
+                            
+                              $total = 0;
+
+                              foreach($object->array as $array){
+                                
+
+                               $total = $array->total + $total;
+                             
+
+                              }
+                              if(count($object->array)!=0){
+                               if($total != 0){
+                                $newCentroid = $total / count($object->array);
+                                $object->centroid = $newCentroid;
+                                //echo 'new centroid '.$object->centroid;
+                               }
+                                //echo ' object centroid cc'.count($object->array).'total ='.$total;
+                              }else{
+
+                              }
+                              
+                             
+                            }
+                                
+                                 // dd($objects);
+                                
+                           /* $move = false;*/
+
+                           $test++;
+
+                          }while($move == true);
+                            
+                        
+                       // echo count($volObj);
+                          //dd($objects);
+                          $criteria = Activitycriteria::where('activity_id',$activity->activity_id)->get();
+                          
+                          $this->createTable($objects,$activity,$criteria,$criteria);
+                          
+                         
+                         return $objects;
+                        //return response()->json($volObj);
+
+    }
+
+
+     public function createTable($objects,$activity,$criteria){
+      foreach($objects as $object){
+         $count = 0;
+         $id = null;
+         $volunteerCount = count($object->array);
+         
+
+
+         foreach($object->array as $array){
+
+                    $this->create_volunteer_criteria_points2($activity,$array->volunteer->volunteer_id,$criteria);
+         // $volunteerCount = 0;
+
+            if($count == 0 ){
+                $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                 Activitygroup::create([
+                  'id'=>$id,
+                  'activity_id'=>$activity->activity_id,
+                  'type'=>'clustered'
+                  
+                ]);
+
+                 Volunteergroup::create([
+                    'activity_groups_id'=>$id,
+                     'volunteer_id'=>$array->volunteer->volunteer_id
+                  ]);
+
+            }else{
+
+                 Volunteergroup::create([
+                    'activity_groups_id'=>$id,
+                     'volunteer_id'=>$array->volunteer->volunteer_id
+                  ]);
+
+            }
+            $count++;
+            if($count == $volunteerCount){
+              \DB::table('activitygroups')->where('id',$id)->update([
+                  'numOfVolunteers'=>$count
+                ]);
+             // echo 'count = '.$count . ' volunteerCount '.$volunteerCount;
+            }
+         }
+
+      }
+
+    }
+
+    public function create_volunteer_criteria_points2($activity, $volunteer_id,$criterias){
+
+     
+      foreach($criterias as $criteria){
+
+            Volunteercriteriapoint::create([
+                
+                'activity_id'=>$activity->activity_id,
+                'volunteer_id'=>$volunteer_id,
+                'criteria_name'=>$criteria->criteria,
+                'total_points'=>0,
+                'no_of_raters'=>0,
+                'average_points'=>0
+                 
+                ]);
+      }
+    //}
+
+}
+
 
     public function group($volunteers, $activity, $skillName){
 
@@ -487,7 +772,30 @@ class RunScheduler extends Command
 
                       if($count < $vol_per_group){//maka sud pa siya og group
                             if($count == 0){//create new group reset
-                                if($volunteerCount + 1 == $numOfVolunteers ){
+                               if($numOfVolunteers == 1){
+
+                                  $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                                 Activitygroup::create([
+                                          'id'=> $id,
+                                          'activity_id'=>$activity->activity_id ,
+                                          'type'=>$skillName 
+                                        ]);   
+                                    Volunteergroup::create([
+                                         'activity_groups_id'=>$id,
+                                         'volunteer_id' =>$volunteer->volunteer_id 
+                                    ]);  
+
+                                    $count++;
+                                    $countforId++;
+
+                                    if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                        \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                    }
+
+                              }else{
+
+                                 if($volunteerCount + 1 == $numOfVolunteers ){
 
                                     Volunteergroup::create([
                                          'activity_groups_id'=>$lastGroup,
@@ -503,7 +811,7 @@ class RunScheduler extends Command
                                           'id'=> $id,
                                           'activity_id'=>$activity->activity_id ,
                                           'type'=>$skillName 
-                                        ]);   
+                                    ]);   
 
                                     Volunteergroup::create([
                                          'activity_groups_id'=>$id,
@@ -516,8 +824,8 @@ class RunScheduler extends Command
                                         \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
                                     }
                                 }
-                             
-
+                              }
+                               
                             }else{
 
                                 Volunteergroup::create([
@@ -600,11 +908,12 @@ class RunScheduler extends Command
         //09210296430
 
                             //$activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('5hrs',false)->get();
+
                              $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('fiveHours',false)->get();
 
                               if($activities_with_false_5hrs->count()){
                                   $this->info('ni sud if acitivites count');
-                                  $this->addCriteriaTotal($activities_with_false_5hrs);  
+                                 // $this->addCriteriaTotal($activities_with_false_5hrs);  
                              }else{
                               $this->info('wala nisud acitivites count');
                              }
@@ -651,16 +960,10 @@ class RunScheduler extends Command
                        if($activity_deadlineTime <= $timeNow){
                             $this->info('==sulod pa '.$activity->name.' = '.$timeNow.' !! '.$activity_deadlineTime); 
                             $this->info('GROUPTYPE  '.$activity->group_type);   
-
-                            switch($activity->group_type){
-                                case 'random': $this->randomAllocation($activity);  
-                                                $this->info('random'); 
-                                               break;
-                                case 'skill': $this->skill($activity);
-                                                $this->info('skill');  
-                                               break;           
-                            }
-
+                            $activity = Activity::where('activity_id',$activity->activity_id)->first();
+                             
+                            $this->thesis($activity);
+                            
 
                        }else{
                             $this->info('==wala pa');
@@ -739,17 +1042,13 @@ class RunScheduler extends Command
     public function addCriteriaTotal($activities_with_false_5hrs){
 
      
-
       foreach($activities_with_false_5hrs as $activity_with_false_5hrs){
-       // $this->info('nisulod sa foreach');
+      
          $this->info('nisulod sa addcriteria Total function foreach'. \Carbon\Carbon::now(). ' add hours 5 = '.\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5));
 
-        // echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
-
-          if(\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5) <=  \Carbon\Carbon::now()){
+         if(\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5) <=  \Carbon\Carbon::now()){
             $this->info('nisulod sa condtion endTime + 5 hours <= karon'. \Carbon\Carbon::now(). ' add hours 5 = '.\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5));
-              //echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
-
+              
              $volunteers = \DB::table('volunteers')->select('volunteers.*')
                                                 ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id')
                                                 ->where('volunteeractivities.activity_id',$activity_with_false_5hrs->activity_id)
@@ -760,10 +1059,42 @@ class RunScheduler extends Command
                    
                     foreach($volunteers as $volunteer){
 
-                       $volunteercriteriapoints = Volunteercriteriapoint::where('volunteer_id',$volunteer->volunteer_id)
+                      $num = Activitygroup::select('activitygroups.numOfVolunteers')
+                                      ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
+                                      ->where('volunteergroups.volunteer_id','=',$volunteer->volunteer_id)
+                                      ->where('activitygroups.activity_id',$activity_with_false_5hrs->activity_id)
+                                      ->first();
+
+                      if($num->numOfVolunteers == 1){
+
+                      $volunteercriteriapoints = Volunteercriteriapoint::where('volunteer_id',$volunteer->volunteer_id)
                                                                           ->where('activity_id',$activity_with_false_5hrs->activity_id)
                                                                           ->get();
 
+                            $criteriaTotalSolo = $volunteercriteriapoints->count() * 5;                                              
+                      
+                              foreach($activityskills as $activityskill){
+                                                  
+                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
+                                                                ->where('skill',$activityskill->name)
+                                                                ->first();
+                                                                 
+                                $newBadgePoints = $volunteerbadge->points + $criteriaTotalSolo;
+                                 $this->info('New badge points  = '.$newBadgePoints); 
+                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
+                                                                ->where('skill',$activityskill->name)
+                                                                ->update(['points'=>$newBadgePoints]);
+
+                                $totalVolPoints = $volunteer->points + $criteriaTotalSolo;
+                                $this->info('New Volunteer points  = '.$totalVolPoints);                                  
+                                Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
+                              }   
+
+                      }else{
+
+                       $volunteercriteriapoints = Volunteercriteriapoint::where('volunteer_id',$volunteer->volunteer_id)
+                                                                          ->where('activity_id',$activity_with_false_5hrs->activity_id)
+                                                                          ->get();
 
                                         $criteriaTotal = 0;
 
@@ -771,10 +1102,11 @@ class RunScheduler extends Command
 
                             $criteriaTotal = $Volunteercriteriapoint->average_points + $criteriaTotal;
                             $this->info('criteriaTotal = '.$criteriaTotal);
+
                        }
                       
                         foreach($activityskills as $activityskill){
-
+                                                  
                                 $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
                                                                 ->where('skill',$activityskill->name)
                                                                 ->first();
@@ -788,7 +1120,9 @@ class RunScheduler extends Command
                                 $totalVolPoints = $volunteer->points + $criteriaTotal;
                                 $this->info('New Volunteer points  = '.$totalVolPoints);                                  
                                 Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
-                        }     
+                        } 
+
+                      }              
 
                          $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name,$activity_with_false_5hrs->activity_id,$newBadgePoints,$volunteer->volunteer_id);                                                   
                     }  
