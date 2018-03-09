@@ -172,13 +172,14 @@ class RunScheduler extends Command
             }
 
 
-                $foundation = \DB::table('foundations')->select('foundations.*')
-                                                        ->join('activities','activities.foundation_id','=','foundations.foundation_id')
-                                                        ->where('activities.activity_id',$activity->activity_id)->first();
+                            $foundation = \DB::table('foundations')->select('foundations.*')
+                            ->join('activities','activities.foundation_id','=','foundations.foundation_id')
+                            ->where('activities.activity_id',$activity->activity_id)->first();
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
                             $optionBuilder->setPriority('high');
+                            $foundationName = "Ethelon";
 
                             $body = 'Your groupmates have been revealed for '.$activity->name.' activity';
  
@@ -190,7 +191,7 @@ class RunScheduler extends Command
                              $dataBuilder->addData([
                                 
                                 'eventImage'=>$activity->image_url,
-                                'eventHost' =>$foundation->foundation_name,
+                                'eventHost' =>$foundationName,
                                 'eventName'=>$activity->name,
                                 'activity_id'=>$activity->activity_id,
                                 'eventDate'=>$activity->startDate, 
