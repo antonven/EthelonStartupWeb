@@ -213,7 +213,7 @@ class RunScheduler extends Command
                                     'data'=>$activity->activity_id
                                 ]);
 
-                            $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
+                          $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
                              
       
             
@@ -617,11 +617,11 @@ class RunScheduler extends Command
                                       $volObj1->index = $forIndex;
                                      // echo ' index = '.$forIndex;
                                       array_push($object->array,$volObj1);
-                                    }
+                                  }
                                     
                                     $move = true;
                                    // echo '180'.$move;
-                                  }
+                                 }
 
                                 }
 
@@ -963,7 +963,7 @@ class RunScheduler extends Command
 
                             $act = Activity::where('activity_id',$activity->activity_id)->first();
                              
-                            $this->thesis($act);
+                            //$this->thesis($act);
                             
 
                        }else{
