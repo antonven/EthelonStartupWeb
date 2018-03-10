@@ -189,7 +189,7 @@ class RunScheduler extends Command
                              $dataBuilder->addData([
                                 
                                 'eventImage'=>$activity->image_url,
-                                'eventHost' =>$foundationName,
+                                'eventHost' =>"Ethelon",
                                 'eventName'=>$activity->name,
                                 'activity_id'=>$activity->activity_id,
                                 'eventDate'=>$activity->startDate, 
@@ -960,8 +960,10 @@ class RunScheduler extends Command
                             $this->info('==sulod pa '.$activity->name.' = '.$timeNow.' !! '.$activity_deadlineTime); 
                             $this->info('GROUPTYPE  '.$activity->group_type);   
                             $activity = Activity::where('activity_id',$activity->activity_id)->first();
+
+                            $act = Activity::where('activity_id',$activity->activity_id)->first();
                              
-                            $this->thesis($activity);
+                            $this->thesis($act);
                             
 
                        }else{
