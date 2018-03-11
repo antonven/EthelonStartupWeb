@@ -426,9 +426,10 @@ class RunScheduler extends Command
 
                           // echo (int)$grpN . (int)$grpM;
 
+                           if($volunteersNoMatch->count()!=0) 
                            $nM = $this->thesis1($activity,$volunteersNoMatch,$grpN);  
 
-                           
+                           if($volunteersMatch->count()!=0)  
                            $m = $this->thesis1($activity,$volunteersMatch,$grpM);  
 
                            
@@ -516,7 +517,14 @@ class RunScheduler extends Command
                       
                             for($i = 0; $i < $group; $i++){
 
-                              $min = $volObj[$i]->total;
+                              $min = 1;
+
+                              if($volunteers->count() < $group){
+                                $min = $volObj[0]->total;  
+                              }else{
+                                 $min = $volObj[$i]->total;
+                              }
+                             
                               $max = 100;
                               $array = array();
                              // echo 'nisud for';
@@ -963,7 +971,7 @@ class RunScheduler extends Command
 
                             $act = Activity::where('activity_id',$activity->activity_id)->first();
                              
-                           // $this->thesis($act);
+                            $this->thesis($act);
                             
 
                        }else{
