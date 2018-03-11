@@ -9,7 +9,7 @@
     }
 </style>
 @endsection
-
+ 
 @section('content')
     <!-- PROGRESSBAR WIZARD -->
     <div class="col-lg-10 col-md-offset-1">
@@ -84,11 +84,11 @@
                     <div class="tab-pane p-t-10 fade" id="second">
                         <div class="row">
                             <div class="form-group col-lg-8 col-lg-offset-2">
-                                <div class="col-lg-6" style="padding-left: 0;">
+                                <div class="col-lg-6" style="padding-left: 0;" id="date1">
                                     <label class="control-label " for="startDate">Start Date</label>
                                     <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose" name="startDate">
                                 </div>
-                                <div class="col-lg-6" style="padding: 0;">
+                                <div class="col-lg-6" style="padding: 0;" id="time1">
                                     <label class="control-label " for="startTime">Start Time</label>
                                     <div class="bootstrap-timepicker">
                                         <input id="timepicker3" name="startTime" type="text" class="required form-control">
@@ -97,11 +97,11 @@
                             </div>
 
                             <div class="form-group col-lg-8 col-lg-offset-2">
-                                <div class="col-lg-6" style="padding-left: 0;">
+                                <div class="col-lg-6" style="padding-left: 0;" id="date2">
                                     <label class="control-label " for="endDate">End Date</label>
-                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose2" name="endDate">
+                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose2" name="endDate" disabled="disabled">
                                 </div>
-                                <div class="col-lg-6" style="padding: 0;">
+                                <div class="col-lg-6" style="padding: 0;" id="time2">
                                     <label class="control-label " for="endTime">End Time</label>
                                     <div class="bootstrap-timepicker">
                                         <input id="timepicker4" name="endTime" type="text" class="required form-control">
@@ -110,11 +110,11 @@
                             </div>
                             
                             <div class="form-group col-lg-8 col-lg-offset-2">
-                                <div class="col-lg-6" style="padding-left: 0;">
+                                <div class="col-lg-6" style="padding-left: 0;" id="date3">
                                     <label class="control-label " for="deadlineDate">Registration Deadline Date</label>
-                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose5" name="deadlineDate">
+                                    <input type="text" class=" required form-control" placeholder="mm/dd/yyyy" id="datepicker-autoclose5" name="deadlineDate" disabled="disabled">
                                 </div>
-                                <div class="col-lg-6" style="padding: 0;">
+                                <div class="col-lg-6" style="padding: 0;" id="time3">
                                     <label class="control-label " for="deadlineTime">Registration Deadline Time</label>
                                     <div class="bootstrap-timepicker">
                                         <input id="timepicker5" name="deadlineTime" type="text" class="required form-control">
@@ -152,6 +152,14 @@
                             <div class="form-group col-lg-8 col-lg-offset-2">
                                 <label class="control-label " for="group">Number of volunteers needed</label>
                                 <input  name="volunteersNeeded" id="volunteersNeeded" type="number" class="required form-control" placeholder="">
+                            </div>
+                            <div class="form-group col-lg-8 col-lg-offset-2">
+                                <label class="control-label " for="group_type">Grouping Type</label>
+                                <select class="form-control" name="group_type">
+                                    <option value="" hidden=""></option>
+                                    <option>Group randomly</option>
+                                    <option>Group by skills</option>
+                                </select>
                             </div>
                             <div class="form-group col-lg-8 col-lg-offset-2">
                                 <label class="control-label " for="group">Number of volunteers in a group</label>
@@ -249,6 +257,8 @@
     <script type="text/javascript">
         var $criteria = "";
         $(window).load(function(){
+
+
  // <option value="Environment">Environment</option>
  //                                    <option value="Livelihood">Livelihood</option>
  //                                    <option value="Education">Education</option>
@@ -275,6 +285,26 @@
             //     bool = null;
             // });
             //display inputs before creating the activity
+
+
+            function getAsDate(day, time)
+            {
+              var hours = Number(time.match(/^(\d+)/)[1]);
+              var minutes = Number(time.match(/:(\d+)/)[1]);
+              var AMPM = time.match(/\s(.*)$/)[1];
+              if(AMPM == "pm" && hours<12) hours = hours+12;
+              if(AMPM == "am" && hours==12) hours = hours-12;
+              var sHours = hours.toString();
+              var sMinutes = minutes.toString();
+              if(hours<10) sHours = "0" + sHours;
+              if(minutes<10) sMinutes = "0" + sMinutes;
+              time = sHours + ":" + sMinutes + ":00";
+
+              var d = new Date(day);
+              var n = d.toISOString().substring(0,10);
+              var newDate = new Date(n+"T"+time);
+              return newDate;
+            }
             $('#commentForm2').on('keyup keypress click mousemove', function(e){
                $('#displayActivityName').text($('#activityName').val());
                $('#displayActivityDescription').text($('#activityDescription').val());
@@ -314,12 +344,16 @@
                 {
                     $criteria = $criteria +' '+ $("#criteria").val();
                     //var $card = '<div class="panel panel-color panel-inverse" style="margin-bottom=0!important;"><div class="panel-heading"><h3 class="panel-title">'+$('#criteria').val()+'</h3></div></div><input type="text" name="activityCriteria[]" hidden>';
-                    var $card = '<div class="row"><div class="col-md-8 col-md-offset-1"><pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$('#criteria').val()+'"></div><div class="pull-right col-md-3"><button class="btn btn-icon waves-effect waves-light btn-danger m-b-5 remove"> <i class="fa fa-remove"></i> </button></div></div>';
-                                        //add criteria to the list
-                                        $('#criteriaList').append($card);
-                                        $('#criteria').val("");
-                                    }
-                                });
+                    var $card = '<div class="row parentCriteria"><div class="col-md-8 col-md-offset-1"><pre class="criteria">'+$('#criteria').val()+'</pre><input type="text" hidden name="criteria[]" value="'+$('#criteria').val()+'"></div><div class="pull-right col-md-3 tangtangon"><button type="button" class="tangtang">X</button></div></div>';
+                    //add criteria to the list
+                    $('#criteriaList').append($card);
+                    $('#criteria').val("");
+                }
+            });
+            //removing of criteria
+            $('#criteriaList').delegate(".tangtang", "click", function(){
+                $(this).closest(".parentCriteria").remove();
+            });
                                 
                                 //initialize the multiple select
                                 $(".select2").select2();
@@ -333,8 +367,18 @@
             //initialize the date picker
             jQuery('#datepicker-autoclose').datepicker({
                 autoclose: true,
-                todayHighlight: true
+                todayHighlight: true,
+                startDate: new Date()
+            }).on('changeDate', function(selected){
+                $('#datepicker-autoclose2').prop("disabled", false);
+                $('#datepicker-autoclose5').prop("disabled", false);
+                var minDate = new Date(selected.date.valueOf());
+                $('#datepicker-autoclose2').datepicker('setStartDate', minDate);
+                var maxDate = new Date(selected.date.valueOf() - (1000 * 60 * 60 * 24 * 1));
+                $('#datepicker-autoclose5').datepicker('setStartDate', new Date());
+                $('#datepicker-autoclose5').datepicker('setEndDate', maxDate);
             });
+
             jQuery('#datepicker-autoclose2').datepicker({
                 autoclose: true,
                 todayHighlight: true
@@ -347,15 +391,12 @@
             //initialize the time picker
             jQuery('#timepicker3').timepicker({
                 minuteStep : 1,
-                defaultTIme : true
             });
             jQuery('#timepicker4').timepicker({
                 minuteStep : 1,
-                defaultTIme : true
             });
             jQuery('#timepicker5').timepicker({
                 minuteStep : 1,
-                defaultTIme : true
             });
             
             //initialize the gallery/portfolio
@@ -491,7 +532,7 @@
       var map;
       function initAutocomplete() {
          map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 80.397, lng: 160.644},
+          center: {lat: 46.397, lng: 160.644},
           zoom: 1,
           minZoom: 1,
           mapTypeId: 'roadmap'

@@ -77,7 +77,8 @@
                                 </button>
                             </li>
                             <li>
-                                <!-- <h4 class="page-title">Activity</h4> -->
+                                 <h4 class="page-title">@yield('page_title')</h4> 
+
                             </li>
                         </ul>
 
@@ -95,9 +96,9 @@
                     <div class="user-box">
                         <div class="user-img">
                             @if(\Auth::user()->role == "admin")
-                            <img src="{{ asset('assets/images/ethelon.png') }}" style="object-fit: cover;min-height: 90px;height: 90px;" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
+                            <img src="{{ asset('assets/images/ethelon.png') }}" style="object-fit: cover;min-height: 90px;height: 90px;width:200px" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
                             @elseif(\Auth::user()->role == "foundation")
-                            <img src="{{ \Auth::user()->foundation->image_url }}" style="object-fit: cover;min-height: 90px;height: 90px;" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
+                            <img src="{{ \Auth::user()->foundation->image_url }}" style="object-fit: cover;min-height: 90px;height: 90px;width:300px" alt="user-img" title="{{ \Auth::user()->name }}" class="img-circle img-thumbnail img-responsive">
                             @endif
                             <div class="user-status offline"><i class="zmdi zmdi-dot-circle"></i></div>
                         </div>
@@ -130,13 +131,14 @@
                             <li class="text-muted menu-title">Navigation</li>
 
                             <li>
-                                <a href="{{url('/')}}" class="waves-effect"><i class="zmdi zmdi-view-dashboard"></i> <span> HOME </span> </a>
+                                <a href="{{url('/admin')}}" class="waves-effect"><i class="zmdi zmdi-view-dashboard"></i> <span> HOME </span> </a>
                             </li>
 
                             <li>
-                                <a href="{{url('/activity')}}" class="waves-effect"><i class="zmdi zmdi-format-underlined"></i> <span> ACTIVITY </span> </a>
+                                <a href="{{url('/activity')}}" class="waves-effect"><i class="zmdi zmdi-local-activity"></i> <span> ACTIVITY </span> </a>
                             </li>
 
+                            <!--
                             <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-invert-colors"></i> <span> VOLUNTEERS </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">
@@ -155,13 +157,22 @@
                                     <li><a href="ui-widgets.html">Widgets</a></li>
                                 </ul>
                             </li>
-                            
+                            -->
                             <li>
-                                <a href="{{url('/')}}" class="waves-effect"><i class="zmdi zmdi-view-dashboard"></i> <span> PROFILE </span> </a>
+                                <a href="{{url('/volunteers')}}" class="waves-effect"><i class="zmdi zmdi-directions-walk"></i> <span> VOLUNTEERS </span> </a>
                             </li>
 
                             <li>
-                                <a href="{{url('/')}}" class="waves-effect"><i class="zmdi zmdi-format-underlined"></i> <span> SETTINGS </span> </a>
+                                <a href="{{url('/profile/'.\Auth::user()->foundation->foundation_id)}}" class="waves-effect"><i class="zmdi zmdi-account"></i> <span> PROFILE </span> </a>
+                            </li>
+
+                            <li>
+                                <a href="{{url('/portfolio/'.\Auth::user()->foundation->foundation_id)}}" class="waves-effect"><i class="zmdi zmdi-book"></i> <span> PORTFOLIO </span> </a>
+                            </li>
+
+                            <li>
+                                <a href="{{url('/')}}" onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();" class="waves-effect"><i class="zmdi zmdi-power" style="color:red;"></i> <span> LOGOUT </span> </a>
                             </li>
 
                             @elseif(\Auth::user()->role == "admin")

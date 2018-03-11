@@ -12,6 +12,9 @@
         <!-- App titlee -->
         <title>Ethelon</title>
 
+        <!-- form Uploads -->
+        <link href="{{ asset('adminitoAssets/assets/plugins/fileuploads/css/dropify.min.css') }}" rel="stylesheet" type="text/css" />
+
         <!-- App CSS -->
         <link href="{{ asset('adminitoAssets/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('adminitoAssets/assets/css/core.css') }}" rel="stylesheet" type="text/css" />
@@ -39,6 +42,8 @@
     <body>
         <form class="form-horizontal" method="POST" action="{{ route('register') }}" enctype="multipart/form-data"s>
         {{ csrf_field() }}
+        <input type="text" name="lat" id="lat" hidden>
+        <input type="text" name="long" id="long" hidden>
         <div class="clearfix"></div>
         <div class="wrapper-page">
             <div class="text-center">
@@ -105,7 +110,8 @@
 
                     <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                         <div class="col-xs-12">
-                            <input class="form-control" type="file" required="" name="image">
+                            <label class="control-label " for="contactPerson">Foundation Logo</label>
+                            <input class="form-control dropify" type="file" required="" name="image" data-height="250" />
                         </div>
                         @if ($errors->has('image'))
                         <center>
@@ -281,17 +287,17 @@
           placeMarker(event.latLng);
           //input x ang long y ang lat
           console.log(event);
-          console.log(event.ea.x);
-          console.log(event.ea.y);
-          $('#long').val(event.ea.x);
-          $('#lat').val(event.ea.y);
+          console.log(event.latLng.lng());
+          console.log(event.latLng.lat());
+          $('#long').val(event.latLng.lng());
+          $('#lat').val(event.latLng.lat());
           console.log($('#long').val());
           console.log($('#lat').val());
         });
       }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh9Zof4j3ivJSWjB_YEnAvDsCjwr8h978&libraries=places&callback=initAutocomplete"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh9Zof4j3ivJSWjB_YEnAvDsCjwr8h978&libraries="
          async defer></script>
     <!-- END SCRIPT FOR MAPS -->
 
@@ -307,9 +313,26 @@
         <script src="{{ asset('adminitoAssets/assets/js/jquery.nicescroll.js') }}"></script>
         <script src="{{ asset('adminitoAssets/assets/js/jquery.scrollTo.min.js') }}"></script>
 
+        <!-- file uploads js -->
+        <script src="{{ asset('adminitoAssets/assets/plugins/fileuploads/js/dropify.min.js') }}"></script>
+
         <!-- App js -->
         <script src="{{ asset('adminitoAssets/assets/js/jquery.core.js') }}"></script>
         <script src="{{ asset('adminitoAssets/assets/js/jquery.app.js') }}"></script>
+
+        <script type="text/javascript">
+            $('.dropify').dropify({
+                messages: {
+                    'default': 'Drag and drop a file here or click',
+                    'replace': 'Drag and drop or click to replace',
+                    'remove': 'Remove',
+                    'error': 'Ooops, something wrong appended.'
+                },
+                error: {
+                    'fileSize': 'The file size is too big (1M max).'
+                }
+            });
+        </script>
 
     </body>
 </html>
