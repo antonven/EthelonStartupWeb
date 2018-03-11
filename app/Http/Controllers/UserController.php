@@ -14,7 +14,7 @@ class UserController extends Controller
     {
     	return view('user.userIndex');
     }
-    public function list($skill)
+    public function lists($skill)
     {
     	$activities = Activity::whereHas('skills', function($query) use($skill)
         {

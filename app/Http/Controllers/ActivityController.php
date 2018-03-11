@@ -456,6 +456,8 @@ public function webtest($id){
           $activities = null;
           $volunteers = null;
       }
+
+    //  return response()->json($volunteersArray);
       return view('activity.activityIndex', compact('activities', 'volunteersArray'));
     }
     
@@ -541,9 +543,9 @@ public function webtest($id){
 
             $destinationPath = public_path('file_attachments');
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
+            $file->move($destinationPath,$filename);
             
-            dd($file->move($destinationPath, $filename));
-            
+          
             \Cloudder::upload(url('/file_attachments').'/'.$filename);
               
             $url = \Cloudder::getResult();

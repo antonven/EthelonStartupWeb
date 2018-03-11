@@ -24,8 +24,8 @@ Route::group(['middleware'=>'auth:api'],function(){
 		//activity
 		Route::post('/joinactivity','VolunteerController@joinActivity');
 		Route::post('/activitycriteria','ActivityController@criteria');
-		Route::post('/portfolio','ActivityController@portfolio');
-		Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
+		
+		
 		Route::post('/activitygetvolunteersbefore','ActivityController@getVolunteersBefore');
 		Route::get('/activitygetvolunteersafter','ActivityController@getVolunteersAfter');
 		Route::post('/activitycriteria','ActivityController@criteria');
@@ -36,7 +36,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 		Route::post('/volunteerstorate','ActivityController@volunteersToRate');
 		Route::post('/checkIfAlreadyAttended','VolunteerController@checkIfAlreadyAttended');
 		
-		Route::post('/rategroupmate','VolunteerController@rategroupmate');	
+			
 		
 		Route::post('/volunteerskills','VolunteerController@inputSkills');	
 		Route::post('/activitypoints','VolunteerController@points');
@@ -70,7 +70,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 Route::group(['middleware'=>'foundation'],function(){
 
 });
-
+Route::post('/portfolio','ActivityController@portfolio');
 Route::post('/foundation','VolunteerController@getFoundationProfile');
 Route::post('/fcm_token','VolunteerController@fcm_token');
 Route::post('/groupmatestorate','ActivityController@volunteersToRate');
@@ -79,7 +79,7 @@ Route::get('/leaderboard','VolunteerController@leaderboard');
 Route::post('/volunteerprofile','VolunteerController@volunteerProfile');
 
 //testingge
-
+Route::post('/rategroupmate','VolunteerController@rategroupmate');
 Route::post('/qr','VolunteerController@qrPicture');
 Route::post('/notificationClicked','NotificationController@notificationClicked');
 Route::post('/skillprac','TestingController@skill');
@@ -98,5 +98,5 @@ Route::post('/groupmatestorate','ActivityController@volunteersToRate');
 Route::post('/getSkills','VolunteerController@getSkills');
 
 Route::post('/profileDetails','VolunteerController@profileDetails');
-
-
+Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
+Route::post('/thesis','TestingController@thesis');

@@ -54,7 +54,7 @@ Route::middleware(['auth','verified'])->group(function () {
 });
 Route::get('/{foundation_name}/portfolio', 'UserController@portfolioView');
 Route::get('/foundations', 'UserController@foundationList');
-Route::get('/{skill}', 'UserController@list');
+Route::get('/{skill}', 'UserController@lists');
 Route::get('/activity/{id}', 'UserController@activityView');
 
 Route::get('/webtest/{id}','ActivityController@webtest');
