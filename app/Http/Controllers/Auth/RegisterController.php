@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Foundation;
-
+use App\Portfolio;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 
@@ -68,7 +68,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255|min:5',
+            'name' => 'required|string|max:255|min:5|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'description' => 'required|string|min:10|max:255'
@@ -123,6 +123,11 @@ class RegisterController extends Controller
             'website_url' => $data['websiteUrl']                                            
             ]);
 
+        Portfolio::create([
+            'foundation_id' => $foundation_id,
+            'portfolioType' => null
+        ]);
+
         return User::create([
 
             'user_id' => $user_id,
@@ -147,16 +152,17 @@ class RegisterController extends Controller
 
             $file->move($destinationPath, $filename);
             
-            \Cloudder::upload(url('/file_attachments').'/'.$filename);
+            // \Cloudder::upload(url('/file_attachments').'/'.$filename);
 
-            $url = \Cloudder::getResult();
+            // $url = \Cloudder::getResult();
             //return dd($url);
 
-            if($url){
+            // if($url){
 
-               return $url['url'];
+            //    return $url['url'];
 
-            }
+            // }
+            return url('/file_attachments').'/'.$filename;
             
         }
         else

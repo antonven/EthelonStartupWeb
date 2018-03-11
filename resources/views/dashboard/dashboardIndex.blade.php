@@ -4,100 +4,50 @@
     Ethelon
 @endsection
 @section('additional_styles')
-    <!--Morris Chart CSS -->
-    <link rel="stylesheet" href="{{ asset('adminitoAssets/assets/plugins/morris/morris.css') }}">
+    <!--calendar css-->
+    <link href="{{ asset('adminitoAssets/assets/plugins/fullcalendar/dist/fullcalendar.css') }}" rel="stylesheet" />
 @endsection
 
 @section('content')
     <div class="row">
-
         <div class="col-lg-3 col-md-6">
-            <div class="card-box">
-
-                <h4 class="header-title m-t-0 m-b-30">Portfolio Visits</h4>
-
-                <div class="widget-chart-1">
-                    <div class="widget-chart-box-1">
-                        <input data-plugin="knob" data-width="80" data-height="80" data-fgColor="#f05050 "
-                           data-bgColor="#F9B9B9" value="58"
-                           data-skin="tron" data-angleOffset="180" data-readOnly=true
-                           data-thickness=".15"/>
-                    </div>
-
-                    <div class="widget-detail-1">
-                        <h2 class="p-t-10 m-b-0"> 256 </h2>
-                        <p class="text-muted">Revenue today</p>
-                    </div>
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ $volunteersCount }}</h2>
+                    <h5>Total Volunteers</h5>
                 </div>
             </div>
-        </div><!-- end col -->
+        </div>
 
         <div class="col-lg-3 col-md-6">
-            <div class="card-box">
-
-                <h4 class="header-title m-t-0 m-b-30">Activity</h4>
-
-                <div class="widget-box-2">
-                    <div class="widget-detail-2">
-                        <span class="badge badge-success pull-left m-t-20">32% <i class="zmdi zmdi-trending-up"></i> </span>
-                        <h2 class="m-b-0"> 8451 </h2>
-                        <p class="text-muted m-b-25">Revenue today</p>
-                    </div>
-                    <div class="progress progress-bar-success-alt progress-sm m-b-0">
-                        <div class="progress-bar progress-bar-success" role="progressbar"
-                             aria-valuenow="77" aria-valuemin="0" aria-valuemax="100"
-                             style="width: 77%;">
-                            <span class="sr-only">77% Complete</span>
-                        </div>
-                    </div>
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-pink" data-plugin="counterup">{{ \Auth::user()->foundation->activities->where('status', 1)->count()}}</h2>
+                    <h5>Total Activities</h5>
                 </div>
             </div>
-        </div><!-- end col -->
+        </div>
 
         <div class="col-lg-3 col-md-6">
-            <div class="card-box">
-
-                <h4 class="header-title m-t-0 m-b-30">Volunteers</h4>
-
-                <div class="widget-chart-1">
-                    <div class="widget-chart-box-1">
-                        <input data-plugin="knob" data-width="80" data-height="80" data-fgColor="#ffbd4a"
-                           data-bgColor="#FFE6BA" value="80"
-                           data-skin="tron" data-angleOffset="180" data-readOnly=true
-                           data-thickness=".15"/>
-                    </div>
-                    <div class="widget-detail-1">
-                        <h2 class="p-t-10 m-b-0"> 4569 </h2>
-                        <p class="text-muted">Revenue today</p>
-                    </div>
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-info" data-plugin="counterup">{{ \Auth::user()->foundation->activities->where('status', 0)->count() }}</h2>
+                    <h5>Ongoing Activities</h5>
                 </div>
             </div>
-        </div><!-- end col -->
+        </div>
 
         <div class="col-lg-3 col-md-6">
-            <div class="card-box">
-
-                <h4 class="header-title m-t-0 m-b-30">Funds</h4>
-
-                <div class="widget-box-2">
-                    <div class="widget-detail-2">
-                        <span class="badge badge-pink pull-left m-t-20">32% <i class="zmdi zmdi-trending-up"></i> </span>
-                        <h2 class="m-b-0"> 158 </h2>
-                        <p class="text-muted m-b-25">Revenue today</p>
-                    </div>
-                    <div class="progress progress-bar-pink-alt progress-sm m-b-0">
-                        <div class="progress-bar progress-bar-pink" role="progressbar"
-                             aria-valuenow="77" aria-valuemin="0" aria-valuemax="100"
-                             style="width: 77%;">
-                            <span class="sr-only">77% Complete</span>
-                        </div>
-                    </div>
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-warning" data-plugin="counterup">{{ \Auth::user()->foundation->portfolio->views }}</h2>
+                    <h5>Portfolio Views</h5>
                 </div>
             </div>
-        </div><!-- end col -->
+        </div>
+    </div> 
 
-    </div>
-    @if($activities)
+    @if($finished_activities == true)
     <h3 class="page-title"> PAST ACTIVITIES </h3>
     <div class="row">
     @foreach($activities as $activity)
@@ -128,16 +78,5 @@
 @endsection
 
 @section('additional_scripts')
-    <!-- KNOB JS -->
-    <!--[if IE]>
-    <script type="text/javascript" src="assets/plugins/jquery-knob/excanvas.js"></script>
-    <![endif]-->
-    <script src="{{ asset('adminitoAssets/assets/plugins/jquery-knob/jquery.knob.js') }}"></script>
 
-    <!--Morris Chart-->
-    <script src="{{ asset('adminitoAssets/assets/plugins/morris/morris.min.js') }}"></script>
-    <script src="{{ asset('adminitoAssets/assets/plugins/raphael/raphael-min.js') }}"></script>
-
-    <!-- Dashboard init -->
-    <script src="{{ asset('adminitoAssets/assets/pages/jquery.dashboard.js') }}"></script>
 @endsection

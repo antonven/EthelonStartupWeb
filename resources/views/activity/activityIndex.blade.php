@@ -7,19 +7,26 @@
 
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-lg-2">
-            <button type="button" id="createActivity" class="btn btn-danger btn-block btn-bordred waves-effect w-md waves-light">Add Activity</button>
+    <br>
+
+    <div class="col-lg-3">
+        <div class="card-box project-box addactbtn" id="createActivity" style="height: 424px; display: table; width: 100%;">
+            <div style="text-align: center; display: table-cell; vertical-align: middle;">
+                <span style="font-size: 26px; text-indent: 1px; padding: 3px 12px; border: 2px solid #797979; border-radius: 50%;">+</span>
+                <h4 style="margin-top: 20px;">Add an activity</h4>
+            </div>
         </div>
     </div>
-    <br>
-    
-
-    <div class="row">
-  
+     
+    <?php
+        $itemCounter = 0;
+    ?>
     @foreach($activities as $activity)
+        @if($itemCounter == 0)
+            <div class="row">
+        @endif
         <div class="col-lg-3">
-            <div class="card-box project-box">
+            <div class="card-box project-box activity_card">
                 @if($activity->status == 0)
                 <div class="label label-danger">Open</div>
                 @else
@@ -32,7 +39,7 @@
                    
                 <h4 class="m-t-0 m-b-5"><a href="webtest/{{$activity->activity_id}}" class="text-inverse" style="color:#ff5b5b !important;">{{ $activity->name }}</a></h4>
                 <p class="text-muted font-13" style="color:black !important;min-height: 80px;height:80px">{{ substr($activity->description,0,200) }}...<a href="{{ url('/activity/'.$activity->activity_id ) }}" class="font-600 text-muted">view more</a>
-
+                <input type="text" class="activity_card_id" value="{{ url('/activity/'.$activity->activity_id ) }}" hidden>
                 </p>
 
                 <!-- <ul class="list-inline">
@@ -47,10 +54,10 @@
                     @if($volunteersArray)
                     @foreach($volunteersArray as $volunteerArray)
                       @if(isset($volunteerArray[$activity->activity_id]))
-                        @foreach($volunteerArray[$activity->activity_id]->slice(0,10) as $volunteer)
+                        @foreach($volunteerArray[$activity->activity_id]->slice(0,5) as $volunteer)
 
                                   @if($volunteer->image_url != null)  
-                                 <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="">
+                                 <a href="#" data-toggle="tooltip" data-placement="top" title="{{ $volunteer->name }}" data-original-title="">
                                     <img src="{{ $volunteer->image_url }}" class="img-circle thumb-sm" />
                                  </a>
                                   @endif  
@@ -76,8 +83,17 @@
                
             </div>
         </div>
+        <?php
+            $itemCounter++;
+        ?>
+        @if($itemCounter == 4)
+            </div>
+            <?php
+                $itemCounter = 0;
+            ?>
+        @endif
     @endforeach
-    </div>
+
 
 @endsection
 
@@ -86,6 +102,9 @@
         $(document).ready(function(){
             $('#createActivity').on('click',function(){
                window.location = "{{url('/activity/create')}}"; 
+            });
+            $('.activity_card').on('click', function(){
+                window.location = $(this).find('.activity_card_id').val();
             });
         });
     </script>

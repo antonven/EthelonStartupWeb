@@ -21,4 +21,9 @@ class Foundation extends Model
     	return $this->hasMany('App\Activity','foundation_id','foundation_id');
     }
 
+    public function portfolio()
+    {
+        return $this->hasOne('App\Portfolio', 'foundation_id', 'foundation_id');
+    }
+
 }
