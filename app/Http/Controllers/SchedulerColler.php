@@ -1,33 +1,8 @@
 <?php
 
-/**
+namespace App\Http\Controllers;
 
-
-This Scheduler will run once every minute unlike the Heroku scheduler which only runs every 10 mintues.
-
-To use this scheduler with Laravel 5.4+ add this file to /app/Console/Commands/RunScheduler.php
-Register this file in app/Console/Kernel.php
-
-protected $commands = [
-...
-Commands\RunScheduler::class
-...
-]
-
-Add this line to your Procfile:
-
-scheduler: php -d memory_limit=512M artisan schedule:cron
-
-Push to Heroku and you will see you have a new dyno option called Scheduler, start ONE only.
-
-I highly recommend using Artisan::queue to run your cron jobs so that your scheduler does not over run.
-
-*/
-
-namespace App\Console\Commands;
-
-use Illuminate\Console\Command;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use App\Volunteerbeforeactivity;
 use App\Volunteerafteractivity;
@@ -45,7 +20,6 @@ use App\Volunteergroup;
 use App\Volunteercriteria;
 use App\Volunteercriteriapoint;
 use App\Notification;
-use App\Foundation;
 use App\Notification_user;
 use App\Volunteerbadge;
 use LaravelFCM\Message\OptionsBuilder;
@@ -54,46 +28,10 @@ use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
 use App\Groupnotification;
 
-/**
- *
- * Runs the scheduler every 60 seconds as expected to be done by cron.
- * This will break if jobs exceed 60 seconds so you should make sure all scheduled jobs are queued
- *
- * Class RunScheduler
- * @package App\Console\Commands
- */
-class RunScheduler extends Command
-{
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'schedule:cron {--queue}';
- 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Run the scheduler without cron (For use with Heroku etc)';
-    
-    /**
-     * Create a new command instance.
-     *
-     * @    return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
+class SchedulerColler extends Controller
+{
+     public function handle()
     {
 
 
@@ -113,9 +51,9 @@ class RunScheduler extends Command
        }                          */   
         
 
-        $this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
+        /*$this->info('Waiting '. $this->nextMinute(). ' for next run of scheduler');
         sleep($this->nextMinute());
-        $this->runScheduler();
+        $this->runScheduler();*/
     }
 
     /**
@@ -127,277 +65,10 @@ class RunScheduler extends Command
      *
      */
     //b2b66de
-   
-     public function sendNotifications($activity){
 
-        $tokens = array();
-
-       // foreach($activities as $activity){
-
-          $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
-                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
-                                                               ->where('volunteeractivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
-
-          $volunteersKeeper = array();
-
-          $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-
-            foreach($volunteers as $volunteer){
-
-                       $token = $volunteer->fcm_token;
-
-                            if($token != null){
-                                $notification_user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-
-                                Notification_user::create([
-                                       'id'=>$notification_user_id,
-                                       'notification_id' => $notification_id,
-                                       'sender_id'=> $activity->activity_id,
-                                       'receiver_id'=>$volunteer->volunteer_id,
-                                       'date'=> \Carbon\Carbon::now()->format('Y-m-d h:i')
-                                    ]);
-
-                                array_push($tokens,$token);
-
-                             }else{
-
-                                Groupnotification::create([
-                                    'volunteer_id'=>$volunteer->volunteer_id,
-                                    'activity_id'=>$activity->activity_id,
-                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d h:i')
-                                    ]);
-
-                            }
-                           
-            }
-
-
-                           
-
-                            $optionBuilder = new OptionsBuilder();
-                            $optionBuilder->setTimeToLive(60*20);
-                            $optionBuilder->setPriority('high');
-                            $foundationName = "Ethelon";
-
-                            $body = 'Your groupmates have been revealed for '.$activity->name.' activity';
- 
-                          $notificationBuilder = new PayloadNotificationBuilder($activity->name);
-                          $notificationBuilder->setBody($body)
-                                              ->setSound('default'); 
-
-                             $dataBuilder = new PayloadDataBuilder();
-                             $dataBuilder->addData([
-                                
-                                'eventImage'=>$activity->image_url,
-                                'eventHost' =>"Ethelon",
-                                'eventName'=>$activity->name,
-                                'activity_id'=>$activity->activity_id,
-                                'eventDate'=>$activity->startDate, 
-                                'eventTimeStart'=>$activity->start_time,
-                                'eventLocation'=>$activity->location, 
-                                'contactNo'=>$activity->contact, 
-                                'contactPerson'=>$activity->contactperson,  
-                                
-                                ]);
-
-                            $option = $optionBuilder->build();
-                            $notification = $notificationBuilder->build();
-                            $data = $dataBuilder->build();
-
-                            Notification::create([
-                                    'id'=>$notification_id,
-                                    'title'=>$activity->name,
-                                    'body' => $body,
-                                    'major_type'=>'activity_group',
-                                    'sub_type'=>'activity_group',
-                                    'data'=>$activity->activity_id
-                                ]);
-
-                          $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
-                             
-      
-            
-           // return $php artmResponse;
-       // }
-
-    }
-
-    public function randomAllocation($activity){
-        
-                $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
-
-
-                
-                $vol_per_group = $activity->group; 
-                $count = 0;
-                $countforId = 1;
-                $id = '';
-                $volunteerCount = 0;   
-
-                    foreach($volunteers as $volunteer){
-
-                        $this->create_volunteer_criteria_points($activity, $volunteer->volunteer_id);
-
-                      if($count < $vol_per_group){
-                            if($count == 0){
-
-                                $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-
-                                Activitygroup::create([
-                                      'id'=> $id,
-                                      'activity_id'=>$activity->activity_id,
-                                      'type'=>'none'  
-                                    ]);   
-
-                                Volunteergroup::create([
-                                     'activity_groups_id'=>$id,
-                                     'volunteer_id' =>$volunteer->volunteer_id 
-                                ]);    
-
-                                $count++;
-                                $countforId++;
-                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
-                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
-                                }
-
-                            }else{
-
-                                Volunteergroup::create([
-                                     'activity_groups_id'=>$id,
-                                     'volunteer_id' =>$volunteer->volunteer_id 
-                                ]); 
-
-                                $count++;
-                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
-                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
-                                }
-                            }
-                      }
-                      else{
-
-                        $count = 0;
-                           $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-                                    
-                                Activitygroup::create([
-                                      'id'=> $id,
-                                      'activity_id'=>$activity->activity_id,
-                                      'type'=>'none'  
-                                    ]);    
-
-                                Volunteergroup::create([
-                                     'activity_groups_id'=>$id,
-                                     'volunteer_id' =>$volunteer->volunteer_id 
-                                    ]);    
-
-                                $count++;
-                                $countforId++;
-                                
-                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
-                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
-                                }
-
-                      }     
-                      $volunteerCount++;
-                      }      
-                      Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);              
-                      $this->sendNotifications($activity);
-    }
-
-  public function create_volunteer_criteria_points($activity, $volunteer_id){
-
-     $criterias = Activitycriteria::where('activity_id',$activity->activity_id)->get();
-
-      foreach($criterias as $criteria){
-
-            Volunteercriteriapoint::create([
-                
-                'activity_id'=>$activity->activity_id,
-                'volunteer_id'=>$volunteer_id,
-                'criteria_name'=>$criteria->criteria,
-                'total_points'=>0,
-                'no_of_raters'=>0,
-                'average_points'=>0
-                 
-                ]);
-      }
-    }
-
-    public function skill($activity){
-
-      $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
-      
-      $asq = $this->sort($activity,$volunteers);
-      $this->sendNotifications($activity);
-      Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);      
-      
-     // $asq = $this->groupVolunteers($volunteers_with_no_match,$activity);
-      
-      return $asq;
-
-    }
-
-    public function sort($activity,$volunteers){
-
-      $allVolunteers = $volunteers;
-      $noMatches = array();
-      $yesMatches = array();
-      $skills = Activityskill::where('activity_id',$activity->activity_id)->get();
-
-      if(count($allVolunteers) == 2){
-
-        $rets1 = $this->group($allVolunteers,$activity,'none');
-
-      }else{
-
-         foreach($allVolunteers as $allVolunteer){
-
-            $volunteerSkills = Volunteerskill::where('volunteer_id',$allVolunteer->volunteer_id)->get();
-            $matches = false;
-            
-
-              foreach($skills as $skill){
-
-                 foreach($volunteerSkills as $volunteerSkill){
-                   
-                   if(strcasecmp($skill->name , $volunteerSkill->name)==0){
-                                        
-                                        $matches = true;
-                                        break;
-                                            
-                      }
-                 }
-
-              }
-
-            if($matches == false ){
-               array_push($noMatches,$allVolunteer);
-            }else{
-               array_push($yesMatches,$allVolunteer);
-            }
-
-        }
-
-
-     // return count($noMatches). ' '.count($yesMatches);
-
-      
-      $rets1 = $this->group($noMatches,$activity,'none');
-      
-      $rets2 = $this->groupMatches($yesMatches,$activity);
-      
-      }
-    
-     
-
-      //return $noMatches;
-    }
     public function thesis($activity){
                          
-                         $this->info('392');
-                         
-                         $this->info('394');
-                         $this->info(' 395 '.$activity->name);
-
+                       
                          $actskills = $activity->skills;
 
                          //$volunteer = Volunteer::first();
@@ -439,7 +110,8 @@ class RunScheduler extends Command
                            
     }
 
-      public function thesis1($activity,$volunteers,$group){
+
+     public function thesis1($activity,$volunteers,$group){
 /*
       $volunteers = \DB::table('volunteeractivities')->select('volunteeractivities.volunteer_id')
                         ->join('activityskills','activityskills.activity_id','=','volunteeractivities.activity_id')
@@ -498,8 +170,8 @@ class RunScheduler extends Command
 
                         foreach($volunteers as $volunteer){
 
-                          $ageWeight = $setting->agePercentage -($volunteer->age/$setting->ageTotal)*$setting->agePercentage;
-                          $pointWeight = $setting->pointPercentage -($volunteer->points/$setting->pointTotal)*$setting->pointPercentage;
+                          $ageWeight = 70-($volunteer->age/100)*70;
+                          $pointWeight = 30-($volunteer->points/1000)*30;
                           $total = $ageWeight + $pointWeight;
 
                           $vol = (object)array("volunteer"=>$volunteer,"total"=>$total,"previous"=>null,"index"=>null);
@@ -617,11 +289,11 @@ class RunScheduler extends Command
                                       $volObj1->index = $forIndex;
                                      // echo ' index = '.$forIndex;
                                       array_push($object->array,$volObj1);
-                                  }
+                                    }
                                     
                                     $move = true;
                                    // echo '180'.$move;
-                                 }
+                                  }
 
                                 }
 
@@ -681,6 +353,99 @@ class RunScheduler extends Command
 
     }
 
+       public function sendNotifications($activity){
+
+        $tokens = array();
+
+       // foreach($activities as $activity){
+
+          $volunteers = \DB::table('volunteeractivities')->select('volunteers.*')
+                                                               ->join('volunteers','volunteers.volunteer_id','=','volunteeractivities.volunteer_id')
+                                                               ->where('volunteeractivities.activity_id',$activity->activity_id)->inRandomOrder()->get(); 
+
+          $volunteersKeeper = array();
+
+          $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+            foreach($volunteers as $volunteer){
+
+                       $token = $volunteer->fcm_token;
+
+                            if($token != null){
+                                $notification_user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                                Notification_user::create([
+                                       'id'=>$notification_user_id,
+                                       'notification_id' => $notification_id,
+                                       'sender_id'=> $activity->activity_id,
+                                       'receiver_id'=>$volunteer->volunteer_id,
+                                       'date'=> \Carbon\Carbon::now()->format('Y-m-d h:i')
+                                    ]);
+
+                                array_push($tokens,$token);
+
+                             }else{
+
+                                Groupnotification::create([
+                                    'volunteer_id'=>$volunteer->volunteer_id,
+                                    'activity_id'=>$activity->activity_id,
+                                    'date'=>\Carbon\Carbon::now()->format('Y-m-d h:i')
+                                    ]);
+
+                            }
+                           
+            }
+
+
+                           
+
+                            $optionBuilder = new OptionsBuilder();
+                            $optionBuilder->setTimeToLive(60*20);
+                            $optionBuilder->setPriority('high');
+                            $foundationName = "Ethelon";
+
+                            $body = 'Your groupmates have been revealed for '.$activity->name.' activity';
+ 
+                          $notificationBuilder = new PayloadNotificationBuilder($activity->name);
+                          $notificationBuilder->setBody($body)
+                                              ->setSound('default'); 
+
+                             $dataBuilder = new PayloadDataBuilder();
+                             $dataBuilder->addData([
+                                
+                                'eventImage'=>$activity->image_url,
+                                'eventHost' =>"Ethelon",
+                                'eventName'=>$activity->name,
+                                'activity_id'=>$activity->activity_id,
+                                'eventDate'=>$activity->startDate, 
+                                'eventTimeStart'=>$activity->start_time,
+                                'eventLocation'=>$activity->location, 
+                                'contactNo'=>$activity->contact, 
+                                'contactPerson'=>$activity->contactperson,  
+                                
+                                ]);
+
+                            $option = $optionBuilder->build();
+                            $notification = $notificationBuilder->build();
+                            $data = $dataBuilder->build();
+
+                            Notification::create([
+                                    'id'=>$notification_id,
+                                    'title'=>$activity->name,
+                                    'body' => $body,
+                                    'major_type'=>'activity_group',
+                                    'sub_type'=>'activity_group',
+                                    'data'=>$activity->activity_id
+                                ]);
+
+                            $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
+                             
+      
+            
+           // return $downstreamResponse;
+       // }
+
+    }
 
      public function createTable($objects,$activity,$criteria){
       foreach($objects as $object){
@@ -722,12 +487,12 @@ class RunScheduler extends Command
               \DB::table('activitygroups')->where('id',$id)->update([
                   'numOfVolunteers'=>$count
                 ]);
-             // echo 'count = '.$count . ' volunteerCount '.$volunteerCount;
+              echo 'count = '.$count . ' volunteerCount '.$volunteerCount;
             }
          }
 
       }
-
+      
     }
 
     public function create_volunteer_criteria_points2($activity, $volunteer_id,$criterias){
@@ -749,7 +514,263 @@ class RunScheduler extends Command
     //}
 
 }
+   
+    public function randomAllocation($activity){
+        
+                $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->inRandomOrder()->get();
 
+
+                $vol_per_group = $activity->group; 
+                $count = 0;
+                $countforId = 1;
+                $id = '';
+                $volunteerCount = 0;   
+
+                    foreach($volunteers as $volunteer){
+
+                        $this->create_volunteer_criteria_points($activity, $volunteer->volunteer_id);
+
+                      if($count < $vol_per_group){
+                            if($count == 0){
+
+                                $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+
+                                Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id,
+                                      'type'=>'none'  
+                                    ]);   
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    
+
+                                $count++;
+                                $countforId++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+
+                            }else{
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]); 
+
+                                $count++;
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+                            }
+                      }
+                      else{
+
+                        $count = 0;
+                           $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                                    
+                                  Activitygroup::create([
+                                      'id'=> $id,
+                                      'activity_id'=>$activity->activity_id,
+                                      'type'=>'none'  
+                                    ]);    
+
+                                Volunteergroup::create([
+                                     'activity_groups_id'=>$id,
+                                     'volunteer_id' =>$volunteer->volunteer_id 
+                                ]);    
+
+                                $count++;
+                                $countforId++;
+                                
+                                if($count == $vol_per_group || count($volunteers) == $vCount = $volunteerCount+1){
+                                    \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
+                                }
+
+                      }     
+                      $volunteerCount++;
+                      }      
+                      Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);              
+                      $this->sendNotifications($activity);
+    }
+
+  public function create_volunteer_criteria_points($activity, $volunteer_id){
+
+     $criterias = Activitycriteria::where('activity_id',$activity->activity_id)->get();
+
+      foreach($criterias as $criteria){
+
+            Volunteercriteriapoint::create([
+                
+                'activity_id'=>$activity->activity_id,
+                'volunteer_id'=>$volunteer_id,
+                'criteria_name'=>$criteria->criteria,
+                'total_points'=>0,
+                'no_of_raters'=>0,
+                'average_points'=>0
+                 
+                ]);
+      }
+    }
+
+    public function skill($activity){
+
+      $volunteers = Volunteeractivity::where('activity_id',$activity->activity_id)->get();
+      
+      $asq = $this->sort($activity,$volunteers);
+      //$this->sendNotifications($activity);
+     Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);      
+     // $this->info('FUCKCKCK');
+     // $asq = $this->groupVolunteers($volunteers_with_no_match,$activity);
+
+      return $asq;
+
+    }
+
+    public function sort($activity,$volunteers){
+
+      $allVolunteers = $volunteers;
+      $noMatches = array();
+      $yesMatches = array();
+      $skills = Activityskill::where('activity_id',$activity->activity_id)->get();
+
+      if(count($allVolunteers) == 2){
+
+        $rets1 = $this->group($allVolunteers,$activity,'none');
+
+      }else{
+
+         foreach($allVolunteers as $allVolunteer){
+
+        $volunteerSkills = Volunteerskill::where('volunteer_id',$allVolunteer->volunteer_id)->get();
+        
+
+        $matches = false;
+        $skwa = null;
+
+          foreach($skills as $skill){
+
+             foreach($volunteerSkills as $volunteerSkill){
+                $skwa = $allVolunteer;
+               if(strcasecmp($skill->name , $volunteerSkill->name)==0){
+                                   
+                                    $matches = true;
+                                     //echo $allVolunteer->volunteer_id.$skill->name .' =========  ';
+                                    break;
+                                        
+                  }
+             }
+
+          }
+
+        if($matches == false ){
+          
+           array_push($noMatches,$allVolunteer);
+        }else{
+          
+           array_push($yesMatches,$allVolunteer);
+        }
+
+      }
+
+    
+
+      if(count($noMatches) == 1){
+
+      }
+
+      if(count($yesMatches) == 1){
+
+      }
+
+
+     // return count($noMatches). ' '.count($yesMatches);
+
+      $atay = array();
+
+      $rets1 = $this->group($noMatches,$activity,'none');
+      array_push($atay, $rets1);
+      $rets2 = $this->groupMatches($yesMatches,$activity);
+    //  array_push($atay, $rets2);
+
+      return $atay;
+      }
+    
+     
+
+      //return $noMatches;
+    }
+
+     public function groupMatches($volunteers, $activity){
+
+
+      $skills = Activityskill::where('activity_id',$activity->activity_id)->get();
+      $numOfSkills = $skills->count();
+
+      $skillsObjectsLists = array();
+      $ilhanan = false;
+
+      foreach($skills as $skill){
+
+        $array = array();
+        $skillObject = (object) array("name"=>$skill->name,"volunteers"=>$array,"count"=>0);
+        
+        json_encode($skillObject);
+        array_push($skillsObjectsLists,$skillObject);
+
+      }
+
+      foreach($volunteers as $volunteer){
+       
+          $skills = Volunteerskill::where('volunteer_id',$volunteer->volunteer_id)->get();
+          
+               usort($skillsObjectsLists, function($a, $b){
+                
+                return strcmp($a->count, $b->count);    
+
+               });
+
+              foreach($skillsObjectsLists as $skillsObjectsList){
+
+                foreach($skills as $skill){
+                     
+                    if(strcasecmp($skill->name , $skillsObjectsList->name)==0){
+
+                      if($ilhanan == false){
+                          //echo $volunteer->volunteer_id. ' = '.$skill->name. "  ******** "; 
+                          array_push($skillsObjectsList->volunteers,$volunteer);
+                          $skillsObjectsList->count = $skillsObjectsList->count + 1;
+                          $ilhanan = true;
+                          break;
+                      }  
+                      
+                    }
+                }
+                  
+              }
+
+              $ilhanan = false;
+
+      }
+
+      $pangTest = array();
+
+      $count_para_sa_bug = true;
+
+      foreach($skillsObjectsLists as $skillsObjectsList){
+        
+        $test = $this->group($skillsObjectsList->volunteers,$activity,$skillsObjectsList->name,$count_para_sa_bug);
+        array_push($pangTest,count($skillsObjectsList->volunteers));
+        $count_para_sa_bug = false;
+
+      }
+
+      //dd($pangTest);
+     
+      return $pangTest;
+      
+    }
 
     public function group($volunteers, $activity, $skillName){
 
@@ -764,6 +785,7 @@ class RunScheduler extends Command
                 $lastCount = 0; 
 
                 $numOfVolunteers = count($volunteers);
+                echo $numOfVolunteers;
 
                     foreach($volunteers as $volunteer){
 
@@ -771,7 +793,7 @@ class RunScheduler extends Command
 
                       if($count < $vol_per_group){//maka sud pa siya og group
                             if($count == 0){//create new group reset
-                               if($numOfVolunteers == 1){
+                              if($numOfVolunteers == 1){
 
                                   $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
@@ -793,8 +815,7 @@ class RunScheduler extends Command
                                     }
 
                               }else{
-
-                                 if($volunteerCount + 1 == $numOfVolunteers ){
+                                   if($volunteerCount + 1 == $numOfVolunteers ){
 
                                     Volunteergroup::create([
                                          'activity_groups_id'=>$lastGroup,
@@ -802,15 +823,16 @@ class RunScheduler extends Command
                                     ]);  
 
                                     \DB::table('activitygroups')->where('id',$lastGroup)->update(['numOfVolunteers' => $lastCount+1]);
+                                  
 
                                 }else{
-                                   $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+                                  $id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
 
                                     Activitygroup::create([
                                           'id'=> $id,
                                           'activity_id'=>$activity->activity_id ,
                                           'type'=>$skillName 
-                                    ]);   
+                                        ]);   
 
                                     Volunteergroup::create([
                                          'activity_groups_id'=>$id,
@@ -823,8 +845,10 @@ class RunScheduler extends Command
                                         \DB::table('activitygroups')->where('id',$id)->update(['numOfVolunteers' => $count]);
                                     }
                                 }
-                              }
+                             
+                              } 
                                
+
                             }else{
 
                                 Volunteergroup::create([
@@ -885,7 +909,7 @@ class RunScheduler extends Command
 
     protected function runScheduler()
     {
-        $fn = $this->option('queue') ? 'queue' : 'call';
+      //  $fn = $this->option('queue') ? 'queue' : 'call';
 
 
 
@@ -907,31 +931,34 @@ class RunScheduler extends Command
         //09210296430
 
                             //$activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('5hrs',false)->get();
+                             // $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('fiveHours',false)->get();
 
-                             $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->where('fiveHours',false)->get();
+                             //  if($activities_with_false_5hrs->count()){
+                             //      $this->info('ni sud if acitivites count');
+                             //    echo 'ni sud activities count';
+                             //      $this->addCriteriaTotal($activities_with_false_5hrs);  
+                             // }else{
+                             //  echo 'wala ni sud boanga';
+                             // }
 
-                              if($activities_with_false_5hrs->count()){
-                                  $this->info('ni sud if acitivites count');
-                                 // $this->addCriteriaTotal($activities_with_false_5hrs);  
-                             }else{
-                              $this->info('wala nisud acitivites count');
-                             }
-
-
-                            $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name','foundations.foundation_id as foundation_id')
-                                ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
-                                ->where('activities.status',false)
-                                ->get();
+                            // $activities = \DB::table('activities')->select('activities.*','foundations.name as foundation_name','foundations.foundation_id as foundation_id')
+                            //     ->join('foundations','foundations.foundation_id','=','activities.foundation_id')
+                            //     ->where('activities.status',false)
+                            //     ->get();
                                     
+                                    $activities = Activity::where('activity_id','3b8dc17')->get();
+
+                                   // dd($activities);
+
                                 if($activities->count()){
-                                    $this->info('nay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
+                                    //$this->info('nay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
                                 }else{
-                                    $this->info('walay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
+                                    //$this->info('walay sulod '.\Carbon\Carbon::now()->format('y-m-d h:i'));
                                 }
 
             foreach($activities as $activity){
 
-                            $this->info('nay sulod '.$activity->registration_deadline);
+                            //$this->info('nay sulod '.$activity->registration_deadline);
 /*
                  $date = substr($activity->startDate, 0,strpos($activity->startDate, ' ')); 
                  $datesaved = $date. ' '.$activity->start_time;
@@ -954,20 +981,25 @@ class RunScheduler extends Command
                        
 
                 if($activity_deadline <= \Carbon\Carbon::now()->format('y-m-d')){
-                        $this->info('sud sa date if');
+                        //$this->info('sud sa date if');
 
                        if($activity_deadlineTime <= $timeNow){
-                            $this->info('==sulod pa '.$activity->name.' = '.$timeNow.' !! '.$activity_deadlineTime); 
-                            $this->info('GROUPTYPE  '.$activity->group_type);   
-                            $activity = Activity::where('activity_id',$activity->activity_id)->first();
+                           /* $this->info('==sulod pa '.$activity->name.' = '.$timeNow.' !! '.$activity_deadlineTime); 
+                            $this->info('GROUPTYPE  '.$activity->group_type);   */
+                          $this->thesis($activity);
+                          /*  switch($activity->group_type){
+                                case 'random': $this->randomAllocation($activity);  
+                                                //$this->info('random'); 
+                                               break;
+                                case 'skill':  $this->skill($activity);
+                                                //$this->info('skill');  
+                                                echo 'skill';
+                                               break;           
+                            }*/
 
-                            $act = Activity::where('activity_id',$activity->activity_id)->first();
-                             
-                           // $this->thesis($act);
-                            
 
                        }else{
-                            $this->info('==wala pa');
+                           // $this->info('==wala pa');
                        }
 
                 }else{
@@ -979,19 +1011,18 @@ class RunScheduler extends Command
            // $this->info('gawas pa');                                   
 
 
-        $this->info('Running scheduler');
+        /*$this->info('Running scheduler');
         Artisan::$fn('schedule:run');
         $this->info('completed, sleeping..');
         sleep($this->nextMinute());
-        $this->runScheduler();
+        $this->runScheduler();*/
     }
 
      public function sendNotifForFiveHours($fcm_token,$criteriaTotal,$activityName,$activity_id,$newBadgePoints,$volunteer_id){
-          $this->info('volunteer_id   = '.$volunteer_id);
-
-      
+          //$this->info('ni sud sa send notif For five hours = '.$newBadgePoints);
+        echo 'notifzzxz'.$volunteer_id;
+        //echo $volunteer_id. ' before ani iya id';
                             $notification_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-                            $this->info('asds'.$notification_id);
 
                             $optionBuilder = new OptionsBuilder();
                             $optionBuilder->setTimeToLive(60*20);
@@ -1002,12 +1033,22 @@ class RunScheduler extends Command
                           $notificationBuilder->setBody($body)
                                               ->setSound('default'); 
 
-                            $this->info('Notification body: '.$body);                  
+                            //$this->info('Notification body: '.$body);                  
 
                              $dataBuilder = new PayloadDataBuilder();
-                             $dataBuilder->addData([
-                               'sample'=>'asds'
-                                ]);
+                         /*    $dataBuilder->addData([
+                                
+                                'eventImage'=>$activity->image_url,
+                                'eventHost' =>$activity->foundation_name,
+                                'eventName'=>$activity->name,
+                                'activity_id'=>$activity->activity_id,
+                                'eventDate'=>$activity->startDate, 
+                                'eventTimeStart'=>$activity->start_time,
+                                'eventLocation'=>$activity->location, 
+                                'contactNo'=>$activity->contact, 
+                                'contactPerson'=>$activity->contactperson,  
+                                
+                                ]);*/
 
                             $option = $optionBuilder->build();
                             $notification = $notificationBuilder->build();
@@ -1022,9 +1063,7 @@ class RunScheduler extends Command
                                     'data'=>$activity_id
                                 ]);
 
-
                             $notification_user_id = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
-                            $this->info('asds'.$notification_id);
 
                                 Notification_user::create([
                                        'id'=>$notification_user_id,
@@ -1035,6 +1074,7 @@ class RunScheduler extends Command
                                     ]);
 
                             $downstreamResponse = FCM::sendTo($fcm_token, $option, $notification, $data); 
+                            dd($downstreamResponse);
 
                                           
 
@@ -1043,93 +1083,87 @@ class RunScheduler extends Command
     public function addCriteriaTotal($activities_with_false_5hrs){
 
      
-      foreach($activities_with_false_5hrs as $activity_with_false_5hrs){
-      
-         $this->info('nisulod sa addcriteria Total function foreach'. \Carbon\Carbon::now(). ' add hours 5 = '.\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5));
 
-         if(\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5) <=  \Carbon\Carbon::now()){
-            $this->info('nisulod sa condtion endTime + 5 hours <= karon'. \Carbon\Carbon::now(). ' add hours 5 = '.\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5));
-              
+      foreach($activities_with_false_5hrs as $activity_with_false_5hrs){
+       // $this->info('nisulod sa foreach');
+        /* $this->info('nisulod sa addcriteria Total function foreach'. \Carbon\Carbon::now(). ' add hours 5 = '.\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5));*/
+
+        // echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
+
+          if(\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5) <=  \Carbon\Carbon::now()){
+         /*   $this->info('nisulod sa condtion endTime + 5 hours <= karon'. \Carbon\Carbon::now(). ' add hours 5 = '.\Carbon\Carbon::parse($activity_with_false_5hrs->endDate)->addHours(5));*/
+              //echo ' fuck naa'. '  '. \Carbon\Carbon::parse($activity_with_false_5hrs->endDate) . '  now = ' . \Carbon\Carbon::now();
+
+         echo 'NI SUD SA IF ATAYA';
+
+         //dd($activity_with_false_5hrs);
+
              $volunteers = \DB::table('volunteers')->select('volunteers.*')
                                                 ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id')
                                                 ->where('volunteeractivities.activity_id',$activity_with_false_5hrs->activity_id)
                                                 ->where('volunteeractivities.status',true)
                                                 ->get(); 
 
-              $activityskills = Activityskill::where('activity_id',$activity_with_false_5hrs->activity_id)->get();                                  
+
+
+              $activityskills = Activityskill::where('activity_id',$activity_with_false_5hrs->activity_id)->get();                                    //dd($activityskills);
+
                    
                     foreach($volunteers as $volunteer){
 
-                      $num = Activitygroup::select('activitygroups.numOfVolunteers')
-                                      ->join('volunteergroups','volunteergroups.activity_groups_id','=','activitygroups.id')
-                                      ->where('volunteergroups.volunteer_id','=',$volunteer->volunteer_id)
-                                      ->where('activitygroups.activity_id',$activity_with_false_5hrs->activity_id)
-                                      ->first();
+                         $vol = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)->get();
+                         $asd = array("skill"=>$activityskills,"badges"=>$vol);
+                         //dd($asd);
+                         
 
-                      if($num->numOfVolunteers == 1){
-
-                      $volunteercriteriapoints = Volunteercriteriapoint::where('volunteer_id',$volunteer->volunteer_id)
-                                                                          ->where('activity_id',$activity_with_false_5hrs->activity_id)
-                                                                          ->get();
-
-                            $criteriaTotalSolo = $volunteercriteriapoints->count() * 5;                                              
-                      
-                              foreach($activityskills as $activityskill){
-                                                  
-                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
-                                                                ->where('skill',$activityskill->name)
-                                                                ->first();
-                                                                 
-                                $newBadgePoints = $volunteerbadge->points + $criteriaTotalSolo;
-                                 $this->info('New badge points  = '.$newBadgePoints); 
-                                $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
-                                                                ->where('skill',$activityskill->name)
-                                                                ->update(['points'=>$newBadgePoints]);
-
-                                $totalVolPoints = $volunteer->points + $criteriaTotalSolo;
-                                $this->info('New Volunteer points  = '.$totalVolPoints);                                  
-                                Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
-                              }   
-
-                      }else{
 
                        $volunteercriteriapoints = Volunteercriteriapoint::where('volunteer_id',$volunteer->volunteer_id)
                                                                           ->where('activity_id',$activity_with_false_5hrs->activity_id)
                                                                           ->get();
+
 
                                         $criteriaTotal = 0;
 
                        foreach($volunteercriteriapoints as $Volunteercriteriapoint){
 
                             $criteriaTotal = $Volunteercriteriapoint->average_points + $criteriaTotal;
-                            $this->info('criteriaTotal = '.$criteriaTotal);
-
+                            //$this->info('criteriaTotal = '.$criteriaTotal);
                        }
                       
                         foreach($activityskills as $activityskill){
-                                                  
+
                                 $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
                                                                 ->where('skill',$activityskill->name)
                                                                 ->first();
+
+                                                                if($volunteerbadge->count()){
+
+                                                                }else{
+                                                                     dd($volunteerbadge); 
+                                                                }
+                                                              
                                                                  
                                 $newBadgePoints = $volunteerbadge->points + $criteriaTotal;
-                                 $this->info('New badge points  = '.$newBadgePoints); 
+                                echo 'New Badge points '. $newBadgePoints;
+                                 //$this->info('New badge points  = '.$newBadgePoints); 
                                 $volunteerbadge = Volunteerbadge::where('volunteer_id',$volunteer->volunteer_id)
                                                                 ->where('skill',$activityskill->name)
                                                                 ->update(['points'=>$newBadgePoints]);
 
                                 $totalVolPoints = $volunteer->points + $criteriaTotal;
-                                $this->info('New Volunteer points  = '.$totalVolPoints);                                  
+                                //$this->info('New Volunteer points  = '.$totalVolPoints); 
+                                echo 'New volunteer ponits ='.$totalVolPoints;                                 
                                 Volunteer::where('volunteer_id',$volunteer->volunteer_id)->update(['points'=>$totalVolPoints]);                                 
-                        } 
-
-                      }              
+                        }     
 
                          $this->sendNotifForFiveHours($volunteer->fcm_token,$criteriaTotal,$activity_with_false_5hrs->name,$activity_with_false_5hrs->activity_id,$newBadgePoints,$volunteer->volunteer_id);                                                   
                     }  
-                     $this->info('iya nang i update to true'); 
+                     //$this->info('iya nang i update to true'); 
+                     echo 'iya naung i update to true';
                      $activities_with_false_5hrs = \DB::table('activities')->select('activities.*')->update(['fiveHours'=>true]);                           
 
+          }else{
+            echo 'wala ni sud sa katong if sa 5 hours';
           }
 
          
@@ -1177,4 +1211,5 @@ class RunScheduler extends Command
 
                              array_push($volunteersKeeper,$data);
                      } */                        
+
 }
