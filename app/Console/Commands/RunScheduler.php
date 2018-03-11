@@ -426,6 +426,9 @@ class RunScheduler extends Command
 
                           // echo (int)$grpN . (int)$grpM;
 
+                            $nM = null;
+                            $m = null;
+
                            if($volunteersNoMatch->count()!=0) 
                            $nM = $this->thesis1($activity,$volunteersNoMatch,$grpN);  
 
@@ -494,6 +497,8 @@ class RunScheduler extends Command
                        //dd($volunteers);
 
                      //  $volunteers = Volunteer::all();           
+
+                         $setting = \DB::table('settings')->first();
 
                         $volObj = array();
 
@@ -971,7 +976,7 @@ class RunScheduler extends Command
 
                             $act = Activity::where('activity_id',$activity->activity_id)->first();
                              
-                            $this->thesis($act);
+                           // $this->thesis($act);
                             
 
                        }else{
