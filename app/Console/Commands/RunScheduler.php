@@ -976,7 +976,7 @@ class RunScheduler extends Command
 
                             $act = Activity::where('activity_id',$activity->activity_id)->first();
                              
-                           // $this->thesis($act);
+                            $this->thesis($act);
                             
 
                        }else{
