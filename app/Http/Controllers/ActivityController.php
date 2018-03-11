@@ -542,7 +542,7 @@ public function webtest($id){
             $destinationPath = public_path('file_attachments');
             $filename = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7).$file->getClientOriginalName();
             
-            $file->move($destinationPath, $filename);
+            dd($file->move($destinationPath, $filename));
             
             \Cloudder::upload(url('/file_attachments').'/'.$filename);
               
@@ -553,7 +553,7 @@ public function webtest($id){
                return $url['url'];
 
             }
-
+            //return url('/file_attachments').'/'.$filename;
             
             
         }
@@ -572,7 +572,7 @@ public function webtest($id){
 
         foreach ($skills as $skill) {
                 Activitiyskill::create([
-                        'name'=>$skill, 	
+                        'name'=>$skill,   
                         'activity_id' => $volunteer_id
                         ]);
         }
@@ -675,10 +675,10 @@ public function webtest($id){
 
     //
 
-	//get volunteers that said they will join
+  //get volunteers that said they will join
     public function getVolunteersBefore(Request $request){
 
-    	$activity_id = $request->input('activity_id');
+      $activity_id = $request->input('activity_id');
 
 
         $volunteersBefore = \DB::table('users')->select('users.name as name','volunteers.*')
@@ -687,20 +687,20 @@ public function webtest($id){
                                            ->where('volunteeractivities.activity_id',$activity_id)
                                            ->get();
                                            
-    	return response()->json($volunteersBefore);
+      return response()->json($volunteersBefore);
         
     }
 
     //get volunteers that joined and captured the qr code
     public function getVolunteersAfter(Request $request){
         
-    	$activity_id = $request->input('activity_id');
+      $activity_id = $request->input('activity_id');
 
-    	//$volunteersAfter = Volunteerafteractivity::where('activity_id',$activity_id)->get();
+      //$volunteersAfter = Volunteerafteractivity::where('activity_id',$activity_id)->get();
 
         $volunteersAfter = \DB::table('volunteers')->select('volunteers.*')->join('volunteerafteractivities','volunteerafteractivities.volunteer_id','=','volunteers.volunteer_id')->where('volunteerafteractivities.activity_id',$activity_id)->get();
 
-    	return response()->json($volunteersAfter);
+      return response()->json($volunteersAfter);
 
     }
 
