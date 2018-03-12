@@ -68,7 +68,11 @@ class SchedulerColler extends Controller
 
     public function thesis($activity){
                          
-                       
+                    /*     $this->info('392');
+                         
+                         $this->info('394');
+                         $this->info(' 395 '.$activity->name);*/
+
                          $actskills = $activity->skills;
 
                          //$volunteer = Volunteer::first();
@@ -88,6 +92,8 @@ class SchedulerColler extends Controller
                                                      $query2->whereIn('activity_id',$activity);
                                              })->get(); 
 
+
+
                                             // dd($volunteersNoMatch);
                                              //dd($skills);  
 
@@ -97,13 +103,24 @@ class SchedulerColler extends Controller
 
                           // echo (int)$grpN . (int)$grpM;
 
+                            echo $volunteersNoMatch->count();
+
+                            $nM = null;
+                            $m = null;
+
+                           if($volunteersNoMatch->count()!=0) 
                            $nM = $this->thesis1($activity,$volunteersNoMatch,$grpN);  
 
-                           
+                           if($volunteersMatch->count()!=0)  
                            $m = $this->thesis1($activity,$volunteersMatch,$grpM);  
+
+
 
                            
                             $objects = array_merge($nM,$m);
+
+                            dd($objects);
+
                             Activity::where('activity_id',$activity->activity_id)->update(['status'=>true]);
                             $this->sendNotifications($activity);
 
@@ -111,7 +128,7 @@ class SchedulerColler extends Controller
     }
 
 
-     public function thesis1($activity,$volunteers,$group){
+       public function thesis1($activity,$volunteers,$group){
 /*
       $volunteers = \DB::table('volunteeractivities')->select('volunteeractivities.volunteer_id')
                         ->join('activityskills','activityskills.activity_id','=','volunteeractivities.activity_id')
@@ -165,13 +182,14 @@ class SchedulerColler extends Controller
                        //dd($volunteers);
 
                      //  $volunteers = Volunteer::all();           
+                         $setting = \DB::table('settings')->first();
 
                         $volObj = array();
 
                         foreach($volunteers as $volunteer){
 
-                          $ageWeight = 70-($volunteer->age/100)*70;
-                          $pointWeight = 30-($volunteer->points/1000)*30;
+                          $ageWeight = $setting->agePercentage -($volunteer->age/$setting->ageTotal)*$setting->agePercentage;
+                          $pointWeight = $setting->pointPercentage -($volunteer->points/$setting->pointTotal)*$setting->pointPercentage;
                           $total = $ageWeight + $pointWeight;
 
                           $vol = (object)array("volunteer"=>$volunteer,"total"=>$total,"previous"=>null,"index"=>null);
@@ -188,7 +206,14 @@ class SchedulerColler extends Controller
                       
                             for($i = 0; $i < $group; $i++){
 
-                              $min = $volObj[$i]->total;
+                              $min = 1;
+
+                              if($volunteers->count() < $group){
+                                $min = $volObj[0]->total;  
+                              }else{
+                                 $min = $volObj[$i]->total;
+                              }
+                             
                               $max = 100;
                               $array = array();
                              // echo 'nisud for';
@@ -289,11 +314,11 @@ class SchedulerColler extends Controller
                                       $volObj1->index = $forIndex;
                                      // echo ' index = '.$forIndex;
                                       array_push($object->array,$volObj1);
-                                    }
+                                  }
                                     
                                     $move = true;
                                    // echo '180'.$move;
-                                  }
+                                 }
 
                                 }
 
@@ -345,7 +370,7 @@ class SchedulerColler extends Controller
                           //dd($objects);
                           $criteria = Activitycriteria::where('activity_id',$activity->activity_id)->get();
                           
-                          $this->createTable($objects,$activity,$criteria,$criteria);
+                         // $this->createTable($objects,$activity,$criteria,$criteria);
                           
                          
                          return $objects;
@@ -946,7 +971,7 @@ class SchedulerColler extends Controller
                             //     ->where('activities.status',false)
                             //     ->get();
                                     
-                                    $activities = Activity::where('activity_id','3b8dc17')->get();
+                                    $activities = Activity::where('activity_id','8d85f04')->get();
 
                                    // dd($activities);
 
@@ -986,6 +1011,7 @@ class SchedulerColler extends Controller
                        if($activity_deadlineTime <= $timeNow){
                            /* $this->info('==sulod pa '.$activity->name.' = '.$timeNow.' !! '.$activity_deadlineTime); 
                             $this->info('GROUPTYPE  '.$activity->group_type);   */
+                           $activity = Activity::where('activity_id',$activity->activity_id)->first();
                           $this->thesis($activity);
                           /*  switch($activity->group_type){
                                 case 'random': $this->randomAllocation($activity);  

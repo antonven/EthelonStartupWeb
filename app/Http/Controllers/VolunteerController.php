@@ -146,11 +146,12 @@ class VolunteerController extends Controller
 
     public function rategroupmate(Request $request){
 
+
     $vol_activity = Volunteeractivity::where('volunteer_id',$request->input('volunteer_id'))
                                           ->where('activity_id',$request->input('activity_id'))
                                           ->where('status',true)->get();
 
-                 $rate_result = $this->rate($request);               
+                             
 
       if($vol_activity->count()){
 
@@ -171,6 +172,9 @@ class VolunteerController extends Controller
   
    public function rate($request){
 
+        $setting = \DB::table('settings')->first();
+        
+
         $activity_group_id = $request->input('activitygroups_id');
         $volunteer_id = $request->input('volunteer_id');
         $volunteer_id_to_rate = $request->input('volunteer_id_to_rate');
@@ -187,7 +191,7 @@ class VolunteerController extends Controller
                         ->where('skill',$activity_skill->name)
                         ->first();
 
-          $additional5PointsForRating = $volunteerbadge->points + 5;
+          $additional5PointsForRating = $volunteerbadge->points + $setting->activityPointsPerRating;
 
            Volunteerbadge::where('volunteer_id',$volunteer_id)
                         ->where('skill',$activity_skill->name)
@@ -420,26 +424,28 @@ class VolunteerController extends Controller
    }
 
    public function getGauge($badge){
+    $setting = \DB::table('settings')->first();
+
     switch ($badge) {
 
       case "Nothing":
-          return 100;
+          return $setting->newbieGauge;
           break;
 
         case "Newbie":
-          return 100;
+          return $setting->newbieGauge;
           break;
 
         case "Explorer":
-          return 200;
+          return $setting->explorerGauge;
           break;
 
         case "Expert":
-          return 300;
+          return $setting->expertGauge;
           break;
 
         case "Legend":
-          return 400;
+          return $setting->legendGauge;
           break;  
 
     }
@@ -509,8 +515,9 @@ class VolunteerController extends Controller
                        $timeInTimeOutDifference = $timeIn->diffInHours($timeOut); 
                  }
 
-          
-                 $totalPointsEarnedFromActivity = $activity->points_equivalent + ($timeInTimeOutDifference * 5);
+
+                 $setting = \DB::table('settings')->first();
+                 $totalPointsEarnedFromActivity = $activity->points_equivalent + ($timeInTimeOutDifference * $setting->activityHoursRenderedMultiplier);
 
                  \DB::table('volunteeractivities')
                     ->where('volunteer_id',$request->input('volunteer_id'))

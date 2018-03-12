@@ -625,8 +625,9 @@ public function webtest($id){
       $end_time =   \Carbon\Carbon::parse($request->input('endTime')); 
 
       $numOfHours = $start_time->diffInHours($end_time);
-
-      $preSetPoints = 5*$numOfHours;
+      $setting = \DB::table('settings')->first();
+      
+      $preSetPoints = $setting->activityPresetPoints*$numOfHours;
       
       $activityId = Activity::where('activity_id', $id)->update([
           "name" => $request->input('activityName'),
