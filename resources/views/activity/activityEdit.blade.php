@@ -339,13 +339,28 @@
             //initialize the date picker
             jQuery('#datepicker-autoclose').datepicker({
                 autoclose: true,
-                todayHighlight: true
+                todayHighlight: true,
+                startDate: new Date()
+            }).on('changeDate', function(selected){
+                $('#datepicker-autoclose2').prop("disabled", false);
+                $('#datepicker-autoclose5').prop("disabled", false);
+                var minDate = new Date(selected.date.valueOf());
+                $('#datepicker-autoclose2').datepicker('setStartDate', minDate);
+                var maxDate = new Date(selected.date.valueOf() - (1000 * 60 * 60 * 24 * 1));
+                $('#datepicker-autoclose5').datepicker('setStartDate', new Date());
+                $('#datepicker-autoclose5').datepicker('setEndDate', maxDate);
             });
+
             jQuery('#datepicker-autoclose2').datepicker({
                 autoclose: true,
                 todayHighlight: true
             });
             
+            jQuery('#datepicker-autoclose5').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+
             //initialize the time picker
             jQuery('#timepicker3').timepicker({
                 minuteStep : 1,
@@ -354,6 +369,9 @@
             jQuery('#timepicker4').timepicker({
                 minuteStep : 1,
                 defaultTIme : true
+            });
+            jQuery('#timepicker5').timepicker({
+                minuteStep : 1,
             });
             
             //initialize the gallery/portfolio

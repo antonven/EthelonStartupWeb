@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "33f49b69e9c45f92e0248003e86a2149",
+    "content-hash": "4e71deb2ecef1e99d4eabbb937d57fe7",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -158,6 +158,50 @@
                 "sdk"
             ],
             "time": "2017-05-03T14:29:33+00:00"
+        },
+        {
+            "name": "consoletvs/charts",
+            "version": "6.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ConsoleTVs/Charts.git",
+                "reference": "ca85d2def32423f3fa91c6dfb5c1e61490fefb5b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ConsoleTVs/Charts/zipball/ca85d2def32423f3fa91c6dfb5c1e61490fefb5b",
+                "reference": "ca85d2def32423f3fa91c6dfb5c1e61490fefb5b",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ConsoleTVs\\Charts\\ChartsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ConsoleTVs\\Charts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Èrik Campobadal Forés",
+                    "email": "soc@erik.cat"
+                }
+            ],
+            "description": "The laravel charting package",
+            "time": "2018-03-11T02:54:34+00:00"
         },
         {
             "name": "container-interop/container-interop",

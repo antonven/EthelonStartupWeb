@@ -183,6 +183,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        ConsoleTVs\Charts\ChartsServiceProvider::class,
+
     ],
 
     /*
@@ -235,6 +237,7 @@ return [
         'PushNotification' => 'Davibennun\LaravelPushNotification\Facades\PushNotification',
         'FCM'      => LaravelFCM\Facades\FCM::class,
         'FCMGroup' => LaravelFCM\Facades\FCMGroup::class, // Optional
+        'Charts' => ConsoleTvs\Charts\Charts::class,
         
     ],
 

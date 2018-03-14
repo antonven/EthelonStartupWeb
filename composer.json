@@ -8,6 +8,7 @@
         "php": ">=5.6.4",
         "bacon/bacon-qr-code": "^1.0",
         "brozot/laravel-fcm": "^1.2",
+        "consoletvs/charts": "^6.1",
         "davibennun/laravel-push-notification": "dev-laravel5",
         "endroid/qrcode": "^2.3",
         "fideloper/proxy": "^3.3",
