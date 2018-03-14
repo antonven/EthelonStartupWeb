@@ -663,9 +663,9 @@ class RunScheduler extends Command
                                if($total != 0){
                                 $newCentroid = $total / count($object->array);
                                 $object->centroid = $newCentroid;
-                                //echo 'new centroid '.$object->centroid;
+                               
                                }
-                                //echo ' object centroid cc'.count($object->array).'total ='.$total;
+                               
                               }else{
 
                               }

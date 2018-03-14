@@ -47,7 +47,8 @@ class RegistrationController extends Controller
                          'user_id'=>$user_id,
                          'location'=>$request->input('location'),
                          'image_url'=>$request->input('image_url'),
-                         'fcm_token'=>$request->input('fcm_token')
+                         'fcm_token'=>$request->input('fcm_token'),
+                         'age'=>$request->input('age')
                        ]);
 
                        $skills = array('Environment','Education','Sports','Arts','Medical','Culinary','Livelihood','Charity');

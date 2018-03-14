@@ -50,7 +50,7 @@ public function test2(){
 $vol = Volunteer::all();
 
 foreach($vol as $val){
-  Volunteeractivity::create(['activity_id'=>'7ea859d','volunteer_id'=>$val->volunteer_id]);
+  Volunteeractivity::create(['activity_id'=>'7d108d5','volunteer_id'=>$val->volunteer_id]);
 }
 }
 
