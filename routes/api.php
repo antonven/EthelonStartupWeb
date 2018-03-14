@@ -70,6 +70,7 @@ Route::group(['middleware'=>'auth:api'],function(){
 Route::group(['middleware'=>'foundation'],function(){
 
 });
+
 Route::post('/portfolio','ActivityController@portfolio');
 Route::post('/foundation','VolunteerController@getFoundationProfile');
 Route::post('/fcm_token','VolunteerController@fcm_token');
