@@ -701,7 +701,8 @@ class VolunteerController extends Controller
             Volunteeractivity::create([
                  'volunteer_id'=>$request->input('volunteer_id'),
                  'activity_id'=>$request->input('activity_id'),
-                 'status'=> false  
+                 'status'=> false,
+                 'timeIn'=>null  
                 ]);
             
 
