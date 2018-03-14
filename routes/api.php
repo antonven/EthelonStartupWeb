@@ -100,3 +100,11 @@ Route::post('/getSkills','VolunteerController@getSkills');
 Route::post('/profileDetails','VolunteerController@profileDetails');
 Route::post('/getallactivities','ActivityController@getActivitiesNotDone');	
 Route::post('/thesis','TestingController@thesis');
+
+
+//testingCharts
+Route::post('/absents','ChartController@getPercentOfAbsents');
+Route::post('/getAge','ChartController@getAge');
+Route::post('/getNumberOfVolunteerSkills','ChartController@getNumberOfVolunteerSkills');
+Route::post('/getExp','ChartController@getExp');
+Route::post('/getRating','ChartController@getRating');

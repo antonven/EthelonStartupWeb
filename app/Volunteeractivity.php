@@ -8,7 +8,7 @@ class Volunteeractivity extends Model
 {
     //
 
-    protected $fillable = ['volunteer_id','activity_id','status','volunteerTimedIn'];
+    protected $fillable = ['volunteer_id','activity_id','status','volunteerTimedIn','timeIn'];
     
     public function activity(){
 
