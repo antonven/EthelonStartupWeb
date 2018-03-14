@@ -42,4 +42,10 @@ class UserController extends Controller
 
         return view('user.userFoundationPortfolioView', compact('template','user'));
     }
+    public function viewFoundation($foundation_name)
+    {
+        $user = User::all()->where('name', $foundation_name)->first();
+
+        return view('user.userViewFoundation', compact('user'));
+    }
 }

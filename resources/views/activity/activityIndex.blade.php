@@ -6,9 +6,13 @@
 @section('additional_styles')
 
 @endsection
+@section('page_title')
+    Activity Page
+@endsection
 @section('content')
-    <br>
+<br>
 
+<div class="row">
     <div class="col-lg-3">
         <div class="card-box project-box addactbtn" id="createActivity" style="height: 424px; display: table; width: 100%;">
             <div style="text-align: center; display: table-cell; vertical-align: middle;">
@@ -18,11 +22,12 @@
         </div>
     </div>
      
-    <?php
-        $itemCounter = 0;
-    ?>
+<?php
+    $itemCounter = 0;
+    $isFirstRow = true;
+?>
     @foreach($activities as $activity)
-        @if($itemCounter == 0)
+        @if($itemCounter == 0 && $isFirstRow == false)
             <div class="row">
         @endif
         <div class="col-lg-3">
@@ -32,7 +37,7 @@
                 @else
                 <div class="label label-danger">Close</div>
                 @endif
-                <!-- <p class="text-danger text-uppercase m-b-20 font-13">Web Design</p> -->
+
                 <img src="{{ $activity->image_url }}" class="thumb-img" style="border-radius:0px !important;object-fit:cover;height:200px;width:calc(100% + 40px);margin-top: -20px !important;margin-left: -20px !important;border-top-left-radius: 5px !important;border-top-right-radius: 5px !important;">
                
                 <p>
@@ -42,53 +47,46 @@
                 <input type="text" class="activity_card_id" value="{{ url('/activity/'.$activity->activity_id ) }}" hidden>
                 </p>
 
-                <!-- <ul class="list-inline">
-                    <li>
-                        <h3 class="m-b-0">87</h3>
-                        <p class="text-muted" style="color:#98a6ad !important">Questions</p>
-                    </li>
-                </ul> -->
-
                 <div class="project-members m-b-20">
                     <span class="m-r-5 font-600">Volunteers :</span>
-                    @if($volunteersArray)
-                    @foreach($volunteersArray as $volunteerArray)
-                      @if(isset($volunteerArray[$activity->activity_id]))
-                        @foreach($volunteerArray[$activity->activity_id]->slice(0,5) as $volunteer)
-
-                                  @if($volunteer->image_url != null)  
-                                 <a href="#" data-toggle="tooltip" data-placement="top" title="{{ $volunteer->name }}" data-original-title="">
-                                    <img src="{{ $volunteer->image_url }}" class="img-circle thumb-sm" />
-                                 </a>
-                                  @endif  
-                            @endforeach
-                       
-                      @endif
+                    @foreach($activity->volunteers->slice(0,2) as $volunteerList)
+                        @if($volunteerList->volunteer->image_url)
+                            <a href="#" data-toggle="tooltip" data-placement="top" title="{{ $volunteerList->volunteer->user->name }}" data-original-title="">
+                            <img src="{{ $volunteerList->volunteer->image_url }}" class="img-circle thumb-sm" />
+                            </a>
+                        @else
+                            <a href="#" data-toggle="tooltip" data-placement="top" title="{{ $volunteerList->volunteer->user->name }}" data-original-title="">
+                            <img src="{{ url('/skills/avatar.png') }}" class="img-circle thumb-sm" />
+                            </a>
+                        @endif
                     @endforeach
-                    @endif
-
                 </div>
-                        @foreach($volunteersArray as $volunteerArray)
-                             @if(isset($volunteerArray[$activity->activity_id]))    
-                                     <p class="font-600 m-b-5">Needed Volunteers {{ count($volunteerArray[$activity->activity_id]) }}/{{ $activity->volunteersNeeded }} <span class="text-danger pull-right">{{ (count($volunteerArray[$activity->activity_id])/ $activity->volunteersNeeded )*100 }}%</span></p>
-                    <div class="progress progress-bar-danger-alt progress-sm m-b-5">
-                    <div class="progress-bar progress-bar-danger progress-animated wow animated animated"
-                         role="progressbar" aria-valuenow="{{ (count($volunteerArray[$activity->activity_id])/100)*100 }}" aria-valuemin="0" aria-valuemax="100"
-                         style="width: {{ (count($volunteerArray[$activity->activity_id])/$activity->volunteersNeeded)*100 }}%;">
-                    </div><!-- /.progress-bar .progress-bar-danger -->
-                    </div><!-- /.progress .no-rounded -->
 
-                             @endif
-                       @endforeach
-               
+                    <p class="font-600 m-b-5">Progress <span class="text-danger pull-right">68%</span></p>
+                                    <div class="progress progress-bar-danger-alt progress-sm m-b-5">
+                                        <div class="progress-bar progress-bar-danger progress-animated wow animated animated"
+                                             role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"
+                                             style="width: 68%;">
+                                        </div><!-- /.progress-bar .progress-bar-danger -->
+                                    </div><!-- /.progress .no-rounded -->
+
+
             </div>
         </div>
         <?php
             $itemCounter++;
         ?>
-        @if($itemCounter == 4)
+        @if($itemCounter == 3 && $isFirstRow == true)
             </div>
             <?php
+                $isFirstRow = false;
+                $itemCounter = 0;
+            ?>
+        @endif
+        @if($itemCounter == 4 && $isFirstRow == false)
+            </div>
+                        <?php
+                
                 $itemCounter = 0;
             ?>
         @endif

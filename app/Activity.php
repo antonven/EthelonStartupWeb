@@ -36,4 +36,8 @@ class Activity extends Model
         return $query->where('active', 1);
     }
 
+    public function volunteers()
+    {
+        return $this->hasMany('App\Volunteeractivity', 'activity_id', 'activity_id');
+    }
 }

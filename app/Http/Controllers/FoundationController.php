@@ -7,6 +7,7 @@ use App\Activitiyskill;
 use App\Activity;
 use App\Foundation;
 use App\User;
+use App\Setting;
 
 class FoundationController extends Controller
 {
@@ -39,5 +40,21 @@ class FoundationController extends Controller
 				]);
 
 		return redirect(url('/admin/foundationlist'));
+	}
+
+	public function configurations()
+	{
+		$settings = Setting::all()->first();
+
+		return view('foundation.configuration', compact('settings'));
+	}
+
+	public function updateSetting($setting,$value)
+	{
+		Setting::where('id', '1')->update([
+			$setting => $value
+		]);
+
+		return response()->json("Ji");
 	}
 }

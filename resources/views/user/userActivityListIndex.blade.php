@@ -15,13 +15,13 @@
 		@if($activities->count())
 			@foreach($activities as $activity)                
 		    <div class="col-sm-3">
-		        <a href="{{ url('/activity'.'/'.$activity->activity_id) }}">
+		        <a href="{{ url('/activity/view'.'/'.$activity->activity_id) }}">
 		        <div class="panel-thumbnail" style="background: #222;">
 		            <img src="{{ $activity->image_url }}" class="img-responsive">
 		        </div>
 		        </a>
 		        <div>
-		        	<p style="font-size: 18px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Karla';">{{ $activity->name }}</p>
+		        	<p style="font-size: 18px;">{{ $activity->name }}</p>
 		        </div>
 		    </div>
 		    @endforeach

@@ -73,9 +73,13 @@
           <div class="assign-team m-t-30">
               <h5 class="font-600 m-b-5">Volunteers</h5>
               <div>
-                
-                  <a href="#"> <img class="img-circle thumb-sm" alt="" src="assets/images/users/avatar-8.jpg"> </a>
-                
+                    @foreach($activity->volunteers as $volunteerList)
+                    @if($volunteerList->volunteer->image_url)
+                      <a href="#"> <img class="img-circle thumb-sm" title="{{ $volunteerList->volunteer->user->name }}" src="{{ $volunteerList->volunteer->image_url }}"> </a>
+                    @else
+                      <a href="#"> <img class="img-circle thumb-sm" title="{{ $volunteerList->volunteer->user->name }}" src="{{ url('/skills/avatar.png') }}"> </a>
+                    @endif
+                  @endforeach
               </div>
           </div>
           

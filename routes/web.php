@@ -51,11 +51,15 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/admin/foundationlist', 'FoundationController@foundationList');
     Route::get('/admin/activitylist', 'ActivityController@activityList');
     Route::get('/admin/verify/{id}', 'FoundationController@verifyFoundation');
+    Route::get('/admin/configurations', 'FoundationController@configurations');
+        //settings
+    Route::post('/admin/setting/update/{setting}/{value}', 'FoundationController@updateSetting');
 });
 Route::get('/{foundation_name}/portfolio', 'UserController@portfolioView');
 Route::get('/foundations', 'UserController@foundationList');
 Route::get('/{skill}', 'UserController@lists');
-Route::get('/activity/{id}', 'UserController@activityView');
+Route::get('/activity/view/{id}', 'UserController@activityView');
+Route::get('/foundation/{foundation_name}', 'UserController@viewFoundation');
 
 Route::get('/webtest/{id}','ActivityController@webtest');
 Route::get('test', 'DashboardController@test');

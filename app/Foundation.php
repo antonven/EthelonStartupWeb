@@ -18,7 +18,7 @@ class Foundation extends Model
     }
 
     public function activities(){
-    	return $this->hasMany('App\Activity','foundation_id','foundation_id');
+    	return $this->hasMany('App\Activity','foundation_id','foundation_id')->orderBy("created_at", "DESC");
     }
 
     public function portfolio()

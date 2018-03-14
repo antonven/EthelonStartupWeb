@@ -189,6 +189,10 @@
                             <li>
                                 <a href="{{url('/admin/activitylist')}}" class="waves-effect"><i class="zmdi zmdi-format-underlined"></i> <span> ACTIVITIES </span> </a>
                             </li>
+
+                            <li>
+                                <a href="{{url('/admin/configurations')}}" class="waves-effect"><i class="zmdi zmdi-format-underlined"></i> <span> CONFIGURATIONS </span> </a>
+                            </li>
                             @else
                             @endif
                         </ul>

@@ -21,11 +21,7 @@ Foundation List
         $template_id = $foundation->portfolio->templates->where("active", 1)->first();
       ?>                
       <div class="col-sm-3">
-          @if($template_id)
-          <a href="{{ url('/'.$foundation->user->name.'/portfolio') }}">
-          @else
-          <a href="#">
-          @endif
+          <a href="{{ url('/foundation'.'/'.$foundation->user->name) }}">
           <div class="panel-thumbnail" style="background: #222;">
               <img src="{{ $foundation->image_url }}" class="img-responsive">
           </div>

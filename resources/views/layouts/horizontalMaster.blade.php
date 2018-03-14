@@ -52,21 +52,14 @@
 
                     <!-- LOGO -->
                     <div class="topbar-left">
-                        <a href="index.html" class="logo"><span style="color:white">Ethelon</span></a>
+                        <a href="{{ url('/') }}" class="logo"><span style="color:white">Ethelon</span></a>
                     </div>
                     <!-- End Logo container-->
 
 
                     <div class="menu-extras">
 
-                        <ul class="nav navbar-nav navbar-right pull-right">
-                            <li>
-                                <form role="search" class="navbar-left app-search pull-left hidden-xs">
-                                     <input type="text" placeholder="Search..." class="form-control">
-                                     <a href=""><i class="fa fa-search"></i></a>
-                                </form>
-                            </li>
-                        </ul>
+
                         <div class="menu-item">
                             <!-- Mobile menu toggle-->
                             <a class="navbar-toggle">
@@ -89,13 +82,13 @@
                         <!-- Navigation Menu-->
                         <ul class="navigation-menu">
                             <li>
-                                <a href="{{ url('/') }}"><i class="zmdi zmdi-view-dashboard"></i> <span> Home </span> </a>
+                                <a href="{{ url('/') }}"><i class="zmdi zmdi-home"></i> <span> Home </span> </a>
                             </li>
                             <li>
                                 <a href="{{ url('/foundations') }}"><i class="zmdi zmdi-view-dashboard"></i> <span> Foundations </span> </a>
                             </li>
                             <li>
-                                <a href="{{ url('/admin') }}"><i class="zmdi zmdi-view-dashboard"></i> <span> Foundation Login </span> </a>
+                                <a href="{{ url('/admin') }}"><i class="zmdi zmdi-account-o"></i> <span> Foundation Login </span> </a>
                             </li>
                         </ul>
                         <!-- End navigation menu  -->
@@ -121,7 +114,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-xs-6">
-                                2016 © Adminto.
+                                2016 © Ethelon
                             </div>
                             <div class="col-xs-6">
                                 <ul class="pull-right list-inline m-b-0">
@@ -149,16 +142,15 @@
 
 
         <!-- jQuery  -->
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/jquery.min.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/detect.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/fastclick.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/jquery.slimscroll.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/jquery.blockUI.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/waves.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/wow.min.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/jquery.nicescroll.js') }}"></script>
-        <script src="{{ asset('horizontalAdmintoAssets/assets/js/jquery.scrollTo.min.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/detect.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/fastclick.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/jquery.slimscroll.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/jquery.blockUI.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/waves.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/jquery.nicescroll.js') }}"></script>
+        <script src="{{ asset('adminitoAssets/assets/js/jquery.scrollTo.min.js') }}"></script>
 
 
         <!-- App js -->

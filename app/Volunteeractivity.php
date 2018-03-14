@@ -15,5 +15,10 @@ class Volunteeractivity extends Model
     	return $this->hasOne('App\Activity','activity_id','activity_id');
    
     }
+
+    public function volunteer()
+    {
+    	return $this->hasOne('App\Volunteer','volunteer_id','volunteer_id');
+    }
     
 }

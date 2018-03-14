@@ -52,8 +52,65 @@
 		            </tbody>
 		        </table>
 		    </div>
-		</div><!-- end col -->
+		</div>
 	</div>
+
+	
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-box">
+                <div class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
+                        <i class="zmdi zmdi-more-vert"></i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </div>
+
+                <h4 class="header-title m-t-0 m-b-30">Configuration for Activity Points</h4>
+
+                <div class="table-responsive">
+                    <table id="mainTable2" class="table table-striped m-b-0">
+                        <thead>
+                            <tr>
+                                <th>Variable Name</th>
+                                <th>Points Assigned</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Activity Preset Points Constant</td>
+                                <td>2</td>
+                              
+                            </tr>
+                            <tr>
+                                <td>Activity Hours Rendered Constant</td>
+                                <td>5</td>
+                               
+                            </tr>
+                                                                           
+                        </tbody>
+                        <tfoot>
+                           
+                        </tfoot>
+                    </table>
+                </div>
+
+
+
+
+            </div>
+
+
+        </div><!-- end col -->
+
+    </div>
 @endsection
 
 @section('additional_scripts')

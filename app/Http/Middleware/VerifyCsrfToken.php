@@ -15,6 +15,7 @@ class VerifyCsrfToken extends BaseVerifier
         //
     	'/editor/upload/*',
     	'editor/store/*',
-    	'editor/load/*'
+    	'editor/load/*',
+        'admin/setting/update/*/*'
     ];
 }

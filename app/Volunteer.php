@@ -20,5 +20,9 @@ class Volunteer extends Model
     	return $this->hasMany('App\Volunteerskill','volunteer_id','volunteer_id');
     }
 
+    public function user()
+    {
+        return $this->hasOne('App\User', 'user_id', 'user_id');
+    }
 
 }

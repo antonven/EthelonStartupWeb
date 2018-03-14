@@ -30,7 +30,7 @@ use Davibennun\LaravelPushNotification\Facades\PushNotification;
 use Symfony\Component\HttpFoundation\Response;
 
 use Illuminate\Support\Facades\App;
-
+use App\Skill;
 class ActivityController extends Controller
 {
 
@@ -430,26 +430,6 @@ public function webtest($id){
       if(\Auth::user()->foundation)
       {
           $activities = \Auth::user()->foundation->activities;
-          $volunteersArray = array();
-          $eachActivityArray = array();
-
-          foreach($activities as $activity){
-
-                $volunteersQuery = \DB::table('users')->select('volunteers.image_url as image_url')
-                                           ->join('volunteers','volunteers.user_id','=','users.user_id')
-                                           ->join('volunteeractivities','volunteeractivities.volunteer_id','=','volunteers.volunteer_id')
-                                           ->where('volunteeractivities.activity_id',$activity->activity_id)
-                                           ->inRandomOrder()
-                                           ->get();
-                                           
-                                           $Volunteers = array($activity->activity_id=>$volunteersQuery);
-                                           
-                                           array_push($volunteersArray,$Volunteers);
-          }
-
-         /* $volunteersArray = json_encode($volunteersArray);
-          return response($volunteersArray);*/
-
       }
       else
       {
@@ -458,7 +438,7 @@ public function webtest($id){
       }
 
     //  return response()->json($volunteersArray);
-      return view('activity.activityIndex', compact('activities', 'volunteersArray'));
+      return view('activity.activityIndex', compact('activities'));
     }
     
     public function create()
@@ -598,13 +578,13 @@ public function webtest($id){
     public function edit($id)
     {
       $activity = Activity::find($id);
-
-      return view('activity.activityEdit', compact('activity'));
+      $activity_skills = $activity->skills;
+      $skills = Skill::all();
+      return view('activity.activityEdit', compact('activity','skills','activity_skills'));
     }
 
     public function update(Request $request, $id)
     {
-
       $activity = Activity::find($id);
       foreach($activity->criteria as $criterion)
       {
@@ -614,24 +594,23 @@ public function webtest($id){
       {
         Activityskill::where('activity_id', $id)->where('name',$skill->name)->delete();
       }
+
       $dt = new \DateTime($request->input('startDate').' '.$request->input('startTime'));
       $sd = Carbon::instance($dt);
       $dtt = new \DateTime($request->input('endDate').' '.$request->input('endTime'));
       $ed = Carbon::instance($dtt);
-      $url = $this->uploadFile($request->file('file'));
-      $activity_id_store = substr(sha1(mt_rand().microtime()), mt_rand(0,35),7);
+      $rt = new \DateTime($request->input('deadlineDate').' '.$request->input('deadlineTime'));
+      $rtt = Carbon::instance($rt);
 
       $start_time = \Carbon\Carbon::parse($request->input('startTime'));   
       $end_time =   \Carbon\Carbon::parse($request->input('endTime')); 
 
       $numOfHours = $start_time->diffInHours($end_time);
       $setting = \DB::table('settings')->first();
-      
       $preSetPoints = $setting->activityPresetPoints*$numOfHours;
       
       $activityId = Activity::where('activity_id', $id)->update([
           "name" => $request->input('activityName'),
-          "image_url" => $url,
           "imageQr_url" =>'',
           "description" => $request->input('activityDescription'),
           "location" => $request->input('activityLocation'),
@@ -642,13 +621,22 @@ public function webtest($id){
           "long" => $request->input('long'),
           "lat" => $request->input('lat'),
           "points_equivalent" => $preSetPoints,
-          "status" => 0,
           "startDate" => $sd->toDateTimeString(),
           "contactperson" => $request->input('contactPerson'),
           "contact" => $request->input('contactInfo'),
           "startDate" => $sd,
-          "volunteersNeeded" => $request->input('volunteersNeeded')
+          "volunteersNeeded" => $request->input('volunteersNeeded'),
+          "registration_deadline" => $rtt
       ]);
+
+      if($request->file('file') != null)
+      {
+        $url = $this->uploadFile($request->file('file'));
+          $activityId = Activity::where('activity_id', $id)->update([
+            "image_url" => $url
+          ]);
+      }
+
       
       foreach($request->input('criteria') as $criterion)
       {
